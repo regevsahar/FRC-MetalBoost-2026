@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -27,7 +28,7 @@ public class Swerve extends SubsystemBase {
 
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   public Swerve() {
-    pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, Constants.CanivoreName);
+    pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, new CANBus(Constants.CanivoreName));
     zeroPigeon();
 
     mSwerveMods =
@@ -66,10 +67,12 @@ public class Swerve extends SubsystemBase {
             ),
         config, // The robot configuration
         () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
@@ -83,18 +86,18 @@ public class Swerve extends SubsystemBase {
         );
 
     // m_poseEstimator =
-    //     new SwerveDrivePoseEstimator(
-    //         SwerveConstants.swerveKinematics,
-    //         pigeon.getRotation2d(),
-    //         new SwerveModulePosition[] {
-    //         mSwerveMods[0].getPosition(),
-    //         mSwerveMods[1].getPosition(),
-    //         mSwerveMods[2].getPosition(),
-    //         mSwerveMods[3].getPosition()
-    //         },
-    //         new Pose2d(),
-    //         VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-    //         VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+    // new SwerveDrivePoseEstimator(
+    // SwerveConstants.swerveKinematics,
+    // pigeon.getRotation2d(),
+    // new SwerveModulePosition[] {
+    // mSwerveMods[0].getPosition(),
+    // mSwerveMods[1].getPosition(),
+    // mSwerveMods[2].getPosition(),
+    // mSwerveMods[3].getPosition()
+    // },
+    // new Pose2d(),
+    // VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+    // VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
   }
 
@@ -106,13 +109,16 @@ public class Swerve extends SubsystemBase {
     // Retrieve the speeds of the swerve modules and convert to chassis speeds
     SwerveModuleState[] moduleStates = getModuleStates();
 
-    // Assuming you have logic in place to calculate chassis speeds from module states
-    // Here, you would sum the individual module states' speeds to get the total chassis speed
+    // Assuming you have logic in place to calculate chassis speeds from module
+    // states
+    // Here, you would sum the individual module states' speeds to get the total
+    // chassis speed
     double vx = 0.0, vy = 0.0, omega = 0.0;
 
     for (SwerveModuleState state : moduleStates) {
       // You can perform vector math to sum the module states' velocities.
-      // This might involve considering the robot's geometry to convert module velocities to chassis
+      // This might involve considering the robot's geometry to convert module
+      // velocities to chassis
       // speeds.
       vx += state.speedMetersPerSecond * Math.cos(state.angle.getRadians());
       vy += state.speedMetersPerSecond * Math.sin(state.angle.getRadians());
@@ -139,9 +145,9 @@ public class Swerve extends SubsystemBase {
   }
 
   // public void resetTo0 (){
-  //     for(SwerveModule mod : mSwerveMods){
-  //         mod.setTo0();
-  //     }
+  // for(SwerveModule mod : mSwerveMods){
+  // mod.setTo0();
+  // }
   // }
 
   public void drive(
@@ -228,30 +234,32 @@ public class Swerve extends SubsystemBase {
   }
 
   // public void updateOdometry() {
-  //     boolean doRejectUpdate = false;
+  // boolean doRejectUpdate = false;
 
-  //     swerveOdometry.update(getGyroYaw(), getModulePositions());
+  // swerveOdometry.update(getGyroYaw(), getModulePositions());
 
-  //     LimelightHelpers.SetRobotOrientation("limelight",
-  // m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-  //     LimelightHelpers.PoseEstimate mt2 =
+  // LimelightHelpers.SetRobotOrientation("limelight",
+  // m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0,
+  // 0, 0);
+  // LimelightHelpers.PoseEstimate mt2 =
   // LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-  //     if(Math.abs(pigeon.getRate()) > 360) // if our angular velocity is greater than 360 degrees
+  // if(Math.abs(pigeon.getRate()) > 360) // if our angular velocity is greater
+  // than 360 degrees
   // per second, ignore vision updates
-  //     {
-  //         doRejectUpdate = true;
-  //     }
-  //     if(mt2.tagCount == 0)
-  //     {
-  //         doRejectUpdate = true;
-  //     }
-  //     if(!doRejectUpdate)
-  //     {
-  //         m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-  //         m_poseEstimator.addVisionMeasurement(
-  //             mt2.pose,
-  //             mt2.timestampSeconds);
-  //     }
+  // {
+  // doRejectUpdate = true;
+  // }
+  // if(mt2.tagCount == 0)
+  // {
+  // doRejectUpdate = true;
+  // }
+  // if(!doRejectUpdate)
+  // {
+  // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+  // m_poseEstimator.addVisionMeasurement(
+  // mt2.pose,
+  // mt2.timestampSeconds);
+  // }
   // }
 
   @Override
