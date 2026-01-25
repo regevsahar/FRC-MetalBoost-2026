@@ -26,12 +26,13 @@ public class Shoot extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.SetMotor(MathUtil.applyDeadband(trigger.getAsDouble() * 0.9, Constants.stickDeadband));
+    shooter.SetMotor(MathUtil.applyDeadband(trigger.getAsDouble() * (0.9), Constants.stickDeadband));
   }
 
   // Called once the command ends or is interrupted.
