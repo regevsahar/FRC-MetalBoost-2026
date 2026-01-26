@@ -8,16 +8,16 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Shooter extends SubsystemBase {
+public class Shooter extends MBSubsystem {
   /** Creates a new Shooter. */
   private TalonFX masterMotor, slaveMotor;
 
   int masterMotorId = 9;
 
   public Shooter() {
+    super("Shooter");
     masterMotor = new TalonFX(masterMotorId, new CANBus(Constants.CanivoreName));
     slaveMotor = new TalonFX(13, new CANBus(Constants.CanivoreName));
     slaveMotor.setControl(new Follower(masterMotorId, MotorAlignmentValue.Opposed));
@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+  public void subsystemPeriodic() {
     // This method will be called once per scheduler run
   }
 }
