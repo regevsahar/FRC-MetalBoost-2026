@@ -4,22 +4,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Shooter;
-import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.Shooter.ShooterIO.ShooterSub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
   /** Creates a new Shoot. */
-  private final Shooter shooter;
+  private final ShooterSub shooter;
 
-  private DoubleSupplier trigger;
-
-  public Shoot(Shooter shooter, DoubleSupplier trigger) {
+  public Shoot(ShooterSub shooter) {
     this.shooter = shooter;
-    this.trigger = trigger;
     addRequirements(shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -31,14 +25,13 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.SetMotor(
-        MathUtil.applyDeadband(trigger.getAsDouble() * (0.9), Constants.stickDeadband));
+    shooter.setTargetDistance();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.SetMotor(0);
+    shooter.stop();
   }
 
   // Returns true when the command should end.

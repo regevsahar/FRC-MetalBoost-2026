@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Shooter.ShooterIO.ShooterIO;
+import frc.robot.subsystems.Shooter.ShooterIO.ShooterIOSimulation;
+import frc.robot.subsystems.Shooter.ShooterIO.ShooterSub;
 
 public class RobotContainer {
   /* Controllers */
@@ -43,7 +46,7 @@ public class RobotContainer {
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
-  private final Shooter shooter = new Shooter();
+  private final ShooterSub shooter;
   private final Spindexer spindexer = new Spindexer();
   private final Intake s_intake = new Intake();
 
@@ -52,6 +55,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    ShooterIO shooterIO = new ShooterIOSimulation();
+    shooter = new ShooterSub(shooterIO);
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
@@ -102,8 +107,7 @@ public class RobotContainer {
             () -> true,
             () -> 0.85));
 
-    shoot.whileTrue(
-        new Shoot(shooter, () -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value)));
+    shoot.whileTrue(new Shoot(shooter));
     spin.whileTrue(new Spin(spindexer, -0.35));
     spinAnotherSide.whileTrue(new Spin(spindexer, 0.35));
     intake.whileTrue(new IntakeCommand(s_intake, 0.45));
