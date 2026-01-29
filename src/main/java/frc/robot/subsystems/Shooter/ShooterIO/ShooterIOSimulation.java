@@ -35,11 +35,9 @@ public class ShooterIOSimulation implements ShooterIO {
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
     // Simulating the on-board controller (e.g., TalonFX)
-    if (targetRPM != 0) {
-      appliedVolts = pid.calculate(sim.getAngularVelocityRPM(), targetRPM) + ff.calculate(targetRPM);
-      appliedVolts = Math.max(
-          -ShooterConstants.kMaxVoltage, Math.min(ShooterConstants.kMaxVoltage, appliedVolts));
-    }
+    appliedVolts = pid.calculate(sim.getAngularVelocityRPM(), targetRPM) + ff.calculate(targetRPM);
+    appliedVolts = Math.max(
+        -ShooterConstants.kMaxVoltage, Math.min(ShooterConstants.kMaxVoltage, appliedVolts));
 
     sim.setInputVoltage(appliedVolts);
     sim.update(ShooterConstants.kLoopTime);
