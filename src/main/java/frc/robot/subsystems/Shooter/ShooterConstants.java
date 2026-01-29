@@ -32,8 +32,8 @@ public class ShooterConstants {
       public static final int SLAVE_MOTOR_PORT =13;
 
       public static final double kShooterP = 0.6947;
-      public static final double kShooterI = 0.5;
-      public static final double kShooterD = 0.0;
+      public static final double kShooterI = 0.55;
+      public static final double kShooterD = 0.000017;
       public static final double kShooterS = 0;
       public static final double kShooterV = 12.0 / kMaxRPM;
       public static final double kShooterA = 0;
