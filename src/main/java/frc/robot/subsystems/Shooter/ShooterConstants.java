@@ -3,10 +3,10 @@ package frc.robot.subsystems.Shooter;
 public class ShooterConstants {
   // SIM{
   
-      public static final double kMaxRPM = 5500;
+      public static final double kMaxRPM = 5400;
       public static final double kMinRPM = 0;
       public static final double kDefaultRPM = 2500;
-      public static final double kRPMPolerance = 100;
+      public static final double kRPMPolerance = 300;
 
       // Physics Simulation Constants
       public static final int kNumMotors = 2; // Number of Kraken X60 motors
@@ -31,11 +31,11 @@ public class ShooterConstants {
       public static final int MASTER_MOTOR_PORT =9;
       public static final int SLAVE_MOTOR_PORT =13;
 
-      public static final double kShooterP = 0;
-      public static final double kShooterI = 0;
-      public static final double kShooterD = 0;
+      public static final double kShooterP = 0.6947;
+      public static final double kShooterI = 0.5;
+      public static final double kShooterD = 0.0;
       public static final double kShooterS = 0;
-      public static final double kShooterV = 0;
+      public static final double kShooterV = 12.0 / kMaxRPM;
       public static final double kShooterA = 0;
 
   //REAL}

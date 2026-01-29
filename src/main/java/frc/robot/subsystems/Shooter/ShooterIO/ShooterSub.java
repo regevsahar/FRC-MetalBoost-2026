@@ -22,13 +22,12 @@ public class ShooterSub extends MBSubsystem {
     this.io = io;
 
     // Mapping (Distance Meters -> RPM)
-    DISTANCE_TO_RPM_MAP.put(0.0, 0.0);
-    DISTANCE_TO_RPM_MAP.put(1.0, 2000.0);
-    DISTANCE_TO_RPM_MAP.put(2.0, 3000.0);
-    DISTANCE_TO_RPM_MAP.put(3.0, 3500.0);
-    DISTANCE_TO_RPM_MAP.put(4.0, 4000.0);
-    DISTANCE_TO_RPM_MAP.put(5.0, 4500.0);
-    DISTANCE_TO_RPM_MAP.put(6.0, 5000.0);
+    DISTANCE_TO_RPM_MAP.put(0.0, 2600.0);
+    DISTANCE_TO_RPM_MAP.put(0.5, 2675.0);
+    DISTANCE_TO_RPM_MAP.put(1.0, 2800.0);
+    DISTANCE_TO_RPM_MAP.put(1.5, 3000.0);
+    DISTANCE_TO_RPM_MAP.put(2.0, 3250.0);
+    DISTANCE_TO_RPM_MAP.put(2.5, 3400.0);
   }
 
   public void setTargetRPM(double targetRPM) {

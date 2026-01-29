@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -12,6 +13,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Shooter.ShooterIO.ShooterIO;
 import frc.robot.subsystems.Shooter.ShooterIO.ShooterIOSimulation;
+import frc.robot.subsystems.Shooter.ShooterIO.ShooterIOTalonFX;
 import frc.robot.subsystems.Shooter.ShooterIO.ShooterSub;
 
 public class RobotContainer {
@@ -55,8 +57,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    ShooterIO shooterIO = new ShooterIOSimulation();
-    shooter = new ShooterSub(shooterIO);
+    ShooterIO shooterIO = RobotBase.isSimulation()
+                ? new ShooterIOSimulation()
+                : new ShooterIOTalonFX();
+
+        shooter= new ShooterSub(shooterIO);
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
