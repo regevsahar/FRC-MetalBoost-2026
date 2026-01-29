@@ -36,7 +36,7 @@ public class RobotContainer {
 
   /* operation Buttons */
   private final Trigger shoot =
-      new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.1);
+      new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton spin =
       new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton spinAnotherSide =

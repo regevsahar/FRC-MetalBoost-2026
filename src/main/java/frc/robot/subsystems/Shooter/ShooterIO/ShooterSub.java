@@ -12,7 +12,7 @@ public class ShooterSub extends MBSubsystem {
   private final ShooterIO.ShooterIOInputs inputs = new ShooterIO.ShooterIOInputs();
   private double targetRPM = 0.0;
 
-  private final InterpolatingDoubleTreeMap distanceToRPMAp = new InterpolatingDoubleTreeMap();
+  private final InterpolatingDoubleTreeMap DISTANCE_TO_RPM_MAP = new InterpolatingDoubleTreeMap();
 
   // Tunables
   private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
@@ -22,13 +22,13 @@ public class ShooterSub extends MBSubsystem {
     this.io = io;
 
     // Mapping (Distance Meters -> RPM)
-    distanceToRPMAp.put(0.0, 0.0);
-    distanceToRPMAp.put(1.0, 2000.0);
-    distanceToRPMAp.put(2.0, 3000.0);
-    distanceToRPMAp.put(3.0, 3500.0);
-    distanceToRPMAp.put(4.0, 4000.0);
-    distanceToRPMAp.put(5.0, 4500.0);
-    distanceToRPMAp.put(6.0, 5000.0);
+    DISTANCE_TO_RPM_MAP.put(0.0, 0.0);
+    DISTANCE_TO_RPM_MAP.put(1.0, 2000.0);
+    DISTANCE_TO_RPM_MAP.put(2.0, 3000.0);
+    DISTANCE_TO_RPM_MAP.put(3.0, 3500.0);
+    DISTANCE_TO_RPM_MAP.put(4.0, 4000.0);
+    DISTANCE_TO_RPM_MAP.put(5.0, 4500.0);
+    DISTANCE_TO_RPM_MAP.put(6.0, 5000.0);
   }
 
   public void setTargetRPM(double targetRPM) {
@@ -40,8 +40,8 @@ public class ShooterSub extends MBSubsystem {
     setTargetRPM(getRPMFromDistance(testDistance.get()));
   }
 
-  public void stop() {
-    io.stop();
+  public double getRPMFromDistance(double distance) {
+    return DISTANCE_TO_RPM_MAP.get(distance);
   }
 
   public double getCurrentRPM() {
@@ -52,8 +52,8 @@ public class ShooterSub extends MBSubsystem {
     return Math.abs(getCurrentRPM() - targetRPM) < ShooterConstants.kRPMPolerance;
   }
 
-  public double getRPMFromDistance(double distance) {
-    return distanceToRPMAp.get(distance);
+  public void stop() {
+    io.stop();
   }
 
   @Override
