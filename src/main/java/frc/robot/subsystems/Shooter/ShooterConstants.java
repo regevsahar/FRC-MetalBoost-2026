@@ -3,7 +3,7 @@ package frc.robot.subsystems.Shooter;
 import frc.robot.util.TunableNumber;
 
 public class ShooterConstants {
-  // SIM{
+  // FlyWheel SIM{
 
   public static final double kMaxRPM = 5400;
   public static final double kMinRPM = 0;
@@ -25,10 +25,9 @@ public class ShooterConstants {
   public static final TunableNumber kS = new TunableNumber("Shooter/Sim/kS", 0.0);
   public static final TunableNumber kV = new TunableNumber("Shooter/Sim/kV", 12.0 / kMaxRPM);
   public static final TunableNumber kA = new TunableNumber("Shooter/Sim/kA", 0.0);
+  // FlyWheel SIM}
 
-  // SIM}
-
-  // REAL{
+  // FlyWheel REAL{
 
   public static final int MASTER_MOTOR_PORT = 9;
   public static final int SLAVE_MOTOR_PORT = 13;
@@ -37,10 +36,19 @@ public class ShooterConstants {
   public static final TunableNumber kShooterI = new TunableNumber("Shooter/Real/kI", 0.55);
   public static final TunableNumber kShooterD = new TunableNumber("Shooter/Real/kD", 0.000017);
   public static final TunableNumber kShooterS = new TunableNumber("Shooter/Real/kS", 0.0);
-  public static final TunableNumber kShooterV =
-      new TunableNumber("Shooter/Real/kV", 12.0 / kMaxRPM);
+  public static final TunableNumber kShooterV = new TunableNumber("Shooter/Real/kV", 12.0 / kMaxRPM);
   public static final TunableNumber kShooterA = new TunableNumber("Shooter/Real/kA", 0.0);
 
-  // REAL}
+  // FlyWheel REAL}
 
+  // Hood SIM{
+  public static final double kMaxArc = 80;
+  public static final double kMinArc = 38;
+  public static final double kArcTolerance = 1;
+
+  // Hood SIM}
+
+  // Hood REAL{
+
+  // Hood REAL}
 }
