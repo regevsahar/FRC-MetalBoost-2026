@@ -39,7 +39,22 @@ public class ShooterConstants {
   public static final TunableNumber kShooterV = new TunableNumber("Shooter/Real/kV", 12.0 / kMaxRPM);
   public static final TunableNumber kShooterA = new TunableNumber("Shooter/Real/kA", 0.0);
 
-  // FlyWheel REAL}
+  // Hood Constants
+  public static final int HOOD_MOTOR_ID = 50;
+
+  public static final double kHoodGearRatio = 10.0; // Placeholder 10:1
+  public static final double kHoodRotationsPerDegree = (1.0 / 360.0) * kHoodGearRatio; // Rotations per degree of hood
+
+  public static final double kHoodTolerance = 2.0; // Degrees
+
+  public static final TunableNumber kHoodP = new TunableNumber("Shooter/Hood/kP", 0.1);
+  public static final TunableNumber kHoodI = new TunableNumber("Shooter/Hood/kI", 0.0);
+  public static final TunableNumber kHoodD = new TunableNumber("Shooter/Hood/kD", 0.0);
+  public static final TunableNumber kHoodS = new TunableNumber("Shooter/Hood/kS", 0.0);
+  public static final TunableNumber kHoodV = new TunableNumber("Shooter/Hood/kV", 0.0);
+  public static final TunableNumber kHoodA = new TunableNumber("Shooter/Hood/kA", 0.0);
+
+  // REAL}
 
   // Hood SIM{
   public static final double kMaxArc = 80;

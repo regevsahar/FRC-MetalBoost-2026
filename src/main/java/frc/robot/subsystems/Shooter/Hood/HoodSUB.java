@@ -28,7 +28,6 @@ public class HoodSUB extends MBSubsystem {
         DISTANCE_TO_ARC_MAP.put(1.5, 1.5);
         DISTANCE_TO_ARC_MAP.put(2.0, 2.0);
         DISTANCE_TO_ARC_MAP.put(2.5, 2.5);
-
     }
 
     public void setTargetArc(double targetArc) {
