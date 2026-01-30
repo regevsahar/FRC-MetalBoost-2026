@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Shooter.FlyWheel;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -18,8 +19,8 @@ public class FlyWheelIOTalonFX implements FlyWheelIO {
   private final VelocityVoltage velocityControl = new VelocityVoltage(0);
 
   public FlyWheelIOTalonFX() {
-    shooterMotor = new TalonFX(ShooterConstants.MASTER_MOTOR_PORT, Constants.CanivoreName);
-    slaveMotor = new TalonFX(ShooterConstants.SLAVE_MOTOR_PORT, Constants.CanivoreName);
+    shooterMotor = new TalonFX(ShooterConstants.MASTER_MOTOR_PORT, new CANBus(Constants.CanivoreName));
+    slaveMotor = new TalonFX(ShooterConstants.SLAVE_MOTOR_PORT, new CANBus(Constants.CanivoreName));
 
     configureTalonFX();
 
