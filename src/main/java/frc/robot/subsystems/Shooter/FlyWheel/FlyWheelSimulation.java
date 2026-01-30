@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Shooter.ShooterIO;
+package frc.robot.subsystems.Shooter.FlyWheel;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -9,7 +9,7 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
-public class ShooterIOSimulation implements ShooterIO {
+public class FlyWheelSimulation implements FlyWheelIO {
 
   private final FlywheelSim sim;
   private final PIDController pid;
@@ -17,27 +17,35 @@ public class ShooterIOSimulation implements ShooterIO {
   private double appliedVolts = 0.0;
   private double targetRPM = 0.0;
 
-  public ShooterIOSimulation() {
-    // Create the linear system for the flywheel
-    LinearSystem<N1, N1, N1> plant = LinearSystemId.createFlywheelSystem(
-        DCMotor.getKrakenX60(ShooterConstants.kNumMotors),
-        ShooterConstants.kMomentOfInertia,
-        ShooterConstants.kGearRatio);
+  public FlyWheelSimulation() {
+    LinearSystem<N1, N1, N1> plant =
+        LinearSystemId.createFlywheelSystem(
+            DCMotor.getKrakenX60(ShooterConstants.kNumMotors),
+            ShooterConstants.kMomentOfInertia,
+            ShooterConstants.kGearRatio);
 
-    // Initialize FlywheelSim with the plant and motor
     sim = new FlywheelSim(plant, DCMotor.getKrakenX60(ShooterConstants.kNumMotors));
 
-    // Initialize Control
-    pid = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
-    ff = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
+    pid =
+        new PIDController(
+            ShooterConstants.kP.get(), ShooterConstants.kI.get(), ShooterConstants.kD.get());
+    ff =
+        new SimpleMotorFeedforward(
+            ShooterConstants.kS.get(), ShooterConstants.kV.get(), ShooterConstants.kA.get());
   }
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
-    // Simulating the on-board controller (e.g., TalonFX)
+    if (ShooterConstants.kP.hasChanged()
+        || ShooterConstants.kI.hasChanged()
+        || ShooterConstants.kD.hasChanged()) {
+      pid.setPID(ShooterConstants.kP.get(), ShooterConstants.kI.get(), ShooterConstants.kD.get());
+    }
+
     appliedVolts = pid.calculate(sim.getAngularVelocityRPM(), targetRPM) + ff.calculate(targetRPM);
-    appliedVolts = Math.max(
-        -ShooterConstants.kMaxVoltage, Math.min(ShooterConstants.kMaxVoltage, appliedVolts));
+    appliedVolts =
+        Math.max(
+            -ShooterConstants.kMaxVoltage, Math.min(ShooterConstants.kMaxVoltage, appliedVolts));
 
     sim.setInputVoltage(appliedVolts);
     sim.update(ShooterConstants.kLoopTime);

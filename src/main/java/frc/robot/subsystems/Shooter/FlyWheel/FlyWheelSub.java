@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Shooter.ShooterIO;
+package frc.robot.subsystems.Shooter.FlyWheel;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -6,10 +6,10 @@ import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.util.TunableNumber;
 
-public class ShooterSub extends MBSubsystem {
+public class FlyWheelSub extends MBSubsystem {
 
-  private final ShooterIO io;
-  private final ShooterIO.ShooterIOInputs inputs = new ShooterIO.ShooterIOInputs();
+  private final FlyWheelIO io;
+  private final FlyWheelIO.ShooterIOInputs inputs = new FlyWheelIO.ShooterIOInputs();
   private double targetRPM = 0.0;
 
   private final InterpolatingDoubleTreeMap DISTANCE_TO_RPM_MAP = new InterpolatingDoubleTreeMap();
@@ -17,7 +17,7 @@ public class ShooterSub extends MBSubsystem {
   // Tunables
   private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
 
-  public ShooterSub(ShooterIO io) {
+  public FlyWheelSub(FlyWheelIO io) {
     super("Shooter");
     this.io = io;
 

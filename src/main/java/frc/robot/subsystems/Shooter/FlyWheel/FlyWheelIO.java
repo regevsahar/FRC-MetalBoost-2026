@@ -1,6 +1,6 @@
-package frc.robot.subsystems.Shooter.ShooterIO;
+package frc.robot.subsystems.Shooter.FlyWheel;
 
-public interface ShooterIO {
+public interface FlyWheelIO {
 
   public static class ShooterIOInputs {
 

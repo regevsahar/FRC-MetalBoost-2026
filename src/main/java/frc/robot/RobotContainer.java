@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Shooter.ShooterIO.ShooterIO;
-import frc.robot.subsystems.Shooter.ShooterIO.ShooterIOSimulation;
-import frc.robot.subsystems.Shooter.ShooterIO.ShooterIOTalonFX;
-import frc.robot.subsystems.Shooter.ShooterIO.ShooterSub;
+import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIO;
+import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIOTalonFX;
+import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSimulation;
+import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
 
 public class RobotContainer {
   /* Controllers */
@@ -37,8 +37,7 @@ public class RobotContainer {
       new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
   /* operation Buttons */
-  private final Trigger shoot =
-      new JoystickButton(operator, XboxController.Button.kX.value);
+  private final Trigger shoot = new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton spin =
       new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton spinAnotherSide =
@@ -48,7 +47,7 @@ public class RobotContainer {
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
-  private final ShooterSub shooter;
+  private final FlyWheelSub shooter;
   private final Spindexer spindexer = new Spindexer();
   private final Intake s_intake = new Intake();
 
@@ -57,11 +56,10 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    ShooterIO shooterIO = RobotBase.isSimulation()
-                ? new ShooterIOSimulation()
-                : new ShooterIOTalonFX();
+    FlyWheelIO shooterIO =
+        RobotBase.isSimulation() ? new FlyWheelSimulation() : new FlyWheelIOTalonFX();
 
-        shooter= new ShooterSub(shooterIO);
+    shooter = new FlyWheelSub(shooterIO);
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
