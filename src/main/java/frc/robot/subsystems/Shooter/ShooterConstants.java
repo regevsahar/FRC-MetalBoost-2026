@@ -36,14 +36,16 @@ public class ShooterConstants {
   public static final TunableNumber kShooterI = new TunableNumber("Shooter/Real/kI", 0.55);
   public static final TunableNumber kShooterD = new TunableNumber("Shooter/Real/kD", 0.000017);
   public static final TunableNumber kShooterS = new TunableNumber("Shooter/Real/kS", 0.0);
-  public static final TunableNumber kShooterV = new TunableNumber("Shooter/Real/kV", 12.0 / kMaxRPM);
+  public static final TunableNumber kShooterV =
+      new TunableNumber("Shooter/Real/kV", 12.0 / kMaxRPM);
   public static final TunableNumber kShooterA = new TunableNumber("Shooter/Real/kA", 0.0);
 
   // Hood Constants
   public static final int HOOD_MOTOR_ID = 50;
 
   public static final double kHoodGearRatio = 10.0; // Placeholder 10:1
-  public static final double kHoodRotationsPerDegree = (1.0 / 360.0) * kHoodGearRatio; // Rotations per degree of hood
+  public static final double kHoodRotationsPerDegree =
+      (1.0 / 360.0) * kHoodGearRatio; // Rotations per degree of hood
 
   public static final double kHoodTolerance = 2.0; // Degrees
 
