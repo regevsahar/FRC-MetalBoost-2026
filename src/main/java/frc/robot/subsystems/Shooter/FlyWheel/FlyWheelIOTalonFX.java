@@ -19,7 +19,8 @@ public class FlyWheelIOTalonFX implements FlyWheelIO {
   private final VelocityVoltage velocityControl = new VelocityVoltage(0);
 
   public FlyWheelIOTalonFX() {
-    shooterMotor = new TalonFX(ShooterConstants.MASTER_MOTOR_PORT, new CANBus(Constants.CanivoreName));
+    shooterMotor =
+        new TalonFX(ShooterConstants.MASTER_MOTOR_PORT, new CANBus(Constants.CanivoreName));
     slaveMotor = new TalonFX(ShooterConstants.SLAVE_MOTOR_PORT, new CANBus(Constants.CanivoreName));
 
     configureTalonFX();
