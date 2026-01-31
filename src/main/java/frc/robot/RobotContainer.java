@@ -15,6 +15,10 @@ import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIO;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIOTalonFX;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSimulation;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
+import frc.robot.subsystems.Shooter.Hood.HoodIO;
+import frc.robot.subsystems.Shooter.Hood.HoodIOSim;
+import frc.robot.subsystems.Shooter.Hood.HoodIOTalonFX;
+import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 
 public class RobotContainer {
   /* Controllers */
@@ -42,12 +46,13 @@ public class RobotContainer {
       new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton spinAnotherSide =
       new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton intake =
-      new JoystickButton(operator, XboxController.Button.kB.value);
+  private final Trigger intake = new JoystickButton(operator, XboxController.Button.kB.value);
+  private final Trigger hoodCommand = new JoystickButton(operator, XboxController.Button.kY.value);
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
   private final FlyWheelSub shooter;
+  private final HoodSUB hood;
   private final Spindexer spindexer = new Spindexer();
   private final Intake s_intake = new Intake();
 
@@ -60,6 +65,10 @@ public class RobotContainer {
         RobotBase.isSimulation() ? new FlyWheelSimulation() : new FlyWheelIOTalonFX();
 
     shooter = new FlyWheelSub(shooterIO);
+
+    HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
+
+    hood = new HoodSUB(hoodIO);
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
@@ -114,6 +123,7 @@ public class RobotContainer {
     spin.whileTrue(new Spin(spindexer, -0.35));
     spinAnotherSide.whileTrue(new Spin(spindexer, 0.35));
     intake.whileTrue(new IntakeCommand(s_intake, 0.45));
+    hoodCommand.whileTrue(new HoodCommand(hood));
   }
 
   public Command getAutonomousCommand() {

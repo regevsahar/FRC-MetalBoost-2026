@@ -52,7 +52,7 @@ public class FlyWheelIOTalonFX implements FlyWheelIO {
   }
 
   @Override
-  public void updateInputs(ShooterIOInputs inputs) {
+  public void updateInputs(FlyWheelIOInputs inputs) {
     if (ShooterConstants.kShooterP.hasChanged()
         || ShooterConstants.kShooterI.hasChanged()
         || ShooterConstants.kShooterD.hasChanged()

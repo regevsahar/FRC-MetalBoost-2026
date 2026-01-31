@@ -2,6 +2,9 @@ package frc.robot.subsystems.Shooter.Hood;
 
 public interface HoodIO {
   public static class HoodIOInputs {
+
+    public double distance = 0.0;
+
     public double arc = 0.0;
   }
 

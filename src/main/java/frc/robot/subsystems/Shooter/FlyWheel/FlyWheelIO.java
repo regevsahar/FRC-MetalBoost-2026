@@ -2,8 +2,7 @@ package frc.robot.subsystems.Shooter.FlyWheel;
 
 public interface FlyWheelIO {
 
-  public static class ShooterIOInputs {
-
+  public static class FlyWheelIOInputs {
     // current distance in meters
     public double distance = 0.0;
 
@@ -11,7 +10,7 @@ public interface FlyWheelIO {
     public double rpm = 0.0;
   }
 
-  default void updateInputs(ShooterIOInputs inputs) {}
+  default void updateInputs(FlyWheelIOInputs inputs) {}
 
   default void setTargetRPM(double targetRPM) {}
 

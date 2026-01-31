@@ -9,7 +9,7 @@ import frc.robot.util.TunableNumber;
 public class FlyWheelSub extends MBSubsystem {
 
   private final FlyWheelIO io;
-  private final FlyWheelIO.ShooterIOInputs inputs = new FlyWheelIO.ShooterIOInputs();
+  private final FlyWheelIO.FlyWheelIOInputs inputs = new FlyWheelIO.FlyWheelIOInputs();
   private double targetRPM = 0.0;
 
   private final InterpolatingDoubleTreeMap DISTANCE_TO_RPM_MAP = new InterpolatingDoubleTreeMap();
