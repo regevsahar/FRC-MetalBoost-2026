@@ -16,28 +16,24 @@ public class HoodIOSim implements HoodIO {
   private double targetArc = 0.0;
 
   public HoodIOSim() {
-    sim =
-        new SingleJointedArmSim(
-            DCMotor.getKrakenX60(1),
-            ShooterConstants.kHoodGearRatio,
-            0.005,
-            0.18,
-            Units.degreesToRadians(ShooterConstants.kMinArc),
-            Units.degreesToRadians(ShooterConstants.kMaxArc),
-            true,
-            Units.degreesToRadians(ShooterConstants.kMinArc));
+    sim = new SingleJointedArmSim(
+        DCMotor.getKrakenX60(1),
+        ShooterConstants.kHoodGearRatio,
+        0.005,
+        0.18,
+        Units.degreesToRadians(ShooterConstants.kMinArc),
+        Units.degreesToRadians(ShooterConstants.kMaxArc),
+        true,
+        Units.degreesToRadians(ShooterConstants.kMinArc));
 
-    pid =
-        new PIDController(
-            ShooterConstants.kHoodP.get(),
-            ShooterConstants.kHoodI.get(),
-            ShooterConstants.kHoodD.get());
-    ff =
-        new ArmFeedforward(
-            ShooterConstants.kHoodS.get(),
-            ShooterConstants.kG.get(),
-            ShooterConstants.kHoodV.get(),
-            ShooterConstants.kHoodA.get());
+    pid = new PIDController(
+        ShooterConstants.kHoodP.get(),
+        ShooterConstants.kHoodI.get(),
+        ShooterConstants.kHoodD.get());
+    ff = new ArmFeedforward(
+        ShooterConstants.kHoodS.get(),
+        ShooterConstants.kHoodV.get(),
+        ShooterConstants.kHoodA.get());
   }
 
   @Override
@@ -54,12 +50,10 @@ public class HoodIOSim implements HoodIO {
     double currentAngleRadians = sim.getAngleRads();
     double targetAngleRadians = Units.degreesToRadians(targetArc);
 
-    appliedVolts =
-        pid.calculate(currentAngleRadians, targetAngleRadians)
-            + ff.calculate(currentAngleRadians, 0); // Position control ff
-    appliedVolts =
-        Math.max(
-            -ShooterConstants.kMaxVoltage, Math.min(ShooterConstants.kMaxVoltage, appliedVolts));
+    appliedVolts = pid.calculate(currentAngleRadians, targetAngleRadians)
+        + ff.calculate(currentAngleRadians, 0); // Position control ff
+    appliedVolts = Math.max(
+        -ShooterConstants.kMaxVoltage, Math.min(ShooterConstants.kMaxVoltage, appliedVolts));
 
     sim.setInputVoltage(appliedVolts);
     sim.update(ShooterConstants.kLoopTime);
