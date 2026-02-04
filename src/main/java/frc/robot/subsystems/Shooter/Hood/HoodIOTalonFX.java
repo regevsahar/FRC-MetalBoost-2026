@@ -12,11 +12,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter.ShooterConstants;
@@ -29,16 +25,16 @@ public class HoodIOTalonFX implements HoodIO {
   private final DutyCycleOut dutyCycleControl = new DutyCycleOut(0);
 
   // Status Signals for optimization
-  private final StatusSignal<Double> positionSignal;
-  private final StatusSignal<Double> velocitySignal;
-  private final StatusSignal<Double> motorVoltageSignal;
-  private final StatusSignal<Double> supplyCurrentSignal;
-  private final StatusSignal<Double> tempSignal;
+  private final StatusSignal<?> positionSignal;
+  private final StatusSignal<?> velocitySignal;
+  private final StatusSignal<?> motorVoltageSignal;
+  private final StatusSignal<?> supplyCurrentSignal;
+  private final StatusSignal<?> tempSignal;
 
   public HoodIOTalonFX() {
     hoodMotor = new TalonFX(ShooterConstants.HOOD_MOTOR_ID, new CANBus(Constants.CanivoreName));
+    cancoder = new CANcoder(ShooterConstants.HOOD_CANCODER_ID, new CANBus(Constants.CanivoreName));
 
-    configureTalonFX();
     configureCANCoder();
 
     // Configure the motor
@@ -52,6 +48,7 @@ public class HoodIOTalonFX implements HoodIO {
     tempSignal = hoodMotor.getDeviceTemp();
 
     // Optimize bus utilization
+
     BaseStatusSignal.setUpdateFrequencyForAll(
         50.0,
         positionSignal,
@@ -80,11 +77,12 @@ public class HoodIOTalonFX implements HoodIO {
     config.Slot0.kA = ShooterConstants.kHoodA.get();
 
     // Current Limits: 20A continuous, 40A peak
+
     CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
-    currentLimits.SupplyCurrentLimit = 20.0;
+    currentLimits.SupplyCurrentLimit = 40.0; // Peak
     currentLimits.SupplyCurrentLimitEnable = true;
-    currentLimits.SupplyCurrentThreshold = 40.0;
-    currentLimits.SupplyTimeThreshold = 0.1;
+    currentLimits.SupplyCurrentLowerLimit = 20.0; // Continuous
+    currentLimits.SupplyCurrentLowerTime = 0.1;
     config.CurrentLimits = currentLimits;
 
     // Soft Limits (Prevent mechanism damage)
@@ -116,7 +114,8 @@ public class HoodIOTalonFX implements HoodIO {
   @Override
   public void updateInputs(HoodIOInputs inputs) {
     // Refresh signals
-    BaseStatusSignal.refreshForAll(
+
+    BaseStatusSignal.refreshAll(
         positionSignal,
         velocitySignal,
         motorVoltageSignal,
@@ -153,7 +152,6 @@ public class HoodIOTalonFX implements HoodIO {
     double rotations = clampedArc * ShooterConstants.kHoodRotationsPerDegree;
 
     // Check if within tolerance? PID handles it so just command it.
-    double rotations = arc / ShooterConstants.kHoodRotationsPerDegree;
     hoodMotor.setControl(positionControl.withPosition(rotations));
   }
 
