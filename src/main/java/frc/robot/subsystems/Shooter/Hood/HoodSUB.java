@@ -22,12 +22,12 @@ public class HoodSUB extends MBSubsystem {
     this.io = io;
 
     // Mapping (Distance Meters -> Arc)
-    DISTANCE_TO_ARC_MAP.put(0.0, 0.0);
-    DISTANCE_TO_ARC_MAP.put(0.5, 0.5);
-    DISTANCE_TO_ARC_MAP.put(1.0, 1.0);
-    DISTANCE_TO_ARC_MAP.put(1.5, 1.5);
-    DISTANCE_TO_ARC_MAP.put(2.0, 2.0);
-    DISTANCE_TO_ARC_MAP.put(2.5, 2.5);
+    DISTANCE_TO_ARC_MAP.put(0.0, 38.0);
+    DISTANCE_TO_ARC_MAP.put(0.5, 42.0);
+    DISTANCE_TO_ARC_MAP.put(1.0, 48.0);
+    DISTANCE_TO_ARC_MAP.put(1.5, 58.0);
+    DISTANCE_TO_ARC_MAP.put(2.0, 67.0);
+    DISTANCE_TO_ARC_MAP.put(2.5, 73.0);
   }
 
   public void setTargetArc(double targetArc) {
@@ -48,7 +48,7 @@ public class HoodSUB extends MBSubsystem {
   }
 
   public boolean isAtTarget() {
-    return Math.abs(getCurrentArc() - targetArc) < ShooterConstants.kRPMPolerance;
+    return Math.abs(getCurrentArc() - targetArc) < ShooterConstants.kArcTolerance;
   }
 
   public void stop() {

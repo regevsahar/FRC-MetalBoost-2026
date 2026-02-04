@@ -5,19 +5,26 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
 public class HoodIOTalonFX implements HoodIO {
 
   private final TalonFX hoodMotor;
+  private final CANcoder cancoder;
   private final PositionVoltage positionControl = new PositionVoltage(0);
   private final DutyCycleOut dutyCycleControl = new DutyCycleOut(0);
 
@@ -30,6 +37,9 @@ public class HoodIOTalonFX implements HoodIO {
 
   public HoodIOTalonFX() {
     hoodMotor = new TalonFX(ShooterConstants.HOOD_MOTOR_ID, new CANBus(Constants.CanivoreName));
+
+    configureTalonFX();
+    configureCANCoder();
 
     // Configure the motor
     configMotor();
@@ -95,6 +105,14 @@ public class HoodIOTalonFX implements HoodIO {
     System.out.println("Hood TalonFX config failed after 5 attempts!");
   }
 
+  private void configureCANCoder() {
+    CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
+    StatusCode status = cancoder.getConfigurator().apply(cancoderConfig);
+    if (status != StatusCode.OK) {
+      System.out.println("Failed to configure CANCoder: " + status);
+    }
+  }
+
   @Override
   public void updateInputs(HoodIOInputs inputs) {
     // Refresh signals
@@ -121,6 +139,9 @@ public class HoodIOTalonFX implements HoodIO {
         || ShooterConstants.kHoodA.hasChanged()) {
       configMotor();
     }
+
+    // Convert from Rotations to Arc Degrees
+    inputs.arc = cancoder.getAbsolutePosition().getValueAsDouble() / ShooterConstants.kHoodRotationsPerDegree;
   }
 
   @Override
@@ -132,6 +153,7 @@ public class HoodIOTalonFX implements HoodIO {
     double rotations = clampedArc * ShooterConstants.kHoodRotationsPerDegree;
 
     // Check if within tolerance? PID handles it so just command it.
+    double rotations = arc / ShooterConstants.kHoodRotationsPerDegree;
     hoodMotor.setControl(positionControl.withPosition(rotations));
   }
 

@@ -35,7 +35,7 @@ public class FlyWheelSimulation implements FlyWheelIO {
   }
 
   @Override
-  public void updateInputs(ShooterIOInputs inputs) {
+  public void updateInputs(FlyWheelIOInputs inputs) {
     if (ShooterConstants.kP.hasChanged()
         || ShooterConstants.kI.hasChanged()
         || ShooterConstants.kD.hasChanged()) {
