@@ -81,6 +81,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     Rotation2d currentGyro = m_robotContainer.s_Swerve.getGyroYaw();
     double distanceFromTag = LimelightHelpers.getTargetPose_CameraSpace("limelight")[0];
+    double distanceFromTag2 = LimelightHelpers.getTargetPose_CameraSpace("limelight2")[0];
 
     Pose2d robotPose = m_robotContainer.poseEstimator.getEstimatedPosition();
     boolean isInRedZone = m_robotContainer.fieldGrid.onForbiddenArea(robotPose);
@@ -146,7 +147,7 @@ public class Robot extends LoggedRobot {
         m_robotContainer.poseEstimator.updateVision(
             ll2estimateMT2.get(),
             gyroYawAtTimeStamp.get(),
-            distanceFromTag
+            distanceFromTag2
 
         );
       }
