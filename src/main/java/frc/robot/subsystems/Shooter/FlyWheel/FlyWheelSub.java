@@ -1,6 +1,5 @@
 package frc.robot.subsystems.Shooter.FlyWheel;
 
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
@@ -12,8 +11,6 @@ public class FlyWheelSub extends MBSubsystem {
   private final FlyWheelIO.FlyWheelIOInputs inputs = new FlyWheelIO.FlyWheelIOInputs();
   private double targetRPM = 0.0;
 
-  private final InterpolatingDoubleTreeMap DISTANCE_TO_RPM_MAP = new InterpolatingDoubleTreeMap();
-
   // Tunables
   private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
 
@@ -21,13 +18,6 @@ public class FlyWheelSub extends MBSubsystem {
     super("Shooter");
     this.io = io;
 
-    // Mapping (Distance Meters -> RPM)
-    DISTANCE_TO_RPM_MAP.put(0.0, 2600.0);
-    DISTANCE_TO_RPM_MAP.put(0.5, 2675.0);
-    DISTANCE_TO_RPM_MAP.put(1.0, 2800.0);
-    DISTANCE_TO_RPM_MAP.put(1.5, 3000.0);
-    DISTANCE_TO_RPM_MAP.put(2.0, 3250.0);
-    DISTANCE_TO_RPM_MAP.put(2.5, 3400.0);
   }
 
   public void setTargetRPM(double targetRPM) {
@@ -40,7 +30,7 @@ public class FlyWheelSub extends MBSubsystem {
   }
 
   public double getRPMFromDistance(double distance) {
-    return DISTANCE_TO_RPM_MAP.get(distance);
+    return ShooterConstants.DISTANCE_TO_RPM_MAP.get(distance);
   }
 
   public double getCurrentRPM() {

@@ -1,6 +1,5 @@
 package frc.robot.subsystems.Shooter.Hood;
 
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
@@ -12,8 +11,6 @@ public class HoodSUB extends MBSubsystem {
   private final HoodIO.HoodIOInputs inputs = new HoodIO.HoodIOInputs();
   private double targetArc = 0.0;
 
-  private final InterpolatingDoubleTreeMap DISTANCE_TO_ARC_MAP = new InterpolatingDoubleTreeMap();
-
   // Tunables
   private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
 
@@ -21,13 +18,6 @@ public class HoodSUB extends MBSubsystem {
     super("Hood");
     this.io = io;
 
-    // Mapping (Distance Meters -> Arc)
-    DISTANCE_TO_ARC_MAP.put(0.0, 38.0);
-    DISTANCE_TO_ARC_MAP.put(0.5, 42.0);
-    DISTANCE_TO_ARC_MAP.put(1.0, 48.0);
-    DISTANCE_TO_ARC_MAP.put(1.5, 58.0);
-    DISTANCE_TO_ARC_MAP.put(2.0, 67.0);
-    DISTANCE_TO_ARC_MAP.put(2.5, 73.0);
   }
 
   public void setTargetArc(double targetArc) {
@@ -40,7 +30,7 @@ public class HoodSUB extends MBSubsystem {
   }
 
   public double getArcFromDistance(double distance) {
-    return DISTANCE_TO_ARC_MAP.get(distance);
+    return ShooterConstants.DISTANCE_TO_ARC_MAP.get(distance);
   }
 
   public double getCurrentArc() {
