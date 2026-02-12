@@ -1,8 +1,8 @@
 package frc.robot.autos;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class AutoChooser {
   private final SendableChooser<Command> autoChooser;

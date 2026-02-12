@@ -1,14 +1,13 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Swerve;
 import frc.robot.Constants;
 import frc.robot.subsystems.AlignToPoseSubsystem;
+import frc.robot.subsystems.Swerve;
+import java.util.function.DoubleSupplier;
 
 public class AlignToPoseCommand extends Command {
 
@@ -18,7 +17,11 @@ public class AlignToPoseCommand extends Command {
   private DoubleSupplier strafeSup;
   private DoubleSupplier speedReductionSup;
 
-  public AlignToPoseCommand(Swerve swerve, AlignToPoseSubsystem hubAlignSubsystem, DoubleSupplier translationSup, DoubleSupplier strafeSup) {
+  public AlignToPoseCommand(
+      Swerve swerve,
+      AlignToPoseSubsystem hubAlignSubsystem,
+      DoubleSupplier translationSup,
+      DoubleSupplier strafeSup) {
     this.swerve = swerve;
     this.hubAlignSubsystem = hubAlignSubsystem;
     this.translationSup = translationSup;
@@ -35,9 +38,14 @@ public class AlignToPoseCommand extends Command {
   @Override
   public void execute() {
 
-    double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble() * speedReductionSup.getAsDouble(), Constants.stickDeadband);
-    double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble() * speedReductionSup.getAsDouble(), Constants.stickDeadband);
-    
+    double translationVal =
+        MathUtil.applyDeadband(
+            translationSup.getAsDouble() * speedReductionSup.getAsDouble(),
+            Constants.stickDeadband);
+    double strafeVal =
+        MathUtil.applyDeadband(
+            strafeSup.getAsDouble() * speedReductionSup.getAsDouble(), Constants.stickDeadband);
+
     var alliance = DriverStation.getAlliance();
 
     Translation2d target = Constants.FieldConstants.HUB_CENTER_BLUE;
@@ -45,11 +53,9 @@ public class AlignToPoseCommand extends Command {
       target = Constants.FieldConstants.HUB_CENTER_RED;
     }
 
-    double rotation = hubAlignSubsystem.calculateRotationOutput(
-        swerve.getPose(),
-        target);
+    double rotation = hubAlignSubsystem.calculateRotationOutput(swerve.getPose(), target);
 
-    swerve.drive(new Translation2d(translationVal,strafeVal), rotation, true, false);
+    swerve.drive(new Translation2d(translationVal, strafeVal), rotation, true, false);
   }
 
   @Override

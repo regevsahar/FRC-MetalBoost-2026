@@ -8,52 +8,50 @@ import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Swerve;
 
-public class GoToNearestBranch extends Command{
+public class GoToNearestBranch extends Command {
 
-    private final PoseEstimator estimator;
-    private final Swerve swerve;
-    private Pose2d current;
-    private Pose2d target;
-    public GoToNearestBranch(PoseEstimator estimator, Swerve swerve){
-        this.estimator = estimator;
-        this.swerve = swerve;
+  private final PoseEstimator estimator;
+  private final Swerve swerve;
+  private Pose2d current;
+  private Pose2d target;
 
-        addRequirements(estimator,swerve);
+  public GoToNearestBranch(PoseEstimator estimator, Swerve swerve) {
+    this.estimator = estimator;
+    this.swerve = swerve;
+
+    addRequirements(estimator, swerve);
+  }
+
+  public static Reef getClosestBranch(Pose2d robotPose) {
+    Reef closest = null;
+    double minDistance = Double.MAX_VALUE;
+
+    for (Reef branch : Reef.values()) {
+      double distance = branch.getDistance(robotPose);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closest = branch;
+      }
     }
 
-    public static Reef getClosestBranch(Pose2d robotPose) {
-        Reef closest = null;
-        double minDistance = Double.MAX_VALUE;
-
-        for (Reef branch : Reef.values()) {
-            double distance = branch.getDistance(robotPose);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closest = branch;
-            }
-        }
-
-        return closest;
-	}
-
+    return closest;
+  }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+
     current = estimator.getEstimatedPosition();
-    target = getClosestBranch(current).getPose();    
+    target = getClosestBranch(current).getPose();
 
-    //TODO check if mirror is needed
-    PathPlannerUtil.createPathDuringRuntime(current, target, Constants.SwerveConstants.constraints, true);
-
+    // TODO check if mirror is needed
+    PathPlannerUtil.createPathDuringRuntime(
+        current, target, Constants.SwerveConstants.constraints, true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

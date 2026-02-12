@@ -2,7 +2,6 @@ package frc.lib.util;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.math.util.Units;
 
 /* Contains values and required settings for common COTS swerve modules. */
@@ -18,8 +17,15 @@ public class COTSTalonFXSwerveConstants {
   public final InvertedValue angleMotorInvert;
   public final SensorDirectionValue cancoderInvert;
 
-  public COTSTalonFXSwerveConstants(double wheelDiameter, double angleGearRatio, double driveGearRatio, double angleKP,
-      double angleKI, double angleKD, InvertedValue driveMotorInvert, InvertedValue angleMotorInvert,
+  public COTSTalonFXSwerveConstants(
+      double wheelDiameter,
+      double angleGearRatio,
+      double driveGearRatio,
+      double angleKP,
+      double angleKI,
+      double angleKD,
+      InvertedValue driveMotorInvert,
+      InvertedValue angleMotorInvert,
       SensorDirectionValue cancoderInvert) {
     this.wheelDiameter = wheelDiameter;
     this.wheelCircumference = wheelDiameter * Math.PI;
@@ -51,8 +57,16 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       /** West Coast Products - SwerveX Standard (Kraken X60) */
@@ -69,8 +83,16 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       public static final class driveRatios {
@@ -119,8 +141,16 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       /** West Coast Products - SwerveX Flipped (Kraken X60) */
@@ -137,8 +167,16 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       public static final class driveRatios {
@@ -190,8 +228,16 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.CounterClockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       /** Swerve Drive Specialties - MK3 Module (Kraken X60) */
@@ -208,13 +254,22 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.CounterClockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       public static final class driveRatios {
         /** SDS MK3 - (8.16 : 1) */
         public static final double Standard = (8.16 / 1.0);
+
         /** SDS MK3 - (6.86 : 1) */
         public static final double Fast = (6.86 / 1.0);
       }
@@ -236,8 +291,16 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.CounterClockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       /** Swerve Drive Specialties - MK4 Module (Kraken X60) */
@@ -254,17 +317,28 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.CounterClockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       public static final class driveRatios {
         /** SDS MK4 - (8.14 : 1) */
         public static final double L1 = (8.14 / 1.0);
+
         /** SDS MK4 - (6.75 : 1) */
         public static final double L2 = (6.75 / 1.0);
+
         /** SDS MK4 - (6.12 : 1) */
         public static final double L3 = (6.12 / 1.0);
+
         /** SDS MK4 - (5.14 : 1) */
         public static final double L4 = (5.14 / 1.0);
       }
@@ -286,8 +360,16 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       /** Swerve Drive Specialties - MK4i Module (Kraken X60) */
@@ -304,15 +386,25 @@ public class COTSTalonFXSwerveConstants {
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
         SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSTalonFXSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD,
-            driveMotorInvert, angleMotorInvert, cancoderInvert);
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
       }
 
       public static final class driveRatios {
         /** SDS MK4i - (8.14 : 1) */
         public static final double L1 = (8.14 / 1.0);
+
         /** SDS MK4i - (6.75 : 1) */
         public static final double L2 = (6.75 / 1.0);
+
         /** SDS MK4i - (6.12 : 1) */
         public static final double L3 = (6.12 / 1.0);
       }
