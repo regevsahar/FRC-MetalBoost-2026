@@ -15,6 +15,7 @@ import frc.lib.util.MapFiltering.GridMap;
 import frc.lib.util.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.*;
+import frc.robot.commands.Shooter.FlywheelHoodIntegrationCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIO;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIOTalonFX;
@@ -67,6 +68,8 @@ public class RobotContainer {
       new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton spinAnotherSide =
       new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+  private final JoystickButton flywheelHoodAutoCommand =
+      new JoystickButton(operator, XboxController.Button.kStart.value);
   private final Trigger intake = new JoystickButton(operator, XboxController.Button.kB.value);
   private final Trigger hoodCommand = new JoystickButton(operator, XboxController.Button.kY.value);
 
@@ -105,6 +108,7 @@ public class RobotContainer {
     spinAnotherSide.whileTrue(new Spin(spindexer, 0.35));
     intake.whileTrue(new IntakeCommand(s_intake, 0.45));
     hoodCommand.whileTrue(new HoodCommand(hood));
+    flywheelHoodAutoCommand.whileTrue(new FlywheelHoodIntegrationCommand(shooter, hood));
 
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
