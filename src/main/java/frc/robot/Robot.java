@@ -80,8 +80,8 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     Rotation2d currentGyro = m_robotContainer.s_Swerve.getGyroYaw();
-    double distanceFromTag = LimelightHelpers.getTargetPose_CameraSpace("limelight")[0];
-    double distanceFromTag2 = LimelightHelpers.getTargetPose_CameraSpace("limelight2")[0];
+    double distanceFromTag = LimelightHelpers.getTargetPose_CameraSpace("limelight-three")[0];
+    double distanceFromTag2 = LimelightHelpers.getTargetPose_CameraSpace("limelight-four")[0];
 
     Pose2d robotPose = m_robotContainer.poseEstimator.getEstimatedPosition();
     boolean isInRedZone = m_robotContainer.fieldGrid.onForbiddenArea(robotPose);

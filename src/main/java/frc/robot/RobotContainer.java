@@ -40,8 +40,8 @@ public class RobotContainer {
         private HeightSpeedReduction heightSpeedReduction = HeightSpeedReduction.getInstance();
 
         public final PoseEstimator poseEstimator = new PoseEstimator();
-        public final LimelightSubsystem limelight = new LimelightSubsystem("limelight");
-        public final LimelightSubsystem limelight2 = new LimelightSubsystem("limelight2");
+        public final LimelightSubsystem limelight = new LimelightSubsystem("limelight-three");
+        public final LimelightSubsystem limelight2 = new LimelightSubsystem("limelight-four");
         public final Swerve s_Swerve = new Swerve(poseEstimator);
 
         public final GridMap fieldGrid;
