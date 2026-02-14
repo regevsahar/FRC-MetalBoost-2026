@@ -82,7 +82,7 @@ public class Robot extends LoggedRobot {
     Rotation2d currentGyro = m_robotContainer.s_Swerve.getGyroYaw();
     
     double distanceFromTag = m_robotContainer.limelight.getDistanceFromTarget();
-    double distanceFromTag2 = m_robotContainer.limelight2.getDistanceFromTarget();
+    //double distanceFromTag2 = m_robotContainer.limelight2.getDistanceFromTarget();
 
     Pose2d robotPose = m_robotContainer.poseEstimator.getEstimatedPosition();
     boolean isInRedZone = m_robotContainer.fieldGrid.onForbiddenArea(robotPose);
@@ -105,11 +105,11 @@ public class Robot extends LoggedRobot {
     Optional<Pose2d> llPoseMT2 = Optional.empty();
     Optional<Pose2d> llPoseMT1 = Optional.empty();
     
-    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT2 = m_robotContainer.limelight2.getMegaTag2Pose();
-    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT1 = m_robotContainer.limelight2.getMegaTag1Pose();
+    //Optional<LimelightHelpers.PoseEstimate> ll2estimateMT2 = m_robotContainer.limelight2.getMegaTag2Pose();
+    //Optional<LimelightHelpers.PoseEstimate> ll2estimateMT1 = m_robotContainer.limelight2.getMegaTag1Pose();
     
-    Optional<Pose2d> ll2PoseMT2 = Optional.empty();
-    Optional<Pose2d> ll2PoseMT1 = Optional.empty();
+    //Optional<Pose2d> ll2PoseMT2 = Optional.empty();
+    //Optional<Pose2d> ll2PoseMT1 = Optional.empty();
     
     Optional<Rotation2d> gyroYawAtTimeStamp = Optional.empty();
     
@@ -121,11 +121,11 @@ public class Robot extends LoggedRobot {
     }
 
     
-    if (ll2estimateMT2.isPresent() && ll2estimateMT1.isPresent()) {
-      ll2PoseMT2 = Optional.of(ll2estimateMT2.get().pose);
-      ll2PoseMT1 = Optional.of(ll2estimateMT1.get().pose);
-      gyroYawAtTimeStamp = m_robotContainer.poseEstimator.getGyroYawAtTimeStamp(ll2estimateMT2.get().timestampSeconds);
-    }
+    // if (ll2estimateMT2.isPresent() && ll2estimateMT1.isPresent()) {
+    //   ll2PoseMT2 = Optional.of(ll2estimateMT2.get().pose);
+    //   ll2PoseMT1 = Optional.of(ll2estimateMT1.get().pose);
+    //   gyroYawAtTimeStamp = m_robotContainer.poseEstimator.getGyroYawAtTimeStamp(ll2estimateMT2.get().timestampSeconds);
+    // }
 
     boolean hasTarget = m_robotContainer.limelight.hasTarget();
     if (hasTarget) {
@@ -143,21 +143,21 @@ public class Robot extends LoggedRobot {
       }
     }
 
-    boolean hasTarget2 = m_robotContainer.limelight2.hasTarget();    
-    if (hasTarget2) {
-      if (ll2PoseMT2.isPresent() && gyroYawAtTimeStamp.isPresent()) {
-        m_robotContainer.poseEstimator.updateHeadingOffset(
-            gyroYawAtTimeStamp.get(),
-            ll2PoseMT1.get().getRotation());
+    // boolean hasTarget2 = m_robotContainer.limelight2.hasTarget();    
+    // if (hasTarget2) {
+    //   if (ll2PoseMT2.isPresent() && gyroYawAtTimeStamp.isPresent()) {
+    //     m_robotContainer.poseEstimator.updateHeadingOffset(
+    //         gyroYawAtTimeStamp.get(),
+    //         ll2PoseMT1.get().getRotation());
 
-        m_robotContainer.poseEstimator.updateVision(
-            ll2estimateMT2.get(),
-            gyroYawAtTimeStamp.get(),
-            distanceFromTag2
+    //     m_robotContainer.poseEstimator.updateVision(
+    //         ll2estimateMT2.get(),
+    //         gyroYawAtTimeStamp.get(),
+    //         distanceFromTag2
 
-        );
-      }
-    }
+    //     );
+    //   }
+    // }
 
     if (isInRedZone)
       Constants.PoseEstimator.OdometryFactor = 2;

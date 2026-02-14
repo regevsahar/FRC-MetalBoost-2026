@@ -93,5 +93,6 @@ public class LimelightSubsystem extends SubsystemBase {
         Logger.recordOutput("Limelight-DATA/" + getName() + "/MT1-isPresent", getMegaTag1Pose().isPresent());
         Logger.recordOutput("Limelight-DATA/" + getName() + "/MT2-isPresent", getMegaTag2Pose().isPresent());
         Logger.recordOutput("Limelight-DATA/" + getName() + "/Pose-isPresent", getMegaTag2Pose().get().pose != null);
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/DistanceFromTarget", hasTarget() ? getDistanceFromTarget() : -1);
     }
 }
