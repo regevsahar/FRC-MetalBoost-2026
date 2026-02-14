@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
+
 import frc.lib.util.LimelightHelpers;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -41,7 +43,7 @@ public class LimelightSubsystem extends SubsystemBase {
         return Optional.of(estimate);
     }
 
-    public void SetHeading(Rotation2d heading) {
+    public void setHeading(Rotation2d heading) {
         LimelightHelpers.SetRobotOrientation(limelightName, heading.getDegrees(), 0, 0, 0, 0, 0);
     }
 
@@ -70,5 +72,26 @@ public class LimelightSubsystem extends SubsystemBase {
      */
     public boolean hasTarget() {
         return LimelightHelpers.getTV(limelightName);
+    }
+
+    public String getName() {
+        return limelightName;
+    }
+
+    public double getApriltagID() {
+        return LimelightHelpers.getFiducialID(limelightName);
+    }
+
+    public double getDistanceFromTarget() {
+        return LimelightHelpers.getTargetPose_CameraSpace(limelightName)[0];
+    }
+
+    @Override
+    public void periodic() {
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/HasTarget", hasTarget());
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/PrimaryTagID", hasTarget() ? getApriltagID() : -1);
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/MT1-isPresent", getMegaTag1Pose().isPresent());
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/MT2-isPresent", getMegaTag2Pose().isPresent());
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/Pose-isPresent", getMegaTag2Pose().get().pose != null);
     }
 }

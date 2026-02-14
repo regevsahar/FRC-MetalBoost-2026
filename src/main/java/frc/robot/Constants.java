@@ -183,6 +183,14 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
 
+    public static final class VisionConstants {
+        public static final double cameraHeight = 0; // TODO: Update to actual camera height
+        public static final double targetHeight = 0; // TODO: Update to actual target height
+        public static final double cameraPitch = Math.toRadians(0); // TODO: Update to actual camera pitch
+    
+        public static final String limelight3name = "limelight-three";
+        public static final String limelight4name = "limelight-four";
+    }
     public static final class PoseEstimator {
         public static double OdometryFactor = 2;
         public static final Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.003, 0.003, 0.003);
