@@ -54,7 +54,7 @@ public class LimelightSubsystem extends SubsystemBase {
         Optional<Alliance> alliance = edu.wpi.first.wpilibj.DriverStation.getAlliance();
         LimelightHelpers.PoseEstimate estimate;
 
-        if (alliance.get() == Alliance.Red) {
+        if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             estimate = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
         } else {
             estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
@@ -88,11 +88,16 @@ public class LimelightSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        Optional<LimelightHelpers.PoseEstimate> mt1 = getMegaTag1Pose();
+        Optional<LimelightHelpers.PoseEstimate> mt2 = getMegaTag2Pose();
+
         Logger.recordOutput("Limelight-DATA/" + getName() + "/HasTarget", hasTarget());
         Logger.recordOutput("Limelight-DATA/" + getName() + "/PrimaryTagID", hasTarget() ? getApriltagID() : -1);
-        Logger.recordOutput("Limelight-DATA/" + getName() + "/MT1-isPresent", getMegaTag1Pose().isPresent());
-        Logger.recordOutput("Limelight-DATA/" + getName() + "/MT2-isPresent", getMegaTag2Pose().isPresent());
-        Logger.recordOutput("Limelight-DATA/" + getName() + "/Pose-isPresent", getMegaTag2Pose().get().pose != null);
-        Logger.recordOutput("Limelight-DATA/" + getName() + "/DistanceFromTarget", hasTarget() ? getDistanceFromTarget() : -1);
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/MT1-isPresent", mt1.isPresent());
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/MT2-isPresent", mt2.isPresent());
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/Pose-isPresent",
+                mt2.isPresent() && mt2.get().pose != null);
+        Logger.recordOutput("Limelight-DATA/" + getName() + "/DistanceFromTarget",
+                hasTarget() ? getDistanceFromTarget() : -1);
     }
 }
