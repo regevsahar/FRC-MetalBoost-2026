@@ -198,6 +198,8 @@ public final class Constants {
         public static final Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.05 / OdometryFactor, 0.05 / OdometryFactor,
                 0.05 / OdometryFactor);
         public static final double stdDevFactor = 0.0035;
+        public static final double stdDevFactorTranslation = 0.0035;
+        public static final double stdDevFactorRotation = 0.05;    
         public static final double minimumStdDev = 0.01;
     }
 

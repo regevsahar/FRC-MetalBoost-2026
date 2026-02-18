@@ -166,6 +166,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    LimelightHelpers.SetThrottle(Constants.VisionConstants.limelight4name, 200);
   }
 
   @Override
@@ -178,6 +179,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void autonomousInit() {
+     LimelightHelpers.SetThrottle(Constants.VisionConstants.limelight4name, 0);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -190,9 +192,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousPeriodic() {
   }
-
+  
   @Override
   public void teleopInit() {
+    LimelightHelpers.SetThrottle(Constants.VisionConstants.limelight4name, 0);
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

@@ -104,8 +104,8 @@ public class PoseEstimator extends SubsystemBase{
     }
     public void updateVision(LimelightHelpers.PoseEstimate estimate,Rotation2d currentGyro,double distanceFromTag) {
         double timestamp = estimate.timestampSeconds;  
-        double translationSTDev = Math.max(Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactor, Constants.PoseEstimator.minimumStdDev);
-        double rotationSTDev = Math.max(Math.pow(distanceFromTag, 2) * 0.05, Constants.PoseEstimator.minimumStdDev);
+        double translationSTDev = Math.max(Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactorTranslation, Constants.PoseEstimator.minimumStdDev);
+        double rotationSTDev = Math.max(Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactorRotation, Constants.PoseEstimator.minimumStdDev);
         Matrix<N3,N1> visionStdDevs = VecBuilder.fill(translationSTDev, translationSTDev, rotationSTDev);
         sEstimator.addVisionMeasurement(
             estimate.pose,
