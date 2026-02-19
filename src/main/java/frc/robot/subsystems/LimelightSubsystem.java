@@ -4,12 +4,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import java.util.Optional;
-
-import org.littletonrobotics.junction.Logger;
-
 import frc.lib.util.LimelightHelpers;
+import java.util.Optional;
+import org.littletonrobotics.junction.Logger;
 
 public class LimelightSubsystem extends SubsystemBase {
 
@@ -25,8 +22,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
 
-    if (estimate == null || estimate.pose == null)
-      return Optional.empty();
+    if (estimate == null || estimate.pose == null) return Optional.empty();
     return Optional.of(estimate);
   }
 
@@ -35,8 +31,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
 
-    if (estimate == null || estimate.pose == null)
-      return Optional.empty();
+    if (estimate == null || estimate.pose == null) return Optional.empty();
     return Optional.of(estimate);
   }
 
@@ -64,16 +59,13 @@ public class LimelightSubsystem extends SubsystemBase {
       estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
     }
 
-    if (estimate == null)
-      return 0.0;
+    if (estimate == null) return 0.0;
 
     double now = Timer.getFPGATimestamp();
     return now - estimate.timestampSeconds;
   }
 
-  /**
-   * האם יש target
-   */
+  /** האם יש target */
   public boolean hasTarget() {
     return LimelightHelpers.getTV(limelightName);
   }
@@ -96,15 +88,17 @@ public class LimelightSubsystem extends SubsystemBase {
     Optional<LimelightHelpers.PoseEstimate> mt2 = getMegaTag2Pose();
 
     Logger.recordOutput("Limelight-DATA/" + getName() + "/HasTarget", hasTarget());
-    Logger.recordOutput("Limelight-DATA/" + getName() + "/PrimaryTagID", hasTarget() ? getApriltagID() : -1);
+    Logger.recordOutput(
+        "Limelight-DATA/" + getName() + "/PrimaryTagID", hasTarget() ? getApriltagID() : -1);
     Logger.recordOutput("Limelight-DATA/" + getName() + "/MT1-isPresent", mt1.isPresent());
     Logger.recordOutput("Limelight-DATA/" + getName() + "/MT2-isPresent", mt2.isPresent());
-    Logger.recordOutput("Limelight-DATA/" + getName() + "/Pose-isPresent",
+    Logger.recordOutput(
+        "Limelight-DATA/" + getName() + "/Pose-isPresent",
         mt2.isPresent() && mt2.get().pose != null);
-    Logger.recordOutput("Limelight-DATA/" + getName() + "/DistanceFromTarget",
+    Logger.recordOutput(
+        "Limelight-DATA/" + getName() + "/DistanceFromTarget",
         hasTarget() ? getDistanceFromTarget() : -1);
     Logger.recordOutput("Limelight-DATA/" + getName() + "/MT1", getMegaTag1Pose().get().pose);
     Logger.recordOutput("Limelight-DATA/" + getName() + "/MT2", getMegaTag2Pose().get().pose);
-
   }
 }

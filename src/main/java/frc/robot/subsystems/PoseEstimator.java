@@ -20,8 +20,10 @@ import org.littletonrobotics.junction.Logger;
 
 public class PoseEstimator extends SubsystemBase {
   public SwerveDrivePoseEstimator sEstimator;
-  public TimeInterpolatableBuffer<Double> turretYawBuffer = TimeInterpolatableBuffer.createDoubleBuffer(1.0);
-  public TimeInterpolatableBuffer<Rotation2d> gyroYawBuffer = TimeInterpolatableBuffer.createBuffer(1.5);
+  public TimeInterpolatableBuffer<Double> turretYawBuffer =
+      TimeInterpolatableBuffer.createDoubleBuffer(1.0);
+  public TimeInterpolatableBuffer<Rotation2d> gyroYawBuffer =
+      TimeInterpolatableBuffer.createBuffer(1.5);
   public Pose2d visionPose = new Pose2d();
   Field2d field = new Field2d();
   // buffer לזווית של הגירו
@@ -30,18 +32,19 @@ public class PoseEstimator extends SubsystemBase {
   private int nOffsets = 0;
 
   public PoseEstimator() {
-    sEstimator = new SwerveDrivePoseEstimator(
-        Constants.SwerveConstants.swerveKinematics,
-        new Rotation2d(),
-        new SwerveModulePosition[] {
-            new SwerveModulePosition(),
-            new SwerveModulePosition(),
-            new SwerveModulePosition(),
-            new SwerveModulePosition()
-        },
-        new Pose2d(),
-        Constants.PoseEstimator.stateStdDevs,
-        Constants.PoseEstimator.visionStdDevs);
+    sEstimator =
+        new SwerveDrivePoseEstimator(
+            Constants.SwerveConstants.swerveKinematics,
+            new Rotation2d(),
+            new SwerveModulePosition[] {
+              new SwerveModulePosition(),
+              new SwerveModulePosition(),
+              new SwerveModulePosition(),
+              new SwerveModulePosition()
+            },
+            new Pose2d(),
+            Constants.PoseEstimator.stateStdDevs,
+            Constants.PoseEstimator.visionStdDevs);
 
     SmartDashboard.putData("FieldPoseEstimator", field);
   }
@@ -58,8 +61,7 @@ public class PoseEstimator extends SubsystemBase {
   }
 
   public Rotation2d getCorrectedHeading(Rotation2d gyro) {
-    if (nOffsets == 0)
-      return gyro;
+    if (nOffsets == 0) return gyro;
     return new Rotation2d(Math.atan2(offsetY, offsetX)).plus(gyro);
   }
 
@@ -72,10 +74,7 @@ public class PoseEstimator extends SubsystemBase {
     return gyroYawBuffer.getSample(0).isPresent();
   }
 
-  /**
-   * Update estimator with Swerve States and Gyro Yaw data. Needs to be updated
-   * every loop.
-   */
+  /** Update estimator with Swerve States and Gyro Yaw data. Needs to be updated every loop. */
   // public void updateSwerve(Rotation2d gyroAngle, SwerveModulePosition[]
   // modulePositions){
   // sEstimator.update(gyroAngle, modulePositions);
@@ -88,9 +87,8 @@ public class PoseEstimator extends SubsystemBase {
   }
 
   /**
-   * Update estimator with vision data.
-   * Should only be updated when target is visible.
-   * 
+   * Update estimator with vision data. Should only be updated when target is visible.
+   *
    * @param LLlatency seconds
    */
   // public void updateVision(Pose2d LLpose, double LLlatency){
@@ -105,16 +103,18 @@ public class PoseEstimator extends SubsystemBase {
     return gyroYawBuffer.getSample(timestamp);
   }
 
-  public void updateVision(LimelightHelpers.PoseEstimate estimate, Rotation2d currentGyro, double distanceFromTag) {
+  public void updateVision(
+      LimelightHelpers.PoseEstimate estimate, Rotation2d currentGyro, double distanceFromTag) {
     double timestamp = estimate.timestampSeconds;
-    double translationSTDev = Math.max(Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactor,
-        Constants.PoseEstimator.minimumStdDev);
-    double rotationSTDev = Math.max(Math.pow(distanceFromTag, 2) * 0.05, Constants.PoseEstimator.minimumStdDev);
-    Matrix<N3, N1> visionStdDevs = VecBuilder.fill(translationSTDev, translationSTDev, rotationSTDev);
-    sEstimator.addVisionMeasurement(
-        estimate.pose,
-        timestamp,
-        visionStdDevs);
+    double translationSTDev =
+        Math.max(
+            Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactor,
+            Constants.PoseEstimator.minimumStdDev);
+    double rotationSTDev =
+        Math.max(Math.pow(distanceFromTag, 2) * 0.05, Constants.PoseEstimator.minimumStdDev);
+    Matrix<N3, N1> visionStdDevs =
+        VecBuilder.fill(translationSTDev, translationSTDev, rotationSTDev);
+    sEstimator.addVisionMeasurement(estimate.pose, timestamp, visionStdDevs);
   }
 
   public Pose2d getEstimatedPosition() {
