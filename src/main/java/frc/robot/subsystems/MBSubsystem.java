@@ -28,7 +28,8 @@ public abstract class MBSubsystem extends SubsystemBase {
     subsystemPeriodic();
   }
 
-  protected void subsystemPeriodic() {}
+  protected void subsystemPeriodic() {
+  }
 
   public Command asSubsystemCommand(Command command, String commandName) {
     command.setName(commandName);
