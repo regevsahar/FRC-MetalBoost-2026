@@ -15,8 +15,11 @@ import frc.lib.util.MapFiltering.GridMap;
 import frc.lib.util.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.*;
+import frc.robot.commands.IntakeCommand.CloseIntake;
+import frc.robot.commands.IntakeCommand.OpenIntake;
 import frc.robot.commands.Shooter.FlywheelHoodIntegrationCommand;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIO;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIOTalonFX;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSimulation;
@@ -70,7 +73,8 @@ public class RobotContainer {
       new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton flywheelHoodAutoCommand =
       new JoystickButton(operator, XboxController.Button.kStart.value);
-  private final Trigger intake = new JoystickButton(operator, XboxController.Button.kB.value);
+  private final Trigger OpenIntake = new JoystickButton(operator, XboxController.Button.kB.value);
+  private final Trigger CloseIntake = new JoystickButton(operator, XboxController.Button.kA.value);
   private final Trigger hoodCommand = new JoystickButton(operator, XboxController.Button.kY.value);
 
   public final GridMap fieldGrid;
@@ -106,7 +110,8 @@ public class RobotContainer {
     shoot.whileTrue(new Shoot(shooter));
     spin.whileTrue(new Spin(spindexer, -0.35));
     spinAnotherSide.whileTrue(new Spin(spindexer, 0.35));
-    intake.whileTrue(new IntakeCommand(s_intake, 0.45));
+    OpenIntake.whileTrue(new OpenIntake(s_intake));
+    CloseIntake.whileTrue(new CloseIntake(s_intake));
     hoodCommand.whileTrue(new HoodCommand(hood));
     flywheelHoodAutoCommand.whileTrue(new FlywheelHoodIntegrationCommand(shooter, hood));
 
