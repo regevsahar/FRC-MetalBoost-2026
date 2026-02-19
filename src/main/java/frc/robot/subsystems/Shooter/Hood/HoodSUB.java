@@ -17,7 +17,6 @@ public class HoodSUB extends MBSubsystem {
   public HoodSUB(HoodIO io) {
     super("Hood");
     this.io = io;
-
   }
 
   public void setTargetArc(double targetArc) {

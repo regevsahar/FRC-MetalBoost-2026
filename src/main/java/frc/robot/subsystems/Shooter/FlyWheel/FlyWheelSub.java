@@ -17,7 +17,6 @@ public class FlyWheelSub extends MBSubsystem {
   public FlyWheelSub(FlyWheelIO io) {
     super("Shooter");
     this.io = io;
-
   }
 
   public void setTargetRPM(double targetRPM) {

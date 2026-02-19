@@ -5,9 +5,12 @@ import frc.robot.util.TunableNumber;
 
 public class ShooterConstants {
 
-  public static final InterpolatingDoubleTreeMap ANGLE_TO_RPM_MAP = new InterpolatingDoubleTreeMap();
-  public static final InterpolatingDoubleTreeMap DISTANCE_TO_ARC_MAP = new InterpolatingDoubleTreeMap();
-  public static final InterpolatingDoubleTreeMap DISTANCE_TO_RPM_MAP = new InterpolatingDoubleTreeMap();
+  public static final InterpolatingDoubleTreeMap ANGLE_TO_RPM_MAP =
+      new InterpolatingDoubleTreeMap();
+  public static final InterpolatingDoubleTreeMap DISTANCE_TO_ARC_MAP =
+      new InterpolatingDoubleTreeMap();
+  public static final InterpolatingDoubleTreeMap DISTANCE_TO_RPM_MAP =
+      new InterpolatingDoubleTreeMap();
 
   static {
     // Angle->RPM
@@ -32,6 +35,7 @@ public class ShooterConstants {
     DISTANCE_TO_RPM_MAP.put(2.0, 3250.0);
     DISTANCE_TO_RPM_MAP.put(2.5, 3400.0);
   }
+
   public static final double kMaxRPM = 5400;
   public static final double kMinRPM = 0;
   public static final double kDefaultRPM = 2500;
@@ -53,7 +57,8 @@ public class ShooterConstants {
   public static final TunableNumber kShooterI = new TunableNumber("Shooter/Real/kI", 0.55);
   public static final TunableNumber kShooterD = new TunableNumber("Shooter/Real/kD", 0.000017);
   public static final TunableNumber kShooterS = new TunableNumber("Shooter/Real/kS", 0.0);
-  public static final TunableNumber kShooterV = new TunableNumber("Shooter/Real/kV", 12.0 / kMaxRPM);
+  public static final TunableNumber kShooterV =
+      new TunableNumber("Shooter/Real/kV", 12.0 / kMaxRPM);
   public static final TunableNumber kShooterA = new TunableNumber("Shooter/Real/kA", 0.0);
   public static final double kMaxArc = 80;
   public static final double kMinArc = 38;
@@ -61,7 +66,8 @@ public class ShooterConstants {
   public static final int HOOD_MOTOR_ID = 50;
   public static final int HOOD_CANCODER_ID = 51;
   public static final double kHoodGearRatio = 1;
-  public static final double kHoodRotationsPerDegree = (1.0 / 360.0) * kHoodGearRatio; // Rotations per degree of hood
+  public static final double kHoodRotationsPerDegree =
+      (1.0 / 360.0) * kHoodGearRatio; // Rotations per degree of hood
   public static final double kHoodTolerance = 2.0; // Degrees
   public static final boolean kHoodCANcoderInvert = false;
   public static final double kHoodCANcoderOffset = 0.0; // Rotations
