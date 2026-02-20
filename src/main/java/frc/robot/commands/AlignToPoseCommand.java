@@ -1,9 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -40,9 +36,10 @@ public class AlignToPoseCommand extends Command {
   @Override
   public void execute() {
 
-    double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
+    double translationVal =
+        MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
     double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
-    
+
     var alliance = DriverStation.getAlliance();
 
     Translation2d target = Constants.FieldConstants.HUB_CENTER_BLUE;
@@ -52,7 +49,7 @@ public class AlignToPoseCommand extends Command {
 
     double rotation = hubAlignSubsystem.calculateRotationOutput(swerve.getPose(), target);
 
-    swerve.drive(new Translation2d(translationVal,strafeVal), rotation, true, true);
+    swerve.drive(new Translation2d(translationVal, strafeVal), rotation, true, true);
   }
 
   @Override
