@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,15 +18,13 @@ public class AlignToPoseCommand extends Command {
   private final AlignToPoseSubsystem hubAlignSubsystem;
   private DoubleSupplier translationSup;
   private DoubleSupplier strafeSup;
-  private DoubleSupplier speedReductionSup;
 
   public AlignToPoseCommand(Swerve swerve, AlignToPoseSubsystem hubAlignSubsystem, DoubleSupplier translationSup, DoubleSupplier strafeSup) {
     this.swerve = swerve;
     this.hubAlignSubsystem = hubAlignSubsystem;
     this.translationSup = translationSup;
     this.strafeSup = strafeSup;
-    this.speedReductionSup = () -> 1.0;
-    addRequirements(hubAlignSubsystem);
+    addRequirements(swerve, hubAlignSubsystem);
   }
 
   @Override
@@ -35,8 +35,8 @@ public class AlignToPoseCommand extends Command {
   @Override
   public void execute() {
 
-    double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble() * speedReductionSup.getAsDouble(), Constants.stickDeadband);
-    double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble() * speedReductionSup.getAsDouble(), Constants.stickDeadband);
+    double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
+    double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
     
     var alliance = DriverStation.getAlliance();
 
@@ -49,7 +49,7 @@ public class AlignToPoseCommand extends Command {
         swerve.getPose(),
         target);
 
-    swerve.drive(new Translation2d(translationVal,strafeVal), rotation, true, false);
+    swerve.drive(new Translation2d(translationVal,strafeVal), rotation, true, true);
   }
 
   @Override
@@ -59,6 +59,6 @@ public class AlignToPoseCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return hubAlignSubsystem.atSetpoint();
+    return false;
   }
 }

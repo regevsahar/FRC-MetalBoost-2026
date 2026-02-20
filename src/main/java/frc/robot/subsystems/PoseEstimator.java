@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.lib.util.LimelightHelpers;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +16,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
@@ -31,7 +33,7 @@ public class PoseEstimator extends SubsystemBase{
     private double offsetX = 0;
     private double offsetY = 0;
     private int nOffsets = 0;
-
+    private Translation2d target = Constants.FieldConstants.HUB_CENTER_BLUE;
 
     public PoseEstimator(){
         sEstimator = new SwerveDrivePoseEstimator(
@@ -47,8 +49,11 @@ public class PoseEstimator extends SubsystemBase{
             Constants.PoseEstimator.stateStdDevs, 
             Constants.PoseEstimator.visionStdDevs
         );
-
+        var alliance = DriverStation.getAlliance();
         SmartDashboard.putData("FieldPoseEstimator", field);
+        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+        target = Constants.FieldConstants.HUB_CENTER_RED;
+        }
 
     }
 
@@ -112,6 +117,10 @@ public class PoseEstimator extends SubsystemBase{
             timestamp,
             visionStdDevs
         );
+    }
+
+    public double getDistanceFromHub(){
+        return getEstimatedPosition().getTranslation().getDistance(target);
     }
 
     public Pose2d getEstimatedPosition(){

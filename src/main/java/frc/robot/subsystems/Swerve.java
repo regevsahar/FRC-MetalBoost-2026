@@ -222,6 +222,9 @@ public class Swerve extends SubsystemBase {
         return estimator.getEstimatedPosition();
         // return swerveOdometry.getPoseMeters();
     }
+    public Pose2d getRawPose() {
+        return swerveOdometry.getPoseMeters();
+    }
 
     public void setPose(Pose2d pose) {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
@@ -306,6 +309,7 @@ public class Swerve extends SubsystemBase {
 
         Logger.recordOutput("Estimator/states/Mystates", getModuleStates());
         Logger.recordOutput("Estimator/Odometry", getPose());
+        Logger.recordOutput("Estimator/RawOdometry", getRawPose());
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
