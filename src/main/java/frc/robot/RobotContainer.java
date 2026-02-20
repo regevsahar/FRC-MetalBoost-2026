@@ -42,8 +42,10 @@ public class RobotContainer {
                         XboxController.Button.kLeftBumper.value);
         private final JoystickButton higherSwerveSpeed = new JoystickButton(driver,
                         XboxController.Button.kRightBumper.value);
-        private final JoystickButton GoToNearestBranch = new JoystickButton(driver, XboxController.Button.kB.value);
+       // private final JoystickButton GoToNearestBranch = new JoystickButton(driver, XboxController.Button.kB.value);
         private final JoystickButton resetPoseEstimator = new JoystickButton(driver, XboxController.Button.kA.value);
+        private final JoystickButton shootWhileMoving = new JoystickButton(driver, XboxController.Button.kX.value);
+
 
         AutoChooser autoChooser;
 
@@ -58,7 +60,7 @@ public class RobotContainer {
         public final LimelightSubsystem limelight = new LimelightSubsystem(Constants.VisionConstants.limelight3name);
         public final LimelightSubsystem limelight2 = new LimelightSubsystem(Constants.VisionConstants.limelight4name);
         public final Swerve s_Swerve = new Swerve(poseEstimator);
-        public final AlignToPoseSubsystem alignToPose = new AlignToPoseSubsystem();
+        public final AlignToPoseSubsystem AlignToPoseSub = new AlignToPoseSubsystem();
 
         /// * operation Buttons */
         private final Trigger shoot = new JoystickButton(operator, XboxController.Button.kX.value);
@@ -135,20 +137,16 @@ public class RobotContainer {
                                                                 s_Swerve.getModulePositions(),
                                                                 new Pose2d(0, 0, new Rotation2d()))));
 
-                GoToNearestBranch.onTrue(
-                                PathPlannerUtil.GoToNearestBranch(
-                                                poseEstimator.getEstimatedPosition(),
-                                                Constants.SwerveConstants.constraints));
 
                 // Shoot While Moving
-                new JoystickButton(driver, XboxController.Button.kX.value).whileTrue(
+                shootWhileMoving.whileTrue(
                                 new ShootWhileMoving(
                                                 s_Swerve,
                                                 poseEstimator,
                                                 hood,
                                                 shooter,
                                                 spindexer,
-                                                alignToPose,
+                                                AlignToPoseSub,
                                                 () -> -driver.getRawAxis(translationAxis),
                                                 () -> -driver.getRawAxis(strafeAxis)));
         }
