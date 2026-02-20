@@ -66,7 +66,6 @@ public class Swerve extends SubsystemBase {
         }
 
         AutoBuilder.configure(
-                // ? why not ()->estimator.getEstimatedPosition()
                 this::getPose, // Robot pose supplier
                 this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
@@ -75,20 +74,11 @@ public class Swerve extends SubsystemBase {
                                                                       // individual module feedforwards
                 new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for
                                                 // holonomic drive trains
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(8.0, 0.0, 0.0) // Rotation PID constants/ Rotation PID constants
+                        new PIDConstants(2, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(3, 0.0, 0.0) // Rotation PID constants/ Rotation PID constants
                 ),
                 config, // The robot configuration
                 () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red
-                    // alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-                    // Boolean supplier that controls when the path will be mirrored for the red
-                    // alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
                     var alliance = DriverStation.getAlliance();
                     if (alliance.isPresent()) {
                         return alliance.get() == DriverStation.Alliance.Red;
@@ -97,20 +87,6 @@ public class Swerve extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
         );
-
-        // m_poseEstimator =
-        // new SwerveDrivePoseEstimator(
-        // SwerveConstants.swerveKinematics,
-        // pigeon.getRotation2d(),
-        // new SwerveModulePosition[] {
-        // mSwerveMods[0].getPosition(),
-        // mSwerveMods[1].getPosition(),
-        // mSwerveMods[2].getPosition(),
-        // mSwerveMods[3].getPosition()
-        // },
-        // new Pose2d(),
-        // VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-        // VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
         SmartDashboard.putData("Field", field);
@@ -220,7 +196,6 @@ public class Swerve extends SubsystemBase {
 
     public Pose2d getPose() {
         return estimator.getEstimatedPosition();
-        // return swerveOdometry.getPoseMeters();
     }
     public Pose2d getRawPose() {
         return swerveOdometry.getPoseMeters();

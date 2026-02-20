@@ -1,14 +1,17 @@
 package frc.robot;
 
+import java.util.Set;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.lib.util.DriveToPoseUtil;
 import frc.lib.util.HeightSpeedReduction;
-import frc.lib.util.PathPlannerUtil;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.robot.autos.AutoChooser;
@@ -30,9 +33,9 @@ public class RobotContainer {
                         XboxController.Button.kLeftBumper.value);
         private final JoystickButton higherSwerveSpeed = new JoystickButton(driver,
                         XboxController.Button.kRightBumper.value);
-       // private final JoystickButton GoToNearestBranch = new JoystickButton(driver, XboxController.Button.kB.value);
         private final JoystickButton resetPoseEstimator = new JoystickButton(driver, XboxController.Button.kA.value);
         private final JoystickButton AlignToPose = new JoystickButton(driver, XboxController.Button.kX.value);
+        private final JoystickButton followPath = new JoystickButton(driver, XboxController.Button.kB.value);
 
 
         AutoChooser autoChooser;
@@ -99,11 +102,20 @@ public class RobotContainer {
                                 s_Swerve.getModulePositions(),
                                 new Pose2d(0, 0, new Rotation2d()))));
 
-        //        GoToNearestBranch.onTrue(PathPlannerUtil.GoToNearestBranch(poseEstimator.getEstimatedPosition(),Constants.SwerveConstants.constraints));
 
                 AlignToPose.toggleOnTrue(new AlignToPoseCommand(s_Swerve, AlignToPoseSub,
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis)));
+                               
+                followPath.whileTrue(new DeferredCommand(
+                        () -> new DriveToPoseUtil().driveToPoseHolonomic(
+                                poseEstimator.getEstimatedPosition(),
+                                new Pose2d(8.5, 3.5, Rotation2d.fromDegrees(180)), // 8, 4.5, 0 ?????????????
+                                .5,
+                                .5
+                                ),
+                                Set.of(s_Swerve)
+                        ));
 
         }
 
