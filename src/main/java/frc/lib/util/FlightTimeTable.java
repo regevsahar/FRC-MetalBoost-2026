@@ -1,11 +1,10 @@
-package frc.robot.util;
+package frc.lib.util;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class FlightTimeTable {
 
-  private static final InterpolatingDoubleTreeMap DISTANCE_TO_FLIGHT_TIME_MAP =
-      new InterpolatingDoubleTreeMap();
+  private static final InterpolatingDoubleTreeMap DISTANCE_TO_FLIGHT_TIME_MAP = new InterpolatingDoubleTreeMap();
 
   static {
     // TODO: Replace with real measurements

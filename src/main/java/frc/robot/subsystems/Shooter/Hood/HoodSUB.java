@@ -1,9 +1,9 @@
 package frc.robot.subsystems.Shooter.Hood;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.lib.util.TunableNumber;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
-import frc.robot.util.TunableNumber;
 
 public class HoodSUB extends MBSubsystem {
 
