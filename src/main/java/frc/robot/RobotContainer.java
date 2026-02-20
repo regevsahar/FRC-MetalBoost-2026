@@ -101,7 +101,7 @@ public class RobotContainer {
 
         //        GoToNearestBranch.onTrue(PathPlannerUtil.GoToNearestBranch(poseEstimator.getEstimatedPosition(),Constants.SwerveConstants.constraints));
 
-                AlignToPose.whileTrue(new AlignToPoseCommand(s_Swerve, AlignToPoseSub,
+                AlignToPose.toggleOnTrue(new AlignToPoseCommand(s_Swerve, AlignToPoseSub,
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis)));
 

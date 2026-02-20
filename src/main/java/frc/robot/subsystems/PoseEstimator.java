@@ -52,7 +52,7 @@ public class PoseEstimator extends SubsystemBase{
         var alliance = DriverStation.getAlliance();
         SmartDashboard.putData("FieldPoseEstimator", field);
         if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-        target = Constants.FieldConstants.HUB_CENTER_RED;
+            target = Constants.FieldConstants.HUB_CENTER_RED;
         }
 
     }
@@ -134,6 +134,7 @@ public class PoseEstimator extends SubsystemBase{
         SmartDashboard.putNumber("robotY", getEstimatedPosition().getY());
         SmartDashboard.putNumber("robotHeading", getEstimatedPosition().getRotation().getRadians());
 
+        Logger.recordOutput("Estimator/DistanceFromHub", getDistanceFromHub());
         Logger.recordOutput("Estimator/estimator", getEstimatedPosition());
         Logger.recordOutput("Estimator/Pose2d/robotX", getEstimatedPosition().getX());
         Logger.recordOutput("Estimator/Pose2d/robotY", getEstimatedPosition().getY());
