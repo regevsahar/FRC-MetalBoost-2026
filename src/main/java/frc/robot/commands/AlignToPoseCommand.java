@@ -36,8 +36,7 @@ public class AlignToPoseCommand extends Command {
   @Override
   public void execute() {
 
-    double translationVal =
-        MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
+    double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
     double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
 
     var alliance = DriverStation.getAlliance();

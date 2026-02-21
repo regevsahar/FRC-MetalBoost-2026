@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -11,11 +13,10 @@ public class AlignToPoseSubsystem extends SubsystemBase {
   private final PIDController pidController;
 
   public AlignToPoseSubsystem() {
-    pidController =
-        new PIDController(
-            Constants.AlignToPoseConstants.kP,
-            Constants.AlignToPoseConstants.kI,
-            Constants.AlignToPoseConstants.kD);
+    pidController = new PIDController(
+        Constants.AlignToPoseConstants.kP,
+        Constants.AlignToPoseConstants.kI,
+        Constants.AlignToPoseConstants.kD);
     pidController.setTolerance(Constants.AlignToPoseConstants.kToleranceRad);
     pidController.enableContinuousInput(-Math.PI, Math.PI);
   }
@@ -28,11 +29,10 @@ public class AlignToPoseSubsystem extends SubsystemBase {
 
     double omega = pidController.calculate(currentPose.getRotation().getRadians(), angleToTarget);
 
-    omega =
-        clamp(
-            omega,
-            -Constants.AlignToPoseConstants.kMaxOmegaRadPerSec,
-            Constants.AlignToPoseConstants.kMaxOmegaRadPerSec);
+    omega = clamp(
+        omega,
+        -Constants.AlignToPoseConstants.kMaxOmegaRadPerSec,
+        Constants.AlignToPoseConstants.kMaxOmegaRadPerSec);
 
     return omega;
   }
@@ -52,6 +52,7 @@ public class AlignToPoseSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Logger.recordOutput("AlignToPoseSubsystem/isAtSetpoint", atSetpoint());
     // This method will be called once per scheduler run
   }
 }

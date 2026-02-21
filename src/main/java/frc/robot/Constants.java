@@ -217,8 +217,8 @@ public final class Constants {
   public static final class AlignToPoseConstants {
     // TODO: Tune these constants
     public static final double kP = 5;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double kI = 0.01;
+    public static final double kD = 0.005;
     public static final double kToleranceRad = Math.toRadians(5);
     public static int kMaxOmegaRadPerSec = 2;
   }
