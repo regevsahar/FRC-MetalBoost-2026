@@ -19,6 +19,8 @@ import frc.robot.subsystems.Swerve;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 public class ShootWhileMoving extends Command {
   private final Swerve swerve;
   private final PoseEstimator poseEstimator;
@@ -108,7 +110,19 @@ public class ShootWhileMoving extends Command {
     SmartDashboard.putNumber("SOM/YawSetpoint_deg", yawSetpointDeg);
     SmartDashboard.putNumber("SOM/RotationOutput", rotationOutput);
 
+    Logger.recordOutput("ShootWhileMoving/NowDistToHub_m", distanceToHubNow);
+    Logger.recordOutput("ShootWhileMoving/FlightTime_s", flightTime);
+    Logger.recordOutput("ShootWhileMoving/FieldVx_mps", fieldRelativeSpeeds.vxMetersPerSecond);
+    Logger.recordOutput("ShootWhileMoving/FieldVy_mps", fieldRelativeSpeeds.vyMetersPerSecond);
+    Logger.recordOutput("ShootWhileMoving/FutureDistToHub_m", futureDistanceToHub);
+    Logger.recordOutput("ShootWhileMoving/YawSetpoint_deg", yawSetpointDeg);
+    Logger.recordOutput("ShootWhileMoving/RotationOutput", rotationOutput);
+    Logger.recordOutput("ShootWhileMoving/CurrentPose", currentPose);
+    Logger.recordOutput("ShootWhileMoving/FuturePose", futurePoseForCalc);
+    Logger.recordOutput("ShootWhileMoving/HubPosition", hubPosition);
+
     // Field2d visualization
+    // TODO: Check what de phuc it is
     field.setRobotPose(currentPose);
     field.getObject("FuturePos").setPose(new Pose2d(futurePos, currentPose.getRotation()));
     field.getObject("Hub").setPose(new Pose2d(hubPosition, currentPose.getRotation()));
