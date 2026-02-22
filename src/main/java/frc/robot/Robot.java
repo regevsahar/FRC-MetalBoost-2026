@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.lib.util.LedController;
 import frc.lib.util.LimelightHelpers;
 import java.util.Optional;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -23,7 +24,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
-
+  LedController led = LedController.getInstance();
   private final RobotContainer m_robotContainer;
 
   /**
@@ -68,6 +69,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotPeriodic() {
+    led.setData();
     CommandScheduler.getInstance().run();
     Rotation2d currentGyro = m_robotContainer.s_Swerve.getGyroYaw();
     double distanceFromTag = LimelightHelpers.getTargetPose_CameraSpace("limelight")[0];
@@ -150,7 +152,9 @@ public class Robot extends LoggedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    led.defaultAnimation(40);
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -169,6 +173,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    led.defaultAnimation(100);
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
