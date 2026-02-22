@@ -72,6 +72,7 @@ public class Robot extends LoggedRobot {
     led.setData();
     CommandScheduler.getInstance().run();
     Rotation2d currentGyro = m_robotContainer.s_Swerve.getGyroYaw();
+    /* 
     double distanceFromTag = LimelightHelpers.getTargetPose_CameraSpace("limelight")[0];
     double distanceFromTag2 = LimelightHelpers.getTargetPose_CameraSpace("limelight2")[0];
 
@@ -145,6 +146,7 @@ public class Robot extends LoggedRobot {
 
     if (isInRedZone) Constants.PoseEstimator.OdometryFactor = 2;
     else Constants.PoseEstimator.OdometryFactor = 1;
+    */
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
