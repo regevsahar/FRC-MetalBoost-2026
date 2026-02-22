@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AddressableLEDBufferView;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants;
@@ -13,7 +14,7 @@ public class LedController {
   private Color ambiance = Color.kBlack;
   private final Color defaultColor = Color.kBlack;
   private static LedController instance;
-  private AddressableLED[] leds = new AddressableLED[10];
+  private AddressableLED led;
   private AddressableLEDBuffer ledBuffer;
   private volatile boolean flash = false;
   private boolean atSetPointActive = false;
@@ -22,18 +23,13 @@ public class LedController {
 
     ledBuffer = new AddressableLEDBuffer(Constants.LedLength);
 
-    for (int port = 0; port < 10; port++) {
-      try{
-        leds[port] = new AddressableLED(port);
-        leds[port].setLength(ledBuffer.getLength());
-        leds[port].setData(ledBuffer);
-        leds[port].start();
-        System.out.println("Port" + port + "LED initialized");
-      }catch(Exception e){
-        leds[port] = null;
-    }
+    led = new AddressableLED(Constants.LedId);
+    led.setLength(ledBuffer.getLength());
+    led.setData(ledBuffer);
+    led.start();
+
   }
-}
+
 
   public static LedController getInstance() {
     if (instance == null) {
@@ -43,9 +39,7 @@ public class LedController {
   }
 
   public void setData() {
-    for (AddressableLED l : leds) {
-      if(l!=null) l.setData(ledBuffer);
-    }
+    led.setData(ledBuffer);
   }
 
   public void startFlashing(Color color) {

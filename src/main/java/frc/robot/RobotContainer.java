@@ -55,7 +55,6 @@ public class RobotContainer {
   private HeightSpeedReduction heightSpeedReduction = HeightSpeedReduction.getInstance();
   private final FlyWheelSub shooter;
   private final HoodSUB hood;
-  private final Spindexer spindexer = new Spindexer();
   private final Intake s_intake = new Intake();
   public final PoseEstimator poseEstimator = new PoseEstimator();
   public final LimelightSubsystem limelight = new LimelightSubsystem("limelight");
@@ -104,8 +103,6 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     shoot.whileTrue(new Shoot(shooter));
-    spin.whileTrue(new Spin(spindexer, -0.35));
-    spinAnotherSide.whileTrue(new Spin(spindexer, 0.35));
     intake.whileTrue(new IntakeCommand(s_intake, 0.45));
     hoodCommand.whileTrue(new HoodCommand(hood));
     flywheelHoodAutoCommand.whileTrue(new FlywheelHoodIntegrationCommand(shooter, hood));
