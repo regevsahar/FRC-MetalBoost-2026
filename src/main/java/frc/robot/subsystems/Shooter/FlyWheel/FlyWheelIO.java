@@ -14,5 +14,7 @@ public interface FlyWheelIO {
 
   default void setTargetRPM(double targetRPM) {}
 
+  default void setVoltage(double volts) {}
+
   default void stop() {}
 }

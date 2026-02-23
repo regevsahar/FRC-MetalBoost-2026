@@ -9,13 +9,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.util.HeightSpeedReduction;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.lib.util.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.*;
-import frc.robot.commands.Shooter.FlywheelHoodIntegrationCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIO;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIOTalonFX;
@@ -55,23 +55,33 @@ public class RobotContainer {
   private HeightSpeedReduction heightSpeedReduction = HeightSpeedReduction.getInstance();
   private final FlyWheelSub shooter;
   private final HoodSUB hood;
-  private final Spindexer spindexer = new Spindexer();
-  private final Intake s_intake = new Intake();
   public final PoseEstimator poseEstimator = new PoseEstimator();
-  public final LimelightSubsystem limelight = new LimelightSubsystem("limelight");
-  public final LimelightSubsystem limelight2 = new LimelightSubsystem("limelight2");
+  public final LimelightSubsystem limelight = new LimelightSubsystem("limelight-three");
+  public final LimelightSubsystem limelight2 = new LimelightSubsystem("limelight-four");
   public final Swerve s_Swerve = new Swerve(poseEstimator);
 
-  /// * operation Buttons */
-  private final Trigger shoot = new JoystickButton(operator, XboxController.Button.kX.value);
-  private final JoystickButton spin =
-      new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton spinAnotherSide =
-      new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton flywheelHoodAutoCommand =
-      new JoystickButton(operator, XboxController.Button.kStart.value);
-  private final Trigger intake = new JoystickButton(operator, XboxController.Button.kB.value);
-  private final Trigger hoodCommand = new JoystickButton(operator, XboxController.Button.kY.value);
+  // ── SysId Buttons (Operator Controller) ─────────────────────────────────
+  // Hood │ D-Pad Up → quasistatic forward
+  // │ D-Pad Down → quasistatic reverse
+  // │ D-Pad Left → dynamic forward
+  // │ D-Pad Right → dynamic reverse
+  private final Trigger hoodSysIdQuasiF = new Trigger(() -> operator.getPOV() == 0);
+  private final Trigger hoodSysIdQuasiR = new Trigger(() -> operator.getPOV() == 180);
+  private final Trigger hoodSysIdDynF = new Trigger(() -> operator.getPOV() == 270);
+  private final Trigger hoodSysIdDynR = new Trigger(() -> operator.getPOV() == 90);
+
+  // Flywheel │ Y → quasistatic forward
+  // │ A → quasistatic reverse
+  // │ X → dynamic forward
+  // │ B → dynamic reverse
+  private final JoystickButton flywheelSysIdQuasiF =
+      new JoystickButton(operator, XboxController.Button.kY.value);
+  private final JoystickButton flywheelSysIdQuasiR =
+      new JoystickButton(operator, XboxController.Button.kA.value);
+  private final JoystickButton flywheelSysIdDynF =
+      new JoystickButton(operator, XboxController.Button.kX.value);
+  private final JoystickButton flywheelSysIdDynR =
+      new JoystickButton(operator, XboxController.Button.kB.value);
 
   public final GridMap fieldGrid;
 
@@ -103,12 +113,17 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    shoot.whileTrue(new Shoot(shooter));
-    spin.whileTrue(new Spin(spindexer, -0.35));
-    spinAnotherSide.whileTrue(new Spin(spindexer, 0.35));
-    intake.whileTrue(new IntakeCommand(s_intake, 0.45));
-    hoodCommand.whileTrue(new HoodCommand(hood));
-    flywheelHoodAutoCommand.whileTrue(new FlywheelHoodIntegrationCommand(shooter, hood));
+    // ── Hood SysId ──────────────────────────────────────────────────────────
+    hoodSysIdQuasiF.whileTrue(hood.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    hoodSysIdQuasiR.whileTrue(hood.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    hoodSysIdDynF.whileTrue(hood.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    hoodSysIdDynR.whileTrue(hood.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+    // ── Flywheel SysId ──────────────────────────────────────────────────────
+    flywheelSysIdQuasiF.whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    flywheelSysIdQuasiR.whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    flywheelSysIdDynF.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    flywheelSysIdDynR.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));

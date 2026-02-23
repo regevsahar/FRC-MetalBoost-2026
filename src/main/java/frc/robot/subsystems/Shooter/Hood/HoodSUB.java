@@ -1,6 +1,9 @@
 package frc.robot.subsystems.Shooter.Hood;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.util.TunableNumber;
@@ -14,9 +17,25 @@ public class HoodSUB extends MBSubsystem {
   // Tunables
   private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
 
+  // SysId
+  private final SysIdRoutine sysIdRoutine;
+
   public HoodSUB(HoodIO io) {
     super("Hood");
     this.io = io;
+
+    sysIdRoutine =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+                Units.Volts.of(1).per(Units.Second), // ramp rate: 1 V/s
+                Units.Volts.of(7), // step voltage: 7 V
+                null, // default timeout
+                null), // default state handler
+            new SysIdRoutine.Mechanism(
+                (voltage) -> io.setVoltage(voltage.in(Units.Volts)),
+                null, // no log consumer needed; use Tuner X / URCL externally
+                this,
+                "Hood"));
   }
 
   public void setTargetArc(double targetArc) {
@@ -42,6 +61,28 @@ public class HoodSUB extends MBSubsystem {
 
   public void stop() {
     io.stop();
+  }
+
+  // ── SysId ────────────────────────────────────────────────────────────────
+
+  /**
+   * Quasistatic (slow-ramp) SysId command.
+   *
+   * @param direction {@link SysIdRoutine.Direction#kForward} or {@link
+   *     SysIdRoutine.Direction#kReverse}
+   */
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return sysIdRoutine.quasistatic(direction);
+  }
+
+  /**
+   * Dynamic (step-voltage) SysId command.
+   *
+   * @param direction {@link SysIdRoutine.Direction#kForward} or {@link
+   *     SysIdRoutine.Direction#kReverse}
+   */
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return sysIdRoutine.dynamic(direction);
   }
 
   @Override

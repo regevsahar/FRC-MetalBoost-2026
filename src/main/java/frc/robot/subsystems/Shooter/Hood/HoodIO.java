@@ -16,5 +16,7 @@ public interface HoodIO {
 
   default void setTargetArc(double arc) {}
 
+  default void setVoltage(double volts) {}
+
   default void stop() {}
 }
