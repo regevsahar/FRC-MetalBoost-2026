@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.MBSubsystem;
+import frc.lib.util.TunableNumber;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
 public class HoodSUB extends MBSubsystem {
