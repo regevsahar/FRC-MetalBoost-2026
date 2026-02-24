@@ -44,15 +44,17 @@ public class Swerve extends SubsystemBase {
     pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, Constants.CanivoreName);
     m_canBus = new CANBus(Constants.CanivoreName);
     zeroPigeon();
-    mSwerveMods = new SwerveModule[] {
-        new SwerveModule(0, Constants.SwerveConstants.Mod0.constants),
-        new SwerveModule(1, Constants.SwerveConstants.Mod1.constants),
-        new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
-        new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
-    };
+    mSwerveMods =
+        new SwerveModule[] {
+          new SwerveModule(0, Constants.SwerveConstants.Mod0.constants),
+          new SwerveModule(1, Constants.SwerveConstants.Mod1.constants),
+          new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
+          new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
+        };
 
-    swerveOdometry = new SwerveDriveOdometry(
-        Constants.SwerveConstants.swerveKinematics, getGyroYaw(), getModulePositions());
+    swerveOdometry =
+        new SwerveDriveOdometry(
+            Constants.SwerveConstants.swerveKinematics, getGyroYaw(), getModulePositions());
 
     try {
       config = RobotConfig.fromGUISettings();
@@ -67,7 +69,8 @@ public class Swerve extends SubsystemBase {
         this::resetPose, // Method to reset odometry (will be called if your auto has a starting
         // pose)
         this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT
+        (speeds, feedforwards) ->
+            driveRobotRelative(speeds), // Method that will drive the robot given ROBOT
         // RELATIVE ChassisSpeeds. Also optionally outputs
         // individual module feedforwards
         new PPHolonomicDriveController( // PPHolonomicController is the built in path following
@@ -75,7 +78,7 @@ public class Swerve extends SubsystemBase {
             // holonomic drive trains
             new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
             new PIDConstants(8.0, 0.0, 0.0) // Rotation PID constants/ Rotation PID constants
-        ),
+            ),
         config, // The robot configuration
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
@@ -94,7 +97,7 @@ public class Swerve extends SubsystemBase {
           return false;
         },
         this // Reference to this subsystem to set requirements
-    );
+        );
 
     // m_poseEstimator =
     // new SwerveDrivePoseEstimator(
@@ -153,7 +156,8 @@ public class Swerve extends SubsystemBase {
 
   public void driveRobotRelative(ChassisSpeeds speeds) {
     // Convert the robot-relative speeds into swerve module states
-    SwerveModuleState[] swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(speeds);
+    SwerveModuleState[] swerveModuleStates =
+        Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
@@ -172,11 +176,12 @@ public class Swerve extends SubsystemBase {
 
   public void drive(
       Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-    SwerveModuleState[] swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
-        fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.getX(), translation.getY(), rotation, getHeading())
-            : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+    SwerveModuleState[] swerveModuleStates =
+        Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
+            fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                    translation.getX(), translation.getY(), rotation, getHeading())
+                : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 

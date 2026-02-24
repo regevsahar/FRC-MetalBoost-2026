@@ -8,8 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 public class ShotPrediction {
 
   /**
-   * Predicts the robot's future position based on current pose, field-relative
-   * speeds, and flight
+   * Predicts the robot's future position based on current pose, field-relative speeds, and flight
    * time. futurePos = currentPos + (vx, vy) * flightTime
    */
   public static Translation2d predictFuturePosition(
@@ -20,8 +19,7 @@ public class ShotPrediction {
   }
 
   /**
-   * Calculates the desired robot yaw to face the hub from the predicted future
-   * position. desiredYaw
+   * Calculates the desired robot yaw to face the hub from the predicted future position. desiredYaw
    * = atan2(hubY - futureY, hubX - futureX)
    */
   public static Rotation2d calculateDesiredYaw(

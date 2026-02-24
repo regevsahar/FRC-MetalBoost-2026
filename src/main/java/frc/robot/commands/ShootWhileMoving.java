@@ -15,10 +15,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.AlignToPoseSubsystem;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Swerve;
-
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class ShootWhileMoving extends Command {
@@ -69,8 +67,8 @@ public class ShootWhileMoving extends Command {
     ChassisSpeeds robotRelativeSpeeds = swerve.getRobotRelativeSpeeds();
 
     // Safer conversion (avoids sign mistakes)
-    ChassisSpeeds fieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeeds,
-        currentPose.getRotation());
+    ChassisSpeeds fieldRelativeSpeeds =
+        ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeeds, currentPose.getRotation());
 
     // Deadband to reduce noise
     if (Math.abs(fieldRelativeSpeeds.vxMetersPerSecond) < 0.1)
@@ -79,13 +77,15 @@ public class ShootWhileMoving extends Command {
       fieldRelativeSpeeds.vyMetersPerSecond = 0;
 
     // 5) Predict future position
-    Translation2d futurePos = ShotPrediction.predictFuturePosition(currentPose, fieldRelativeSpeeds, flightTime);
+    Translation2d futurePos =
+        ShotPrediction.predictFuturePosition(currentPose, fieldRelativeSpeeds, flightTime);
 
     // 6) Record future distance
     double futureDistanceToHub = futurePos.getDistance(hubPosition);
 
     // 7) Compute yaw setpoint (what angle you'd aim from futurePos to hub)
-    double yawSetpointRad = Math.atan2(hubPosition.getY() - futurePos.getY(), hubPosition.getX() - futurePos.getX());
+    double yawSetpointRad =
+        Math.atan2(hubPosition.getY() - futurePos.getY(), hubPosition.getX() - futurePos.getX());
     double yawSetpointDeg = Units.radiansToDegrees(yawSetpointRad);
 
     // 8) Use your align subsystem for rotation output if you want closed-loop
