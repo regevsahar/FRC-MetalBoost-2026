@@ -8,12 +8,16 @@ import frc.robot.subsystems.MBSubsystem;
 import frc.lib.util.TunableNumber;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 public class HoodSUB extends MBSubsystem {
 
   private final HoodIO io;
   private final HoodIO.HoodIOInputs inputs = new HoodIO.HoodIOInputs();
   private double targetArc = 0.0;
-
+  
   // Tunables
   private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
 
@@ -27,10 +31,11 @@ public class HoodSUB extends MBSubsystem {
     sysIdRoutine =
         new SysIdRoutine(
             new SysIdRoutine.Config(
-                Units.Volts.of(1).per(Units.Second), // ramp rate: 1 V/s
-                Units.Volts.of(7), // step voltage: 7 V
+                Units.Volts.of(0.2).per(Units.Second), // ramp rate: 1 V/s
+                Units.Volts.of(1), // step voltage: 7 V
                 null, // default timeout
-                null), // default state handler
+                (state) -> SignalLogger.writeString("state", state.toString())), // default state handler
+
             new SysIdRoutine.Mechanism(
                 (voltage) -> io.setVoltage(voltage.in(Units.Volts)),
                 null, // no log consumer needed; use Tuner X / URCL externally
@@ -91,7 +96,8 @@ public class HoodSUB extends MBSubsystem {
     io.updateInputs(inputs);
 
     SmartDashboard.putNumber("/Shooter/Arc/Current", inputs.arc);
-
+    
+    
     SmartDashboard.putNumber("/Shooter/Arc/Target", targetArc);
 
     SmartDashboard.putBoolean("/Shooter/Arc/At Target", isAtTarget());

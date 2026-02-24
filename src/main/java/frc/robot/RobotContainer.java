@@ -67,22 +67,23 @@ public class RobotContainer {
   // │ D-Pad Down → quasistatic reverse
   // │ D-Pad Left → dynamic forward
   // │ D-Pad Right → dynamic reverse
-  private final Trigger hoodSysIdQuasiF = new Trigger(() -> operator.getPOV() == 0);
-  private final Trigger hoodSysIdQuasiR = new Trigger(() -> operator.getPOV() == 180);
-  private final Trigger hoodSysIdDynF = new Trigger(() -> operator.getPOV() == 270);
-  private final Trigger hoodSysIdDynR = new Trigger(() -> operator.getPOV() == 90);
+
+  //private final Trigger hoodSysIdQuasiF = new Trigger(() -> operator.getPOV() == 0);
+  //private final Trigger hoodSysIdQuasiR = new Trigger(() -> operator.getPOV() == 180);
+  //private final Trigger hoodSysIdDynF = new Trigger(() -> operator.getPOV() == 270);
+  //private final Trigger hoodSysIdDynR = new Trigger(() -> operator.getPOV() == 90);
 
   // Flywheel │ Y → quasistatic forward
   // │ A → quasistatic reverse
   // │ X → dynamic forward
   // │ B → dynamic reverse
-  private final JoystickButton flywheelSysIdQuasiF =
+  private final JoystickButton hoodCommand =
       new JoystickButton(operator, XboxController.Button.kY.value);
-  private final JoystickButton flywheelSysIdQuasiR =
+  private final JoystickButton hoodSysIdQuasiR =
       new JoystickButton(operator, XboxController.Button.kA.value);
-  private final JoystickButton flywheelSysIdDynF =
+  private final JoystickButton hoodSysIdDynF =
       new JoystickButton(operator, XboxController.Button.kX.value);
-  private final JoystickButton flywheelSysIdDynR =
+  private final JoystickButton hoodSysIdDynR =
       new JoystickButton(operator, XboxController.Button.kB.value);
 
   public final GridMap fieldGrid;
@@ -116,16 +117,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // ── Hood SysId ──────────────────────────────────────────────────────────
-    hoodSysIdQuasiF.whileTrue(hood.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    hoodCommand.whileTrue(new HoodCommand(hood));
     hoodSysIdQuasiR.whileTrue(hood.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
     hoodSysIdDynF.whileTrue(hood.sysIdDynamic(SysIdRoutine.Direction.kForward));
     hoodSysIdDynR.whileTrue(hood.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // ── Flywheel SysId ──────────────────────────────────────────────────────
-    flywheelSysIdQuasiF.whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    flywheelSysIdQuasiR.whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    flywheelSysIdDynF.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    flywheelSysIdDynR.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    //flywheelSysIdQuasiF.whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    //flywheelSysIdQuasiR.whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    //flywheelSysIdDynF.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    //flywheelSysIdDynR.whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));

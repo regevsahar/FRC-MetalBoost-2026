@@ -60,12 +60,12 @@ public class ShooterConstants {
   public static final TunableNumber kShooterV =
       new TunableNumber("Shooter/Real/kV", 12.0 / kMaxRPM);
   public static final TunableNumber kShooterA = new TunableNumber("Shooter/Real/kA", 0.0);
-  public static final double kMaxArc = 80;
-  public static final double kMinArc = 38;
-  public static final double kArcTolerance = 4;
-  public static final int HOOD_MOTOR_ID = 50;
+  public static final double kMaxArc = 82;
+  public static final double kMinArc = 30;
+  public static final double kArcTolerance = 2.5;
+  public static final int HOOD_MOTOR_ID = 0;
   public static final int HOOD_CANCODER_ID = 51;
-  public static final double kHoodGearRatio = 1.25;
+  public static final double kHoodGearRatio = 1;
   public static final double kHoodRotationsPerDegree =
       (1.0 / 360.0) * kHoodGearRatio; // Rotations per degree of hood
   public static final double kHoodTolerance = 2.0; // Degrees
