@@ -137,40 +137,40 @@ public final class Constants {
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public static final class Mod0 { // TODO: This must be tuned to specific robot
-      public static final int driveMotorID = 4;
-      public static final int angleMotorID = 3;
-      public static final int canCoderID = 9;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-95.09);
+      public static final int driveMotorID = 2;
+      public static final int angleMotorID = 1;
+      public static final int canCoderID = 12;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(113.9);
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
     /* Front Right Module - Module 1 */
     public static final class Mod1 { // TODO: This must be tuned to specific robot
-      public static final int driveMotorID = 2;
-      public static final int angleMotorID = 1;
-      public static final int canCoderID = 12;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(144.49);
+      public static final int driveMotorID = 6;
+      public static final int angleMotorID = 5;
+      public static final int canCoderID = 15;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(78.2);
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
     /* Back Left Module - Module 2 */
     public static final class Mod2 { // TODO: This must be tuned to specific robot
-      public static final int driveMotorID = 10;
-      public static final int angleMotorID = 7;
-      public static final int canCoderID = 11;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(165.49);
+      public static final int driveMotorID = 4;
+      public static final int angleMotorID = 3;
+      public static final int canCoderID = 9;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(178.5);
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
     /* Back Right Module - Module 3 */
     public static final class Mod3 { // TODO: This must be tuned to specific robot
-      public static final int driveMotorID = 6;
-      public static final int angleMotorID = 5;
-      public static final int canCoderID = 15;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(167.78);
+      public static final int driveMotorID = 10;
+      public static final int angleMotorID = 7;
+      public static final int canCoderID = 11;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(77.5);
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
@@ -194,31 +194,40 @@ public final class Constants {
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
+  public static final class VisionConstants {
+    public static final double cameraHeight = 0; // TODO: Update to actual camera height
+    public static final double targetHeight = 0; // TODO: Update to actual target height
+    public static final double cameraPitch =
+        Math.toRadians(0); // TODO: Update to actual camera pitch
+
+    public static final String limelight3name = "limelight-three";
+    public static final String limelight4name = "limelight-four";
+  }
+
   public static final class PoseEstimator {
     public static double OdometryFactor = 2;
     public static final Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.003, 0.003, 0.003);
     public static final Matrix<N3, N1> visionStdDevs =
         VecBuilder.fill(0.05 / OdometryFactor, 0.05 / OdometryFactor, 0.05 / OdometryFactor);
     public static final double stdDevFactor = 0.0035;
-    public static final double minimumStdDev = 0.01;
+    public static final double stdDevFactorTranslation = 0.5;
+    public static final double stdDevFactorRotation = 0.5;
+    public static final double minimumStdDev = 0.1;
   }
 
   public static final class FieldConstants {
-    public static final Translation2d HUB_CENTER_RED =
-        new Translation2d(0.0, 0.0); // TODO: Update coordinates
-    public static final Translation2d HUB_CENTER_BLUE =
-        new Translation2d(4.62534, 4.03); // TODO: Update
+    public static final Translation2d HUB_CENTER_RED = new Translation2d(11.915, 4.035);
+    public static final Translation2d HUB_CENTER_BLUE = new Translation2d(4.625, 4.035);
     // coordinates
 
   }
 
   public static final class AlignToPoseConstants {
     // TODO: Tune these constants
-    public static final double kP = 0.0;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
-
-    public static final double kToleranceRad = Math.toRadians(2.0);
-    public static int kMaxOmegaRadPerSec = 4;
+    public static final double kP = 5;
+    public static final double kI = 0.01;
+    public static final double kD = 0.005;
+    public static final double kToleranceRad = Math.toRadians(5);
+    public static int kMaxOmegaRadPerSec = 2;
   }
 }

@@ -5,10 +5,12 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +32,7 @@ public class PoseEstimator extends SubsystemBase {
   private double offsetX = 0;
   private double offsetY = 0;
   private int nOffsets = 0;
+  private Translation2d target = Constants.FieldConstants.HUB_CENTER_BLUE;
 
   public PoseEstimator() {
     sEstimator =
@@ -45,8 +48,11 @@ public class PoseEstimator extends SubsystemBase {
             new Pose2d(),
             Constants.PoseEstimator.stateStdDevs,
             Constants.PoseEstimator.visionStdDevs);
-
+    var alliance = DriverStation.getAlliance();
     SmartDashboard.putData("FieldPoseEstimator", field);
+    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      target = Constants.FieldConstants.HUB_CENTER_RED;
+    }
   }
 
   public void updateHeadingOffset(Rotation2d gyro, Rotation2d vision) {
@@ -75,9 +81,10 @@ public class PoseEstimator extends SubsystemBase {
   }
 
   /** Update estimator with Swerve States and Gyro Yaw data. Needs to be updated every loop. */
-  // public void updateSwerve(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions){
-  //     sEstimator.update(gyroAngle, modulePositions);
-  //     gyroYawBuffer.addSample(Timer.getFPGATimestamp(), gyroAngle.getRadians());
+  // public void updateSwerve(Rotation2d gyroAngle, SwerveModulePosition[]
+  // modulePositions){
+  // sEstimator.update(gyroAngle, modulePositions);
+  // gyroYawBuffer.addSample(Timer.getFPGATimestamp(), gyroAngle.getRadians());
   // }
 
   public void updateSwerve(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions) {
@@ -107,13 +114,19 @@ public class PoseEstimator extends SubsystemBase {
     double timestamp = estimate.timestampSeconds;
     double translationSTDev =
         Math.max(
-            Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactor,
+            Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactorTranslation,
             Constants.PoseEstimator.minimumStdDev);
     double rotationSTDev =
-        Math.max(Math.pow(distanceFromTag, 2) * 0.05, Constants.PoseEstimator.minimumStdDev);
+        Math.max(
+            Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactorRotation,
+            Constants.PoseEstimator.minimumStdDev);
     Matrix<N3, N1> visionStdDevs =
         VecBuilder.fill(translationSTDev, translationSTDev, rotationSTDev);
     sEstimator.addVisionMeasurement(estimate.pose, timestamp, visionStdDevs);
+  }
+
+  public double getDistanceFromHub() {
+    return getEstimatedPosition().getTranslation().getDistance(target);
   }
 
   public Pose2d getEstimatedPosition() {
@@ -126,6 +139,7 @@ public class PoseEstimator extends SubsystemBase {
     SmartDashboard.putNumber("robotY", getEstimatedPosition().getY());
     SmartDashboard.putNumber("robotHeading", getEstimatedPosition().getRotation().getRadians());
 
+    Logger.recordOutput("Estimator/DistanceFromHub", getDistanceFromHub());
     Logger.recordOutput("Estimator/estimator", getEstimatedPosition());
     Logger.recordOutput("Estimator/Pose2d/robotX", getEstimatedPosition().getX());
     Logger.recordOutput("Estimator/Pose2d/robotY", getEstimatedPosition().getY());

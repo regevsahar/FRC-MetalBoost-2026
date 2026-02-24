@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.util.HeightSpeedReduction;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
-import frc.lib.util.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -43,10 +42,12 @@ public class RobotContainer {
       new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton higherSwerveSpeed =
       new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-  private final JoystickButton GoToNearestBranch =
-      new JoystickButton(driver, XboxController.Button.kB.value);
+  // private final JoystickButton GoToNearestBranch = new JoystickButton(driver,
+  // XboxController.Button.kB.value);
   private final JoystickButton resetPoseEstimator =
       new JoystickButton(driver, XboxController.Button.kA.value);
+  private final JoystickButton shootWhileMoving =
+      new JoystickButton(driver, XboxController.Button.kX.value);
 
   AutoChooser autoChooser;
 
@@ -59,6 +60,7 @@ public class RobotContainer {
   public final LimelightSubsystem limelight = new LimelightSubsystem("limelight-three");
   public final LimelightSubsystem limelight2 = new LimelightSubsystem("limelight-four");
   public final Swerve s_Swerve = new Swerve(poseEstimator);
+  public final AlignToPoseSubsystem AlignToPoseSub = new AlignToPoseSubsystem();
 
   // ── SysId Buttons (Operator Controller) ─────────────────────────────────
   // Hood │ D-Pad Up → quasistatic forward
@@ -153,9 +155,14 @@ public class RobotContainer {
                     s_Swerve.getModulePositions(),
                     new Pose2d(0, 0, new Rotation2d()))));
 
-    GoToNearestBranch.onTrue(
-        PathPlannerUtil.GoToNearestBranch(
-            poseEstimator.getEstimatedPosition(), Constants.SwerveConstants.constraints));
+    // Shoot While Moving
+    shootWhileMoving.whileTrue(
+        new ShootWhileMoving(
+            s_Swerve,
+            poseEstimator,
+            AlignToPoseSub,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis)));
   }
 
   public Command getAutonomousCommand() {

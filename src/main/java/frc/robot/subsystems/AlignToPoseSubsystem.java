@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import org.littletonrobotics.junction.Logger;
 
 public class AlignToPoseSubsystem extends SubsystemBase {
 
@@ -52,6 +53,7 @@ public class AlignToPoseSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Logger.recordOutput("AlignToPoseSubsystem/isAtSetpoint", atSetpoint());
     // This method will be called once per scheduler run
   }
 }

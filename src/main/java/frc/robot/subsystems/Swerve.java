@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -35,11 +36,13 @@ public class Swerve extends SubsystemBase {
   RobotConfig config = null;
   private Command currentPathCommand;
   private PoseEstimator estimator;
+  private CANBus m_canBus;
 
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   public Swerve(PoseEstimator estimator) {
     this.estimator = estimator;
     pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, Constants.CanivoreName);
+    m_canBus = new CANBus(Constants.CanivoreName);
     zeroPigeon();
     mSwerveMods =
         new SwerveModule[] {
@@ -67,12 +70,12 @@ public class Swerve extends SubsystemBase {
         // pose)
         this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         (speeds, feedforwards) ->
-            driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE
-        // ChassisSpeeds. Also optionally outputs individual
-        // module feedforwards
+            driveRobotRelative(speeds), // Method that will drive the robot given ROBOT
+        // RELATIVE ChassisSpeeds. Also optionally outputs
+        // individual module feedforwards
         new PPHolonomicDriveController( // PPHolonomicController is the built in path following
-            // controller for holonomic
-            // drive trains
+            // controller for
+            // holonomic drive trains
             new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
             new PIDConstants(8.0, 0.0, 0.0) // Rotation PID constants/ Rotation PID constants
             ),
@@ -221,6 +224,10 @@ public class Swerve extends SubsystemBase {
     // return swerveOdometry.getPoseMeters();
   }
 
+  public Pose2d getRawPose() {
+    return swerveOdometry.getPoseMeters();
+  }
+
   public void setPose(Pose2d pose) {
     swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
   }
@@ -295,12 +302,18 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    // ב-Subsystem הלוונטי או ב-RobotContainer
+    var status = m_canBus.getStatus();
+    SmartDashboard.putNumber("CANivore Load", status.BusUtilization * 100);
+
     // updateOdometry();
     swerveOdometry.update(getGyroYaw(), getModulePositions());
     field.setRobotPose(getPose());
 
     Logger.recordOutput("Estimator/states/Mystates", getModuleStates());
     Logger.recordOutput("Estimator/Odometry", getPose());
+    Logger.recordOutput("Estimator/RawOdometry", getRawPose());
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());

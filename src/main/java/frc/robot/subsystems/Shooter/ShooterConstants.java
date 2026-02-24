@@ -1,7 +1,7 @@
 package frc.robot.subsystems.Shooter;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import frc.robot.util.TunableNumber;
+import frc.lib.util.TunableNumber;
 
 public class ShooterConstants {
 
@@ -65,7 +65,7 @@ public class ShooterConstants {
   public static final double kArcTolerance = 4;
   public static final int HOOD_MOTOR_ID = 50;
   public static final int HOOD_CANCODER_ID = 51;
-  public static final double kHoodGearRatio = 1;
+  public static final double kHoodGearRatio = 1.25;
   public static final double kHoodRotationsPerDegree =
       (1.0 / 360.0) * kHoodGearRatio; // Rotations per degree of hood
   public static final double kHoodTolerance = 2.0; // Degrees
