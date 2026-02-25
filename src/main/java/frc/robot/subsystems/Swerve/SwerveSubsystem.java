@@ -25,7 +25,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Swerve.SwerveModule.SwerveModule;
 import frc.robot.subsystems.Vision.PoseEstimator;
-
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveSubsystem extends MBSubsystem {

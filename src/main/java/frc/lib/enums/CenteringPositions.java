@@ -3,7 +3,7 @@ package frc.lib.enums;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-//TODO: update these positions and name and add more if needed
+// TODO: update these positions and name and add more if needed
 public enum CenteringPositions {
   A_LEFT(0, true, new Pose2d(3.71123, 4.19654, Rotation2d.fromDegrees(0))),
   A_RIGHT(1, false, new Pose2d(3.71008, 3.86792, Rotation2d.fromDegrees(0))),
@@ -43,7 +43,6 @@ public enum CenteringPositions {
   public Pose2d getPose() {
     return pose;
   }
-
 
   public double getDistance(Pose2d pose) {
     return this.pose.getTranslation().getDistance(pose.getTranslation());

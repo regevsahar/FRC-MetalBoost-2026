@@ -9,7 +9,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.pathplanner.lib.path.PathConstraints;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -18,7 +17,6 @@ import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
-
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -31,7 +29,7 @@ public final class Constants {
   public static final String CanivoreName = "CanivoreMB";
 
   public static final class SwerveConstants {
-    public static final boolean invertGyro = false; //TODO: Always ensure Gyro is CCW+ CW-
+    public static final boolean invertGyro = false; // TODO: Always ensure Gyro is CCW+ CW-
 
     public static final COTSTalonFXSwerveConstants chosenModule =
         COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(
@@ -174,7 +172,8 @@ public final class Constants {
     }
   }
 
-  public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be
+  public static final
+  class AutoConstants { // TODO: The below constants are used in the example auto, and must be
     // tuned to specific robot
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAccelerationMetersPerSecondSquared = 4;
@@ -190,5 +189,4 @@ public final class Constants {
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
-
 }

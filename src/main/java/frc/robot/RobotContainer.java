@@ -10,19 +10,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.HeightSpeedReduction;
-import frc.lib.util.PathPlannerUtil;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
+import frc.lib.util.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
-import frc.robot.commands.*;
-import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.Shooter.FlywheelHoodIntegrationCommand;
 import frc.robot.commands.Shooter.HoodCommand;
-import frc.robot.commands.Shooter.ShootCommand;
 import frc.robot.commands.Shooter.SpinDexser.SpinCommand;
 import frc.robot.commands.Swerve.TeleopSwerveCommand;
 import frc.robot.commands.Vision.ShootWhileMovingCommand;
-import frc.robot.subsystems.*;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIO;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIOTalonFX;
@@ -56,9 +52,11 @@ public class RobotContainer {
       new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton higherSwerveSpeed =
       new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-//   private final JoystickButton followPath = new JoystickButton(driver, XboxController.Button.kB.value);
+  //   private final JoystickButton followPath = new JoystickButton(driver,
+  // XboxController.Button.kB.value);
 
-  private final JoystickButton GoToNearestBranch = new JoystickButton(driver, XboxController.Button.kB.value);
+  private final JoystickButton GoToNearestBranch =
+      new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton resetPoseEstimator =
       new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton shootWhileMoving =
@@ -92,8 +90,6 @@ public class RobotContainer {
   private final Trigger intake = new JoystickButton(operator, XboxController.Button.kB.value);
   private final Trigger hoodCommand = new JoystickButton(operator, XboxController.Button.kY.value);
 
-
-
   public final GridMap fieldGrid;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -124,10 +120,8 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    shoot.whileTrue(new ShootCommand(shooter));
     spin.whileTrue(new SpinCommand(spindexer, -0.35));
     spinAnotherSide.whileTrue(new SpinCommand(spindexer, 0.35));
-    intake.whileTrue(new IntakeCommand(s_intake, 0.45));
     hoodCommand.whileTrue(new HoodCommand(hood));
     flywheelHoodAutoCommand.whileTrue(new FlywheelHoodIntegrationCommand(shooter, hood));
 
@@ -170,10 +164,7 @@ public class RobotContainer {
 
     GoToNearestBranch.onTrue(
         PathPlannerUtil.GoToNearesPosition(
-            poseEstimator.getEstimatedPosition(),
-            Constants.SwerveConstants.constraints)
-        );
-
+            poseEstimator.getEstimatedPosition(), Constants.SwerveConstants.constraints));
   }
 
   public Command getAutonomousCommand() {

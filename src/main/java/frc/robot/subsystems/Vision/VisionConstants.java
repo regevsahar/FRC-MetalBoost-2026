@@ -7,7 +7,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
 public final class VisionConstants {
-    public static final class CameraConstants {
+  public static final class CameraConstants {
     public static final double cameraHeight = 0; // TODO: Update to actual camera height
     public static final double targetHeight = 0; // TODO: Update to actual target height
     public static final double cameraPitch =

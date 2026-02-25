@@ -118,7 +118,7 @@ public class PathPlannerUtil {
   }
 
   public static Command GoToNearesPosition(
-    Pose2d currentPose, PathConstraints constraints, boolean mirror) {
+      Pose2d currentPose, PathConstraints constraints, boolean mirror) {
     CenteringPositions closest = null;
     double minDistance = Double.MAX_VALUE;
 

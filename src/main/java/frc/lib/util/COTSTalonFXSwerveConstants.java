@@ -412,8 +412,8 @@ public class COTSTalonFXSwerveConstants {
 
     public static final class MK4N {
 
-    /** Swerve Drive Specialties - MK4n Module (Falcon 500) */
-    public static final COTSTalonFXSwerveConstants Falcon500(double driveGearRatio) {
+      /** Swerve Drive Specialties - MK4n Module (Falcon 500) */
+      public static final COTSTalonFXSwerveConstants Falcon500(double driveGearRatio) {
         double wheelDiameter = Units.inchesToMeters(4.0);
 
         /** 18.75 : 1 */
@@ -437,10 +437,10 @@ public class COTSTalonFXSwerveConstants {
             driveMotorInvert,
             angleMotorInvert,
             cancoderInvert);
-    }
+      }
 
-    /** Swerve Drive Specialties - MK4n Module (Kraken X60) */
-    public static final COTSTalonFXSwerveConstants KrakenX60(double driveGearRatio) {
+      /** Swerve Drive Specialties - MK4n Module (Kraken X60) */
+      public static final COTSTalonFXSwerveConstants KrakenX60(double driveGearRatio) {
         double wheelDiameter = Units.inchesToMeters(4.0);
 
         /** 18.75 : 1 */
@@ -464,9 +464,9 @@ public class COTSTalonFXSwerveConstants {
             driveMotorInvert,
             angleMotorInvert,
             cancoderInvert);
-    }
+      }
 
-    public static final class driveRatios {
+      public static final class driveRatios {
         /** SDS MK4n - (8.14 : 1) */
         public static final double L1 = 8.14;
 
@@ -478,7 +478,7 @@ public class COTSTalonFXSwerveConstants {
 
         /** SDS MK4n - (5.14 : 1) */
         public static final double L4 = 5.14;
+      }
     }
-}
   }
 }

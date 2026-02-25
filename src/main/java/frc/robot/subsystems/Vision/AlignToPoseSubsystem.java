@@ -3,10 +3,8 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Vision.VisionConstants.AlignToPoseConstants;
-
 import org.littletonrobotics.junction.Logger;
 
 public class AlignToPoseSubsystem extends MBSubsystem {
