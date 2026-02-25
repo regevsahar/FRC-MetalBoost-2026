@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -11,16 +11,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.FlightTimeTable;
 import frc.lib.util.ShotPrediction;
-import frc.robot.Constants;
-import frc.robot.subsystems.AlignToPoseSubsystem;
-import frc.robot.subsystems.PoseEstimator;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Swerve.SwerveSubsystem;
+import frc.robot.subsystems.Vision.AlignToPoseSubsystem;
+import frc.robot.subsystems.Vision.PoseEstimator;
+import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
+
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
-public class ShootWhileMoving extends Command {
-  private final Swerve swerve;
+public class ShootWhileMovingCommand extends Command {
+  private final SwerveSubsystem swerve;
   private final PoseEstimator poseEstimator;
   private final AlignToPoseSubsystem alignSubsystem;
   private final DoubleSupplier translationXSupplier;
@@ -29,8 +30,8 @@ public class ShootWhileMoving extends Command {
   // Optional: visualize future point on the field
   private final Field2d field = new Field2d();
 
-  public ShootWhileMoving(
-      Swerve swerve,
+  public ShootWhileMovingCommand(
+      SwerveSubsystem swerve,
       PoseEstimator poseEstimator,
       AlignToPoseSubsystem alignSubsystem,
       DoubleSupplier translationXSupplier,
@@ -53,10 +54,10 @@ public class ShootWhileMoving extends Command {
     Pose2d currentPose = poseEstimator.getEstimatedPosition();
 
     // 2) Hub position by alliance
-    Translation2d hubPosition = Constants.FieldConstants.HUB_CENTER_BLUE;
+    Translation2d hubPosition = FieldConstants.HUB_CENTER_BLUE;
     Optional<Alliance> alliance = DriverStation.getAlliance();
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-      hubPosition = Constants.FieldConstants.HUB_CENTER_RED;
+      hubPosition = FieldConstants.HUB_CENTER_RED;
     }
 
     // 3) Distance now -> flight time

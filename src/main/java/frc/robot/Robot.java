@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
@@ -10,6 +6,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.LimelightHelpers;
+import frc.robot.subsystems.Swerve.Configs.CTREConfigs;
+import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
+
 import java.util.Optional;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -155,7 +154,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    LimelightHelpers.SetThrottle(Constants.VisionConstants.limelight4name, 200);
+    LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 200);
   }
 
   @Override
@@ -164,7 +163,7 @@ public class Robot extends LoggedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    LimelightHelpers.SetThrottle(Constants.VisionConstants.limelight4name, 0);
+    LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 0);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -179,7 +178,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    LimelightHelpers.SetThrottle(Constants.VisionConstants.limelight4name, 0);
+    LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 0);
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

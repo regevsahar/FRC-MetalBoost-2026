@@ -1,23 +1,24 @@
-package frc.robot.commands;
+package frc.robot.commands.Swerve;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Swerve.SwerveSubsystem;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-public class TeleopSwerve extends Command {
-  private Swerve s_Swerve;
+public class TeleopSwerveCommand extends Command {
+  private SwerveSubsystem s_Swerve;
   private DoubleSupplier translationSup;
   private DoubleSupplier strafeSup;
   private DoubleSupplier rotationSup;
   private BooleanSupplier robotCentricSup;
   private DoubleSupplier speedReductionSup;
 
-  public TeleopSwerve(
-      Swerve s_Swerve,
+  public TeleopSwerveCommand(
+      SwerveSubsystem s_Swerve,
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup,
       DoubleSupplier rotationSup,
@@ -32,8 +33,8 @@ public class TeleopSwerve extends Command {
     this.speedReductionSup = () -> 1.0;
   }
 
-  public TeleopSwerve(
-      Swerve s_Swerve,
+  public TeleopSwerveCommand(
+      SwerveSubsystem s_Swerve,
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup,
       DoubleSupplier rotationSup,

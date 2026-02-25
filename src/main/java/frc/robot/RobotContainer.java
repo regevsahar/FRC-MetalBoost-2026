@@ -10,12 +10,20 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.HeightSpeedReduction;
+import frc.lib.util.PathPlannerUtil;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.*;
+import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.Shooter.FlywheelHoodIntegrationCommand;
+import frc.robot.commands.Shooter.HoodCommand;
+import frc.robot.commands.Shooter.ShootCommand;
+import frc.robot.commands.Shooter.SpinDexser.SpinCommand;
+import frc.robot.commands.Swerve.TeleopSwerveCommand;
+import frc.robot.commands.Vision.ShootWhileMovingCommand;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIO;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIOTalonFX;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSimulation;
@@ -24,6 +32,12 @@ import frc.robot.subsystems.Shooter.Hood.HoodIO;
 import frc.robot.subsystems.Shooter.Hood.HoodIOSim;
 import frc.robot.subsystems.Shooter.Hood.HoodIOTalonFX;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
+import frc.robot.subsystems.SpinDexser.SpindexerSubsystem;
+import frc.robot.subsystems.Swerve.SwerveSubsystem;
+import frc.robot.subsystems.Vision.AlignToPoseSubsystem;
+import frc.robot.subsystems.Vision.LimelightSubsystem;
+import frc.robot.subsystems.Vision.PoseEstimator;
+import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 
 public class RobotContainer {
   /* Controllers */
@@ -42,8 +56,9 @@ public class RobotContainer {
       new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton higherSwerveSpeed =
       new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-  // private final JoystickButton GoToNearestBranch = new JoystickButton(driver,
-  // XboxController.Button.kB.value);
+//   private final JoystickButton followPath = new JoystickButton(driver, XboxController.Button.kB.value);
+
+  private final JoystickButton GoToNearestBranch = new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton resetPoseEstimator =
       new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton shootWhileMoving =
@@ -56,14 +71,14 @@ public class RobotContainer {
   private HeightSpeedReduction heightSpeedReduction = HeightSpeedReduction.getInstance();
   private final FlyWheelSub shooter;
   private final HoodSUB hood;
-  private final Spindexer spindexer = new Spindexer();
-  private final Intake s_intake = new Intake();
+  private final SpindexerSubsystem spindexer = new SpindexerSubsystem();
+  private final IntakeSubsystem s_intake = new IntakeSubsystem();
   public final PoseEstimator poseEstimator = new PoseEstimator();
   public final LimelightSubsystem limelight =
-      new LimelightSubsystem(Constants.VisionConstants.limelight3name);
+      new LimelightSubsystem(CameraConstants.limelight3name);
   public final LimelightSubsystem limelight2 =
-      new LimelightSubsystem(Constants.VisionConstants.limelight4name);
-  public final Swerve s_Swerve = new Swerve(poseEstimator);
+      new LimelightSubsystem(CameraConstants.limelight4name);
+  public final SwerveSubsystem s_Swerve = new SwerveSubsystem(poseEstimator);
   public final AlignToPoseSubsystem AlignToPoseSub = new AlignToPoseSubsystem();
 
   /// * operation Buttons */
@@ -76,6 +91,8 @@ public class RobotContainer {
       new JoystickButton(operator, XboxController.Button.kStart.value);
   private final Trigger intake = new JoystickButton(operator, XboxController.Button.kB.value);
   private final Trigger hoodCommand = new JoystickButton(operator, XboxController.Button.kY.value);
+
+
 
   public final GridMap fieldGrid;
 
@@ -92,7 +109,7 @@ public class RobotContainer {
     fieldGrid = FieldGridLoader.load("FieldGrid.json");
 
     s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
+        new TeleopSwerveCommand(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
@@ -107,9 +124,9 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    shoot.whileTrue(new Shoot(shooter));
-    spin.whileTrue(new Spin(spindexer, -0.35));
-    spinAnotherSide.whileTrue(new Spin(spindexer, 0.35));
+    shoot.whileTrue(new ShootCommand(shooter));
+    spin.whileTrue(new SpinCommand(spindexer, -0.35));
+    spinAnotherSide.whileTrue(new SpinCommand(spindexer, 0.35));
     intake.whileTrue(new IntakeCommand(s_intake, 0.45));
     hoodCommand.whileTrue(new HoodCommand(hood));
     flywheelHoodAutoCommand.whileTrue(new FlywheelHoodIntegrationCommand(shooter, hood));
@@ -117,7 +134,7 @@ public class RobotContainer {
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     lowerSwerveSpeed.whileTrue(
-        new TeleopSwerve(
+        new TeleopSwerveCommand(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
@@ -126,7 +143,7 @@ public class RobotContainer {
             () -> 0.4));
 
     higherSwerveSpeed.whileTrue(
-        new TeleopSwerve(
+        new TeleopSwerveCommand(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
@@ -144,12 +161,19 @@ public class RobotContainer {
 
     // Shoot While Moving
     shootWhileMoving.whileTrue(
-        new ShootWhileMoving(
+        new ShootWhileMovingCommand(
             s_Swerve,
             poseEstimator,
             AlignToPoseSub,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis)));
+
+    GoToNearestBranch.onTrue(
+        PathPlannerUtil.GoToNearesPosition(
+            poseEstimator.getEstimatedPosition(),
+            Constants.SwerveConstants.constraints)
+        );
+
   }
 
   public Command getAutonomousCommand() {

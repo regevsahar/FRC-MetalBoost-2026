@@ -1,23 +1,25 @@
-package frc.robot.commands;
+package frc.robot.commands.Vision;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.AlignToPoseSubsystem;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Swerve.SwerveSubsystem;
+import frc.robot.subsystems.Vision.AlignToPoseSubsystem;
+import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
+
 import java.util.function.DoubleSupplier;
 
 public class AlignToPoseCommand extends Command {
 
-  private final Swerve swerve;
+  private final SwerveSubsystem swerve;
   private final AlignToPoseSubsystem hubAlignSubsystem;
   private DoubleSupplier translationSup;
   private DoubleSupplier strafeSup;
 
   public AlignToPoseCommand(
-      Swerve swerve,
+      SwerveSubsystem swerve,
       AlignToPoseSubsystem hubAlignSubsystem,
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup) {
@@ -42,9 +44,9 @@ public class AlignToPoseCommand extends Command {
 
     var alliance = DriverStation.getAlliance();
 
-    Translation2d target = Constants.FieldConstants.HUB_CENTER_BLUE;
+    Translation2d target = FieldConstants.HUB_CENTER_BLUE;
     if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      target = Constants.FieldConstants.HUB_CENTER_RED;
+      target = FieldConstants.HUB_CENTER_RED;
     }
 
     double rotation = hubAlignSubsystem.calculateRotationOutput(swerve.getPose(), target);

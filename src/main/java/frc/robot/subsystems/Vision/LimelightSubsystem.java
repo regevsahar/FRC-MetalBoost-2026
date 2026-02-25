@@ -1,18 +1,21 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
+import frc.robot.subsystems.MBSubsystem;
+
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
-public class LimelightSubsystem extends SubsystemBase {
+public class LimelightSubsystem extends MBSubsystem {
 
   private final String limelightName;
 
   public LimelightSubsystem(String limelightName) {
+    super(limelightName + "Subsystem");
     this.limelightName = limelightName;
   }
 
@@ -83,7 +86,7 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+  public void subsystemPeriodic() {
     Optional<LimelightHelpers.PoseEstimate> mt1 = getMegaTag1Pose();
     Optional<LimelightHelpers.PoseEstimate> mt2 = getMegaTag2Pose();
 

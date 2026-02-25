@@ -17,7 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.lib.enums.Reef;
+import frc.lib.enums.CenteringPositions;
 import frc.lib.math.ToleranceMath;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,12 +117,12 @@ public class PathPlannerUtil {
     return PathFollowingCommandsBuilder.followPath(path);
   }
 
-  public static Command GoToNearestBranch(
-      Pose2d currentPose, PathConstraints constraints, boolean mirror) {
-    Reef closest = null;
+  public static Command GoToNearesPosition(
+    Pose2d currentPose, PathConstraints constraints, boolean mirror) {
+    CenteringPositions closest = null;
     double minDistance = Double.MAX_VALUE;
 
-    for (Reef branch : Reef.values()) {
+    for (CenteringPositions branch : CenteringPositions.values()) {
       double distance = branch.getDistance(currentPose);
       if (distance < minDistance) {
         minDistance = distance;
@@ -132,11 +132,11 @@ public class PathPlannerUtil {
     return createPathDuringRuntime(currentPose, closest.getPose(), constraints, mirror);
   }
 
-  public static Command GoToNearestBranch(Pose2d currentPose, PathConstraints constraints) {
-    Reef closest = null;
+  public static Command GoToNearesPosition(Pose2d currentPose, PathConstraints constraints) {
+    CenteringPositions closest = null;
     double minDistance = Double.MAX_VALUE;
 
-    for (Reef branch : Reef.values()) {
+    for (CenteringPositions branch : CenteringPositions.values()) {
       double distance = branch.getDistance(currentPose);
       if (distance < minDistance) {
         minDistance = distance;

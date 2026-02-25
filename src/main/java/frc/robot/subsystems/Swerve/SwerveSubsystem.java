@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Swerve;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -21,12 +21,14 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.SwerveModule;
+import frc.robot.subsystems.MBSubsystem;
+import frc.robot.subsystems.Swerve.SwerveModule.SwerveModule;
+import frc.robot.subsystems.Vision.PoseEstimator;
+
 import org.littletonrobotics.junction.Logger;
 
-public class Swerve extends SubsystemBase {
+public class SwerveSubsystem extends MBSubsystem {
 
   public SwerveDriveOdometry swerveOdometry;
   public SwerveModule[] mSwerveMods;
@@ -39,7 +41,8 @@ public class Swerve extends SubsystemBase {
   private CANBus m_canBus;
 
   // private final SwerveDrivePoseEstimator m_poseEstimator;
-  public Swerve(PoseEstimator estimator) {
+  public SwerveSubsystem(PoseEstimator estimator) {
+    super("Swerve");
     this.estimator = estimator;
     pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, Constants.CanivoreName);
     m_canBus = new CANBus(Constants.CanivoreName);
@@ -301,7 +304,7 @@ public class Swerve extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+  public void subsystemPeriodic() {
 
     // ב-Subsystem הלוונטי או ב-RobotContainer
     var status = m_canBus.getStatus();

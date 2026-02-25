@@ -9,18 +9,16 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.pathplanner.lib.path.PathConstraints;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
+
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -176,8 +174,7 @@ public final class Constants {
     }
   }
 
-  public static final
-  class AutoConstants { // TODO: The below constants are used in the example auto, and must be
+  public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be
     // tuned to specific robot
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAccelerationMetersPerSecondSquared = 4;
@@ -194,40 +191,4 @@ public final class Constants {
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
-  public static final class VisionConstants {
-    public static final double cameraHeight = 0; // TODO: Update to actual camera height
-    public static final double targetHeight = 0; // TODO: Update to actual target height
-    public static final double cameraPitch =
-        Math.toRadians(0); // TODO: Update to actual camera pitch
-
-    public static final String limelight3name = "limelight-three";
-    public static final String limelight4name = "limelight-four";
-  }
-
-  public static final class PoseEstimator {
-    public static double OdometryFactor = 2;
-    public static final Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.003, 0.003, 0.003);
-    public static final Matrix<N3, N1> visionStdDevs =
-        VecBuilder.fill(0.05 / OdometryFactor, 0.05 / OdometryFactor, 0.05 / OdometryFactor);
-    public static final double stdDevFactor = 0.0035;
-    public static final double stdDevFactorTranslation = 0.5;
-    public static final double stdDevFactorRotation = 0.5;
-    public static final double minimumStdDev = 0.1;
-  }
-
-  public static final class FieldConstants {
-    public static final Translation2d HUB_CENTER_RED = new Translation2d(11.915, 4.035);
-    public static final Translation2d HUB_CENTER_BLUE = new Translation2d(4.625, 4.035);
-    // coordinates
-
-  }
-
-  public static final class AlignToPoseConstants {
-    // TODO: Tune these constants
-    public static final double kP = 5;
-    public static final double kI = 0.01;
-    public static final double kD = 0.005;
-    public static final double kToleranceRad = Math.toRadians(5);
-    public static int kMaxOmegaRadPerSec = 2;
-  }
 }

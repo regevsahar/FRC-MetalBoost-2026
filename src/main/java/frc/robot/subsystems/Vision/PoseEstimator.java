@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -17,10 +17,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
+import frc.robot.subsystems.MBSubsystem;
+import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
+
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
-public class PoseEstimator extends SubsystemBase {
+public class PoseEstimator extends MBSubsystem {
   public SwerveDrivePoseEstimator sEstimator;
   public TimeInterpolatableBuffer<Double> turretYawBuffer =
       TimeInterpolatableBuffer.createDoubleBuffer(1.0);
@@ -32,9 +35,10 @@ public class PoseEstimator extends SubsystemBase {
   private double offsetX = 0;
   private double offsetY = 0;
   private int nOffsets = 0;
-  private Translation2d target = Constants.FieldConstants.HUB_CENTER_BLUE;
+  private Translation2d target = FieldConstants.HUB_CENTER_BLUE;
 
   public PoseEstimator() {
+    super("PoseEstimator");
     sEstimator =
         new SwerveDrivePoseEstimator(
             Constants.SwerveConstants.swerveKinematics,
@@ -46,12 +50,12 @@ public class PoseEstimator extends SubsystemBase {
               new SwerveModulePosition()
             },
             new Pose2d(),
-            Constants.PoseEstimator.stateStdDevs,
-            Constants.PoseEstimator.visionStdDevs);
+            VisionConstants.PoseEstimator.stateStdDevs,
+            VisionConstants.PoseEstimator.visionStdDevs);
     var alliance = DriverStation.getAlliance();
     SmartDashboard.putData("FieldPoseEstimator", field);
     if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      target = Constants.FieldConstants.HUB_CENTER_RED;
+      target = FieldConstants.HUB_CENTER_RED;
     }
   }
 
@@ -114,12 +118,12 @@ public class PoseEstimator extends SubsystemBase {
     double timestamp = estimate.timestampSeconds;
     double translationSTDev =
         Math.max(
-            Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactorTranslation,
-            Constants.PoseEstimator.minimumStdDev);
+            Math.pow(distanceFromTag, 2) * VisionConstants.PoseEstimator.stdDevFactorTranslation,
+            VisionConstants.PoseEstimator.minimumStdDev);
     double rotationSTDev =
         Math.max(
-            Math.pow(distanceFromTag, 2) * Constants.PoseEstimator.stdDevFactorRotation,
-            Constants.PoseEstimator.minimumStdDev);
+            Math.pow(distanceFromTag, 2) * VisionConstants.PoseEstimator.stdDevFactorRotation,
+            VisionConstants.PoseEstimator.minimumStdDev);
     Matrix<N3, N1> visionStdDevs =
         VecBuilder.fill(translationSTDev, translationSTDev, rotationSTDev);
     sEstimator.addVisionMeasurement(estimate.pose, timestamp, visionStdDevs);
@@ -134,7 +138,7 @@ public class PoseEstimator extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+  public void subsystemPeriodic() {
     SmartDashboard.putNumber("robotX", getEstimatedPosition().getX());
     SmartDashboard.putNumber("robotY", getEstimatedPosition().getY());
     SmartDashboard.putNumber("robotHeading", getEstimatedPosition().getRotation().getRadians());

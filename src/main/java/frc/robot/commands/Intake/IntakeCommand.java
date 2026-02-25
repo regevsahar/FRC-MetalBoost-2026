@@ -1,20 +1,15 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-package frc.robot.commands;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakeSubsystem;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeCommand extends Command {
-  /** Creates a new Intake. */
-  private final Intake intake;
+  /** Creates a new IntakeSubsystem. */
+  private final IntakeSubsystem intake;
 
   private double value;
 
-  public IntakeCommand(Intake intake, double value) {
+  public IntakeCommand(IntakeSubsystem intake, double value) {
     this.intake = intake;
     this.value = value;
     addRequirements(intake);
