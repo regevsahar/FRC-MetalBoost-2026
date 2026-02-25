@@ -31,7 +31,7 @@ public final class Constants {
   public static final String CanivoreName = "CanivoreMB";
 
   public static final class SwerveConstants {
-    public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
+    public static final boolean invertGyro = false; //TODO: Always ensure Gyro is CCW+ CW-
 
     public static final COTSTalonFXSwerveConstants chosenModule =
         COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(

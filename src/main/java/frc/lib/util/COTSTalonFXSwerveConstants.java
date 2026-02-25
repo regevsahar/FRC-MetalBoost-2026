@@ -409,5 +409,76 @@ public class COTSTalonFXSwerveConstants {
         public static final double L3 = (6.12 / 1.0);
       }
     }
+
+    public static final class MK4N {
+
+    /** Swerve Drive Specialties - MK4n Module (Falcon 500) */
+    public static final COTSTalonFXSwerveConstants Falcon500(double driveGearRatio) {
+        double wheelDiameter = Units.inchesToMeters(4.0);
+
+        /** 18.75 : 1 */
+        double angleGearRatio = 18.75;
+
+        double angleKP = 100.0;
+        double angleKI = 0.0;
+        double angleKD = 0.0;
+
+        InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
+        InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
+        SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
+
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
+    }
+
+    /** Swerve Drive Specialties - MK4n Module (Kraken X60) */
+    public static final COTSTalonFXSwerveConstants KrakenX60(double driveGearRatio) {
+        double wheelDiameter = Units.inchesToMeters(4.0);
+
+        /** 18.75 : 1 */
+        double angleGearRatio = 18.75;
+
+        double angleKP = 1.0;
+        double angleKI = 0.0;
+        double angleKD = 0.0;
+
+        InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
+        InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
+        SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
+
+        return new COTSTalonFXSwerveConstants(
+            wheelDiameter,
+            angleGearRatio,
+            driveGearRatio,
+            angleKP,
+            angleKI,
+            angleKD,
+            driveMotorInvert,
+            angleMotorInvert,
+            cancoderInvert);
+    }
+
+    public static final class driveRatios {
+        /** SDS MK4n - (8.14 : 1) */
+        public static final double L1 = 8.14;
+
+        /** SDS MK4n - (6.75 : 1) */
+        public static final double L2 = 6.75;
+
+        /** SDS MK4n - (6.12 : 1) */
+        public static final double L3 = 6.12;
+
+        /** SDS MK4n - (5.14 : 1) */
+        public static final double L4 = 5.14;
+    }
+}
   }
 }
