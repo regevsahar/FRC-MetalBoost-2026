@@ -9,33 +9,32 @@ import frc.robot.subsystems.Intake.IntakeConstants;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
 
 public class InsertBallCommand extends Command {
-    private IntakeRollersSub intakeRollers;
+  private IntakeRollersSub intakeRollers;
 
-    public InsertBallCommand(IntakeRollersSub intakeRollers) {
-        this.intakeRollers = intakeRollers;
-        addRequirements(intakeRollers);
-    }
+  public InsertBallCommand(IntakeRollersSub intakeRollers) {
+    this.intakeRollers = intakeRollers;
+    addRequirements(intakeRollers);
+  }
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
-    }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-        intakeRollers.SetSpeed(IntakeConstants.INSERT_SPEED);
-    }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    intakeRollers.SetSpeed(IntakeConstants.INSERT_SPEED);
+  }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        intakeRollers.StopIntake();
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    intakeRollers.StopIntake();
+  }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

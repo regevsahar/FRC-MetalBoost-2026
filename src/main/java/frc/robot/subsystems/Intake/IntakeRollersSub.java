@@ -13,32 +13,31 @@ import frc.robot.subsystems.MBSubsystem;
 
 public class IntakeRollersSub extends MBSubsystem {
 
-    private TalonFX motor;
+  private TalonFX motor;
 
-    public IntakeRollersSub() {
-        super("Intake rollers");
-        motor = new TalonFX(IntakeConstants.INTAKE_ROLLER_PORT, new CANBus(Constants.CanivoreName));
-        configureTalonFX();
+  public IntakeRollersSub() {
+    super("Intake rollers");
+    motor = new TalonFX(IntakeConstants.INTAKE_ROLLER_PORT, new CANBus(Constants.CanivoreName));
+    configureTalonFX();
+  }
+
+  private void configureTalonFX() {
+    TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
+
+    StatusCode statusInsert = motor.getConfigurator().apply(talonFXConfig);
+    if (statusInsert != StatusCode.OK) {
+      System.out.println("Failed to configure TalonFX: " + statusInsert);
     }
+  }
 
-    private void configureTalonFX() {
-        TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
+  public void SetSpeed(double value) {
+    motor.set(value);
+  }
 
-        StatusCode statusInsert = motor.getConfigurator().apply(talonFXConfig);
-        if (statusInsert != StatusCode.OK) {
-            System.out.println("Failed to configure TalonFX: " + statusInsert);
-        }
-    }
+  public void StopIntake() {
+    motor.set(0);
+  }
 
-    public void SetSpeed(double value) {
-        motor.set(value);
-    }
-
-    public void StopIntake() {
-        motor.set(0);
-    }
-
-    @Override
-    public void subsystemPeriodic() {
-    }
+  @Override
+  public void subsystemPeriodic() {}
 }

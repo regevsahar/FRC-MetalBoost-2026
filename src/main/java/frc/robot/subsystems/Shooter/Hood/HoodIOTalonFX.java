@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Shooter.Hood;
 
 import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
