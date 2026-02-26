@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Shooter.Hood;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.util.TunableNumber;
 import frc.robot.subsystems.MBSubsystem;
@@ -17,6 +18,22 @@ public class HoodSub extends MBSubsystem {
   public HoodSub(HoodIO io) {
     super("Hood");
     this.io = io;
+  }
+
+  public boolean isStalling() {
+    if (RobotBase.isSimulation()) {
+      return false;
+    }
+    HoodIOTalonFX hood = (HoodIOTalonFX) io;
+    return hood.isStalling();
+  }
+
+  public void resetPosition() {
+    io.resetPosition();
+  }
+
+  public void setSpeed(double speed) {
+    io.setSpeed(speed);
   }
 
   public void setTargetArc(double targetArc) {

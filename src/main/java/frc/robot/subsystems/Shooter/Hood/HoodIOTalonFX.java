@@ -84,12 +84,22 @@ public class HoodIOTalonFX implements HoodIO {
   }
 
   @Override
+  public void setSpeed(double speed) {
+    hoodMotor.set(speed);
+  }
+
+  @Override
   public void setTargetArc(double arcDegrees) {
     hoodMotor.setControl(positionControl.withPosition(degreesToRotations(arcDegrees)));
   }
 
+  @Override
   public void resetPosition() {
     hoodMotor.setPosition(0);
+  }
+
+  public boolean isStalling() {
+    return hoodMotor.getStatorCurrent().getValueAsDouble() > ShooterConstants.kHoodStallThreshold;
   }
 
   @Override

@@ -12,9 +12,18 @@ public interface HoodIO {
     public double tempCelcius = 0.0;
   }
 
-  default void updateInputs(HoodIOInputs inputs) {}
+  default void updateInputs(HoodIOInputs inputs) {
+  }
 
-  default void setTargetArc(double arc) {}
+  default void setTargetArc(double arc) {
+  }
 
-  default void stop() {}
+  default void stop() {
+  }
+
+  default void resetPosition() {
+  }
+
+  default void setSpeed(double speed) {
+  }
 }

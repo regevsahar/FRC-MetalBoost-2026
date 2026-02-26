@@ -19,4 +19,5 @@ public class IntakeConstants {
   public static final double kGearRatio = 1;
   public static final double EJECT_SPEED = 0;
   public static final double INSERT_SPEED = 0;
+  public static final double kStallThreshold = 50.0; // Amps
 }

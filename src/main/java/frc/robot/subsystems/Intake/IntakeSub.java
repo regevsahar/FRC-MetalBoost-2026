@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
+import frc.robot.subsystems.Shooter.ShooterConstants;
 
 public class IntakeSub extends MBSubsystem {
 
@@ -72,6 +73,10 @@ public class IntakeSub extends MBSubsystem {
 
   public double getCurrentPosition() {
     return rotationsToCm(motor.getPosition().getValueAsDouble());
+  }
+
+  public boolean isStalling() {
+    return motor.getStatorCurrent().getValueAsDouble() > IntakeConstants.kStallThreshold;
   }
 
   public double CmToRotations(double cm) {
