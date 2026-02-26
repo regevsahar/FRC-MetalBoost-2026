@@ -10,7 +10,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
-import frc.robot.subsystems.Shooter.ShooterConstants;
 
 public class IntakeSub extends MBSubsystem {
 
@@ -39,8 +38,8 @@ public class IntakeSub extends MBSubsystem {
 
     // limit configuration
     // Soft limits are in Rotations. Convert cm to Rotations.
-    double forwardLimitRotations = CmToRotations(IntakeConstants.BOTTOM_LIMIT);
-    double reverseLimitRotations = CmToRotations(IntakeConstants.TOP_LIMIT);
+    double forwardLimitRotations = IntakeConstants.BOTTOM_LIMIT;
+    double reverseLimitRotations = IntakeConstants.TOP_LIMIT;
 
     var softLimit = talonFXConfig.SoftwareLimitSwitch;
     softLimit.ForwardSoftLimitEnable = true;
@@ -55,8 +54,8 @@ public class IntakeSub extends MBSubsystem {
     }
   }
 
-  public void setTargetPosition(double targetCm) {
-    motor.setControl(new PositionVoltage(CmToRotations(targetCm)));
+  public void setTargetPosition(double target) {
+    motor.setControl(new PositionVoltage(target));
   }
 
   public void resetPosition() {
@@ -72,23 +71,15 @@ public class IntakeSub extends MBSubsystem {
   }
 
   public double getCurrentPosition() {
-    return rotationsToCm(motor.getPosition().getValueAsDouble());
+    return motor.getPosition().getValueAsDouble();
   }
 
   public boolean isStalling() {
     return motor.getStatorCurrent().getValueAsDouble() > IntakeConstants.kStallThreshold;
   }
 
-  public double CmToRotations(double cm) {
-    return (cm - 30) / 44.8;
-  }
-
-  public double rotationsToCm(double rotations) {
-    return rotations * 44.8 + 30;
-  }
-
-  public boolean isAtTargetPosition(double targetPositionCm) {
-    double error = Math.abs(getCurrentPosition() - targetPositionCm);
+  public boolean isAtTargetPosition(double targetPosition) {
+    double error = Math.abs(getCurrentPosition() - targetPosition);
     return error < IntakeConstants.kTolerance;
   }
 
