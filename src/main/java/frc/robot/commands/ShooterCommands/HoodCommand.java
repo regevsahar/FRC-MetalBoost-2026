@@ -1,18 +1,19 @@
-package frc.robot.commands;
+package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter.Hood.HoodSUB;
+import frc.robot.subsystems.Shooter.Hood.HoodSub;
 
 public class HoodCommand extends Command {
-  private final HoodSUB hood;
+  private final HoodSub hood;
 
-  public HoodCommand(HoodSUB hood) {
+  public HoodCommand(HoodSub hood) {
     this.hood = hood;
     addRequirements(hood);
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   @Override
   public void execute() {
@@ -26,6 +27,6 @@ public class HoodCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return hood.isAtTarget();
   }
 }

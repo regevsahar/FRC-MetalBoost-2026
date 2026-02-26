@@ -1,9 +1,6 @@
 package frc.robot.subsystems.Shooter.FlyWheel;
 
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.util.TunableNumber;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
@@ -17,21 +14,9 @@ public class FlyWheelSub extends MBSubsystem {
   // Tunables
   private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
 
-  // SysId
-  private final SysIdRoutine sysIdRoutine;
-
   public FlyWheelSub(FlyWheelIO io) {
     super("Shooter");
     this.io = io;
-
-    sysIdRoutine = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            Units.Volts.of(1).per(Units.Second), // ramp rate: 1 V/s
-            Units.Volts.of(3), // step voltage: 10 V (flywheel needs authority)
-            null,
-            null),
-        new SysIdRoutine.Mechanism(
-            (voltage) -> io.setVoltage(voltage.in(Units.Volts)), null, this, "Flywheel"));
   }
 
   public void setTargetRPM(double targetRPM) {
@@ -57,28 +42,6 @@ public class FlyWheelSub extends MBSubsystem {
 
   public void stop() {
     io.stop();
-  }
-
-  // ── SysId ────────────────────────────────────────────────────────────────
-
-  /**
-   * Quasistatic (slow-ramp) SysId command.
-   *
-   * @param direction {@link SysIdRoutine.Direction#kForward} or {@link
-   *                  SysIdRoutine.Direction#kReverse}
-   */
-  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return sysIdRoutine.quasistatic(direction);
-  }
-
-  /**
-   * Dynamic (step-voltage) SysId command.
-   *
-   * @param direction {@link SysIdRoutine.Direction#kForward} or {@link
-   *                  SysIdRoutine.Direction#kReverse}
-   */
-  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-    return sysIdRoutine.dynamic(direction);
   }
 
   @Override

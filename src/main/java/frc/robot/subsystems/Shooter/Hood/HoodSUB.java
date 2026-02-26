@@ -1,46 +1,23 @@
 package frc.robot.subsystems.Shooter.Hood;
 
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.MBSubsystem;
 import frc.lib.util.TunableNumber;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
-import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.hardware.TalonFX;
-
-public class HoodSUB extends MBSubsystem {
+public class HoodSub extends MBSubsystem {
 
   private final HoodIO io;
   private final HoodIO.HoodIOInputs inputs = new HoodIO.HoodIOInputs();
   private double targetArc = 0.0;
-  
+
   // Tunables
   private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
 
-  // SysId
-  private final SysIdRoutine sysIdRoutine;
-
-  public HoodSUB(HoodIO io) {
+  public HoodSub(HoodIO io) {
     super("Hood");
     this.io = io;
 
-    sysIdRoutine =
-        new SysIdRoutine(
-            new SysIdRoutine.Config(
-                Units.Volts.of(0.2).per(Units.Second), // ramp rate: 1 V/s
-                Units.Volts.of(1), // step voltage: 7 V
-                null, // default timeout
-                (state) -> SignalLogger.writeString("state", state.toString())), // default state handler
-
-            new SysIdRoutine.Mechanism(
-                (voltage) -> io.setVoltage(voltage.in(Units.Volts)),
-                null, // no log consumer needed; use Tuner X / URCL externally
-                this,
-                "Hood"));
   }
 
   public void setTargetArc(double targetArc) {
@@ -68,36 +45,13 @@ public class HoodSUB extends MBSubsystem {
     io.stop();
   }
 
-  // ── SysId ────────────────────────────────────────────────────────────────
-
-  /**
-   * Quasistatic (slow-ramp) SysId command.
-   *
-   * @param direction {@link SysIdRoutine.Direction#kForward} or {@link
-   *     SysIdRoutine.Direction#kReverse}
-   */
-  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return sysIdRoutine.quasistatic(direction);
-  }
-
-  /**
-   * Dynamic (step-voltage) SysId command.
-   *
-   * @param direction {@link SysIdRoutine.Direction#kForward} or {@link
-   *     SysIdRoutine.Direction#kReverse}
-   */
-  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-    return sysIdRoutine.dynamic(direction);
-  }
-
   @Override
   public void subsystemPeriodic() {
 
     io.updateInputs(inputs);
 
     SmartDashboard.putNumber("/Shooter/Arc/Current", inputs.arc);
-    
-    
+
     SmartDashboard.putNumber("/Shooter/Arc/Target", targetArc);
 
     SmartDashboard.putBoolean("/Shooter/Arc/At Target", isAtTarget());
