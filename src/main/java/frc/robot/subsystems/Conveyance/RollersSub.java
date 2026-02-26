@@ -1,0 +1,32 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.subsystems.Conveyance;
+import com.ctre.phoenix6.hardware.TalonFX;
+import frc.robot.subsystems.MBSubsystem;
+
+public class RollersSub extends MBSubsystem {
+  
+ private TalonFX motor;
+
+  public RollersSub() {
+    super("Conveyance rollers");
+    motor = new TalonFX(ConveyanceConstants.ROLLERS_PORT_ROLLERS);
+
+  }
+
+
+    public void setSpeed(double value){
+    motor.set(value);
+    }
+    
+    public void stop(){
+    motor.set(0);
+    }
+  
+  @Override
+  public void subsystemPeriodic() {
+    // This method will be called once per scheduler run
+  }
+}
