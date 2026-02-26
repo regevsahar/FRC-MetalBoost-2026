@@ -20,18 +20,18 @@ public class HoodIOTalonFX implements HoodIO {
   public HoodIOTalonFX() {
     hoodMotor = new TalonFX(ShooterConstants.HOOD_MOTOR_ID, new CANBus(Constants.CanivoreName));
 
+    resetPosition();
     configMotor();
 
-    hoodMotor.setPosition(0);
     hoodMotor.setNeutralMode(NeutralModeValue.Brake);
   }
 
   private double degreesToRotations(double deg) {
-    return deg / 360.0 * ShooterConstants.kHoodGearRatio;
+    return (deg - 30) / 44.8;
   }
 
   private double rotationsToDegrees(double rot) {
-    return rot * 360.0 / ShooterConstants.kHoodGearRatio;
+    return rot * 44.8 + 30;
   }
 
   private void configMotor() {
@@ -45,16 +45,18 @@ public class HoodIOTalonFX implements HoodIO {
     config.Slot0.kV = ShooterConstants.kHoodV.get();
     config.Slot0.kA = ShooterConstants.kHoodA.get();
 
-    SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
+    // SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
 
-    softLimits.ForwardSoftLimitEnable = true;
-    softLimits.ReverseSoftLimitEnable = true;
+    // softLimits.ForwardSoftLimitEnable = true;
+    // softLimits.ReverseSoftLimitEnable = true;
 
-    softLimits.ForwardSoftLimitThreshold = degreesToRotations(ShooterConstants.kMaxArc);
+    // softLimits.ForwardSoftLimitThreshold =
+    // degreesToRotations(ShooterConstants.kMaxArc);
 
-    softLimits.ReverseSoftLimitThreshold = degreesToRotations(ShooterConstants.kMinArc);
+    // softLimits.ReverseSoftLimitThreshold =
+    // degreesToRotations(ShooterConstants.kMinArc);
 
-    config.SoftwareLimitSwitch = softLimits;
+    // config.SoftwareLimitSwitch = softLimits;
 
     for (int i = 0; i < 5; i++) {
       if (hoodMotor.getConfigurator().apply(config).isOK()) {

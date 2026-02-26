@@ -2,29 +2,16 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-<<<<<<<< HEAD:src/main/java/frc/robot/commands/Shooter/ShootCommand.java
-package frc.robot.commands.Shooter;
-========
 package frc.robot.commands.ShooterCommands;
->>>>>>>> 560818ccccfb5ff2229af7a41f279b49f7c3f32b:src/main/java/frc/robot/commands/ShooterCommands/ShooterCommand.java
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-<<<<<<<< HEAD:src/main/java/frc/robot/commands/Shooter/ShootCommand.java
-public class ShootCommand extends Command {
-  /** Creates a new Shoot. */
-  private final FlyWheelSub shooter;
-
-  public ShootCommand(FlyWheelSub shooter) {
-========
 public class ShooterCommand extends Command {
   /** Creates a new Shoot. */
   private final FlyWheelSub shooter;
 
   public ShooterCommand(FlyWheelSub shooter) {
->>>>>>>> 560818ccccfb5ff2229af7a41f279b49f7c3f32b:src/main/java/frc/robot/commands/ShooterCommands/ShooterCommand.java
     this.shooter = shooter;
     addRequirements(shooter);
     // Use addRequirements() here to declare subsystem dependencies.
