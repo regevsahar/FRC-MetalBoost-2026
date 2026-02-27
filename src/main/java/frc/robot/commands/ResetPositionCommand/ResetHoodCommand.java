@@ -1,12 +1,12 @@
 package frc.robot.commands.ResetPositionCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter.Hood.HoodSub;
+import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 
 public class ResetHoodCommand extends Command {
-    private final HoodSub hood;
+    private final HoodSUB hood;
 
-    public ResetHoodCommand(HoodSub hood) {
+    public ResetHoodCommand(HoodSUB hood) {
         this.hood = hood;
         addRequirements(hood);
     }

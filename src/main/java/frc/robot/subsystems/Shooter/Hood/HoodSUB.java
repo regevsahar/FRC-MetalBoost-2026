@@ -6,7 +6,7 @@ import frc.lib.util.TunableNumber;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
-public class HoodSub extends MBSubsystem {
+public class HoodSUB extends MBSubsystem {
 
   private final HoodIO io;
   private final HoodIO.HoodIOInputs inputs = new HoodIO.HoodIOInputs();
@@ -15,7 +15,7 @@ public class HoodSub extends MBSubsystem {
   // Tunables
   private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
 
-  public HoodSub(HoodIO io) {
+  public HoodSUB(HoodIO io) {
     super("Hood");
     this.io = io;
   }
