@@ -467,17 +467,14 @@ public class COTSTalonFXSwerveConstants {
       }
 
       public static final class driveRatios {
-        /** SDS MK4n - (8.14 : 1) */
-        public static final double L1 = 8.14;
+        /** SDS MK4n - (7.13 : 1) */
+        public static final double L1 = 7.13;
 
-        /** SDS MK4n - (6.75 : 1) */
-        public static final double L2 = 6.75;
+        /** SDS MK4n - (5.9 : 1) */
+        public static final double L2 = 5.9;
 
-        /** SDS MK4n - (6.12 : 1) */
-        public static final double L3 = 6.12;
-
-        /** SDS MK4n - (5.14 : 1) */
-        public static final double L4 = 5.14;
+        /** SDS MK4n - (5.36 : 1) */
+        public static final double L3 = 5.36;
       }
     }
   }
