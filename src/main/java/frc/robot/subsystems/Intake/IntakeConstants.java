@@ -16,7 +16,7 @@ public class IntakeConstants {
   public static final TunableNumber kJerk = new TunableNumber("Intake/kJerk", 0.0);
   public static final double kAngleOffset = 0;
   public static final double kTolerance = 0.05; 
-  public static final double TOP_LIMIT =4;// rotations
+  public static final double TOP_LIMIT =4.5;// rotations
   public static final double BOTTOM_LIMIT = 0; // rotations
   public static final double ROTATIONS_PER_CM = 2048;
   public static final double kGearRatio = 1;
