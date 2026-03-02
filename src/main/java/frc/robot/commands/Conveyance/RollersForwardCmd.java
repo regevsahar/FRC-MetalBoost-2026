@@ -1,14 +1,14 @@
 package frc.robot.commands.Conveyance;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Conveyance.RollersSubsystem;
+import frc.robot.subsystems.Conveyance.RollersSub;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
-public class RollersForwardCommand extends Command {
+public class RollersForwardCmd extends Command {
 
-    private final RollersSubsystem rollers;
+    private final RollersSub rollers;
 
-    public RollersForwardCommand(RollersSubsystem rollers) {
+    public RollersForwardCmd(RollersSub rollers) {
         this.rollers = rollers;
         addRequirements(rollers);
     }

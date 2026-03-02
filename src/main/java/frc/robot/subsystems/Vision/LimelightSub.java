@@ -8,11 +8,11 @@ import frc.robot.subsystems.MBSubsystem;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
-public class LimelightSubsystem extends MBSubsystem {
+public class LimelightSub extends MBSubsystem {
 
   private final String limelightName;
 
-  public LimelightSubsystem(String limelightName) {
+  public LimelightSub(String limelightName) {
     super(limelightName + "Subsystem");
     this.limelightName = limelightName;
   }

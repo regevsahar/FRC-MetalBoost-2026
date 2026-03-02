@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
 
-public class IntakeSubsystem extends MBSubsystem {
+public class IntakeSub extends MBSubsystem {
 
   private TalonFX motor;
 
-  public IntakeSubsystem() {
+  public IntakeSub() {
     super("Intake");
     motor = new TalonFX(IntakeConstants.INTAKE_MOTOR_PORT, new CANBus(Constants.CanivoreName));
 

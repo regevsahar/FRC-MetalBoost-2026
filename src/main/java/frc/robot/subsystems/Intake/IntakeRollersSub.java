@@ -11,11 +11,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
 
-public class IntakeRollersSubsystem extends MBSubsystem {
+public class IntakeRollersSub extends MBSubsystem {
 
   private TalonFX motor;
 
-  public IntakeRollersSubsystem() {
+  public IntakeRollersSub() {
     super("Intake rollers");
     motor = new TalonFX(IntakeConstants.INTAKE_ROLLER_PORT, new CANBus(Constants.CanivoreName));
     configureTalonFX();

@@ -11,11 +11,11 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
 
-public class ConveyanceSubsystem extends MBSubsystem {
+public class ConveyanceSub extends MBSubsystem {
   
  private TalonFX lowerMotor,upperMotor;
 
-  public ConveyanceSubsystem() {
+  public ConveyanceSub() {
     super("Conveyance wheels");
     lowerMotor = new TalonFX(ConveyanceConstants.LOWER_MOTOR_PORT,new CANBus(Constants.CanivoreName));
     upperMotor = new TalonFX(ConveyanceConstants.UPPER_MOTOR_PORT, new CANBus(Constants.CanivoreName));

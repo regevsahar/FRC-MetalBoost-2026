@@ -7,11 +7,11 @@ import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Vision.VisionConstants.AlignToPoseConstants;
 import org.littletonrobotics.junction.Logger;
 
-public class AlignToPoseSubsystem extends MBSubsystem {
+public class AlignToPoseSub extends MBSubsystem {
 
   private final PIDController pidController;
 
-  public AlignToPoseSubsystem() {
+  public AlignToPoseSub() {
     super("AlignToPose");
     pidController =
         new PIDController(

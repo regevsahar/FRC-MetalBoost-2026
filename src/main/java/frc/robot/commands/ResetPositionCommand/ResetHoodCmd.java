@@ -3,10 +3,10 @@ package frc.robot.commands.ResetPositionCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 
-public class ResetHoodCommand extends Command {
+public class ResetHoodCmd extends Command {
     private final HoodSUB hood;
 
-    public ResetHoodCommand(HoodSUB hood) {
+    public ResetHoodCmd(HoodSUB hood) {
         this.hood = hood;
         addRequirements(hood);
     }

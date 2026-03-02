@@ -6,12 +6,13 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.IntakeConstants;
-import frc.robot.subsystems.Intake.IntakeRollersSubsystem;
+import frc.robot.subsystems.Intake.IntakeRollersSub;
 
-public class InsertBallCommand extends Command {
-  private IntakeRollersSubsystem intakeRollers;
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class EjectBallCmd extends Command {
+  private IntakeRollersSub intakeRollers;
 
-  public InsertBallCommand(IntakeRollersSubsystem intakeRollers) {
+  public EjectBallCmd(IntakeRollersSub intakeRollers) {
     this.intakeRollers = intakeRollers;
     addRequirements(intakeRollers);
   }
@@ -23,7 +24,7 @@ public class InsertBallCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeRollers.setSpeed(IntakeConstants.INSERT_SPEED);
+    intakeRollers.setSpeed(IntakeConstants.EJECT_SPEED);
   }
 
   // Called once the command ends or is interrupted.

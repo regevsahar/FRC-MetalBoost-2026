@@ -5,21 +5,21 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve.SwerveSubsystem;
-import frc.robot.subsystems.Vision.AlignToPoseSubsystem;
+import frc.robot.subsystems.Swerve.SwerveSub;
+import frc.robot.subsystems.Vision.AlignToPoseSub;
 import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
 import java.util.function.DoubleSupplier;
 
-public class AlignToPoseCommand extends Command {
+public class AlignToPoseCmd extends Command {
 
-  private final SwerveSubsystem swerve;
-  private final AlignToPoseSubsystem hubAlignSubsystem;
+  private final SwerveSub swerve;
+  private final AlignToPoseSub hubAlignSubsystem;
   private DoubleSupplier translationSup;
   private DoubleSupplier strafeSup;
 
-  public AlignToPoseCommand(
-      SwerveSubsystem swerve,
-      AlignToPoseSubsystem hubAlignSubsystem,
+  public AlignToPoseCmd(
+      SwerveSub swerve,
+      AlignToPoseSub hubAlignSubsystem,
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup) {
     this.swerve = swerve;

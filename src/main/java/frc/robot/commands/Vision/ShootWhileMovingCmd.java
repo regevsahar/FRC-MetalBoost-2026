@@ -11,28 +11,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.FlightTimeTable;
 import frc.lib.util.ShotPrediction;
-import frc.robot.subsystems.Swerve.SwerveSubsystem;
-import frc.robot.subsystems.Vision.AlignToPoseSubsystem;
+import frc.robot.subsystems.Swerve.SwerveSub;
+import frc.robot.subsystems.Vision.AlignToPoseSub;
 import frc.robot.subsystems.Vision.PoseEstimator;
 import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
-public class ShootWhileMovingCommand extends Command {
-  private final SwerveSubsystem swerve;
+public class ShootWhileMovingCmd extends Command {
+  private final SwerveSub swerve;
   private final PoseEstimator poseEstimator;
-  private final AlignToPoseSubsystem alignSubsystem;
+  private final AlignToPoseSub alignSubsystem;
   private final DoubleSupplier translationXSupplier;
   private final DoubleSupplier translationYSupplier;
 
   // Optional: visualize future point on the field
   private final Field2d field = new Field2d();
 
-  public ShootWhileMovingCommand(
-      SwerveSubsystem swerve,
+  public ShootWhileMovingCmd(
+      SwerveSub swerve,
       PoseEstimator poseEstimator,
-      AlignToPoseSubsystem alignSubsystem,
+      AlignToPoseSub alignSubsystem,
       DoubleSupplier translationXSupplier,
       DoubleSupplier translationYSupplier) {
 
