@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 
 public class ResetHoodCmd extends Command {
-    private final HoodSUB hood;
+  private final HoodSUB hood;
 
-    public ResetHoodCmd(HoodSUB hood) {
-        this.hood = hood;
-        addRequirements(hood);
-    }
+  public ResetHoodCmd(HoodSUB hood) {
+    this.hood = hood;
+    addRequirements(hood);
+  }
 
   @Override
   public void initialize() {}

@@ -53,10 +53,8 @@ public class RobotContainer {
 
   private HeightSpeedReduction heightSpeedReduction = HeightSpeedReduction.getInstance();
   public final PoseEstimator poseEstimator = new PoseEstimator();
-  public final LimelightSub limelight =
-      new LimelightSub(CameraConstants.limelight3name);
-  public final LimelightSub limelight2 =
-      new LimelightSub(CameraConstants.limelight4name);
+  public final LimelightSub limelight = new LimelightSub(CameraConstants.limelight3name);
+  public final LimelightSub limelight2 = new LimelightSub(CameraConstants.limelight4name);
   public final AlignToPoseSub AlignToPoseSub = new AlignToPoseSub();
   private final FlyWheelSub shooter;
   private final HoodSUB hood;

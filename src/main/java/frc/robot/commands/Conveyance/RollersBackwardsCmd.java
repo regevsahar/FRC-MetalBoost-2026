@@ -8,10 +8,10 @@ public class RollersBackwardsCmd extends Command {
 
   private final RollersSub rollers;
 
-    public RollersBackwardsCmd(RollersSub rollers) {
-        this.rollers = rollers;
-        addRequirements(rollers);
-    }
+  public RollersBackwardsCmd(RollersSub rollers) {
+    this.rollers = rollers;
+    addRequirements(rollers);
+  }
 
   @Override
   public void initialize() {}

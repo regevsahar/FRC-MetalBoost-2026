@@ -6,11 +6,12 @@ import frc.robot.subsystems.Conveyance.ConveyanceSub;
 
 public class ConveyanceWheelsCmd extends Command {
 
-    private ConveyanceSub wheels;
-    public ConveyanceWheelsCmd(ConveyanceSub wheels) {
-        this.wheels = wheels;
-        addRequirements(wheels);
-    }
+  private ConveyanceSub wheels;
+
+  public ConveyanceWheelsCmd(ConveyanceSub wheels) {
+    this.wheels = wheels;
+    addRequirements(wheels);
+  }
 
   @Override
   public void initialize() {}

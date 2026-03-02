@@ -8,10 +8,10 @@ public class RollersForwardCmd extends Command {
 
   private final RollersSub rollers;
 
-    public RollersForwardCmd(RollersSub rollers) {
-        this.rollers = rollers;
-        addRequirements(rollers);
-    }
+  public RollersForwardCmd(RollersSub rollers) {
+    this.rollers = rollers;
+    addRequirements(rollers);
+  }
 
   @Override
   public void initialize() {}
