@@ -15,10 +15,10 @@ import frc.lib.util.MapFiltering.GridMap;
 import frc.lib.util.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.Automation.ShooterAutomationCommand;
-import frc.robot.commands.ResetPositionCommand.ResetIntake;
-import frc.robot.commands.ShooterCommands.HoodCommand;
-import frc.robot.commands.ShooterCommands.ShooterCommand;
-import frc.robot.commands.Swerve.TeleopSwerveCommand;
+import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
+import frc.robot.commands.ShooterCommands.HoodCmd;
+import frc.robot.commands.ShooterCommands.ShooterCmd;
+import frc.robot.commands.Swerve.TeleopSwerveCmd;
 import frc.robot.subsystems.Conveyance.ConveyanceSub;
 import frc.robot.subsystems.Conveyance.RollersSub;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
@@ -31,9 +31,9 @@ import frc.robot.subsystems.Shooter.Hood.HoodIO;
 import frc.robot.subsystems.Shooter.Hood.HoodIOSim;
 import frc.robot.subsystems.Shooter.Hood.HoodIOTalonFX;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
-import frc.robot.subsystems.Swerve.SwerveSubsystem;
-import frc.robot.subsystems.Vision.AlignToPoseSubsystem;
-import frc.robot.subsystems.Vision.LimelightSubsystem;
+import frc.robot.subsystems.Swerve.SwerveSub;
+import frc.robot.subsystems.Vision.AlignToPoseSub;
+import frc.robot.subsystems.Vision.LimelightSub;
 import frc.robot.subsystems.Vision.PoseEstimator;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 
@@ -53,18 +53,18 @@ public class RobotContainer {
 
   private HeightSpeedReduction heightSpeedReduction = HeightSpeedReduction.getInstance();
   public final PoseEstimator poseEstimator = new PoseEstimator();
-  public final LimelightSubsystem limelight =
-      new LimelightSubsystem(CameraConstants.limelight3name);
-  public final LimelightSubsystem limelight2 =
-      new LimelightSubsystem(CameraConstants.limelight4name);
-  public final AlignToPoseSubsystem AlignToPoseSub = new AlignToPoseSubsystem();
+  public final LimelightSub limelight =
+      new LimelightSub(CameraConstants.limelight3name);
+  public final LimelightSub limelight2 =
+      new LimelightSub(CameraConstants.limelight4name);
+  public final AlignToPoseSub AlignToPoseSub = new AlignToPoseSub();
   private final FlyWheelSub shooter;
   private final HoodSUB hood;
   private final IntakeSub intake = new IntakeSub();
   private final IntakeRollersSub intakeRollers = new IntakeRollersSub();
   private final ConveyanceSub conveyanceWheels = new ConveyanceSub();
   private final RollersSub rollers = new RollersSub();
-  public final SwerveSubsystem s_Swerve = new SwerveSubsystem(poseEstimator);
+  public final SwerveSub s_Swerve = new SwerveSub(poseEstimator);
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro =
@@ -106,7 +106,7 @@ public class RobotContainer {
     fieldGrid = FieldGridLoader.load("FieldGrid.json");
 
     s_Swerve.setDefaultCommand(
-        new TeleopSwerveCommand(
+        new TeleopSwerveCmd(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
@@ -124,7 +124,7 @@ public class RobotContainer {
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     lowerSwerveSpeed.whileTrue(
-        new TeleopSwerveCommand(
+        new TeleopSwerveCmd(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
@@ -133,7 +133,7 @@ public class RobotContainer {
             () -> 0.4));
 
     higherSwerveSpeed.whileTrue(
-        new TeleopSwerveCommand(
+        new TeleopSwerveCmd(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
@@ -149,9 +149,9 @@ public class RobotContainer {
                     s_Swerve.getModulePositions(),
                     new Pose2d(0, 0, new Rotation2d()))));
 
-    shoot.whileTrue(new ShooterCommand(shooter));
-    hoodArc.whileTrue(new HoodCommand(hood));
-    resetIntakePosition.onTrue(new ResetIntake(intake));
+    shoot.whileTrue(new ShooterCmd(shooter));
+    hoodArc.whileTrue(new HoodCmd(hood));
+    resetIntakePosition.onTrue(new ResetIntakeCmd(intake));
     shootAutomationTrigger.whileTrue(
         new ShooterAutomationCommand(shooter, hood, conveyanceWheels, rollers));
 

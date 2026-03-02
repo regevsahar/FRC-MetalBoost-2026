@@ -1,10 +1,10 @@
 package frc.robot.commands.Automation;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.Conveyance.ConveyanceWheelsCommand;
-import frc.robot.commands.Conveyance.RollersBackwardsCommand;
-import frc.robot.commands.ShooterCommands.HoodCommand;
-import frc.robot.commands.ShooterCommands.ShooterCommand;
+import frc.robot.commands.Conveyance.ConveyanceWheelsCmd;
+import frc.robot.commands.Conveyance.RollersBackwardsCmd;
+import frc.robot.commands.ShooterCommands.HoodCmd;
+import frc.robot.commands.ShooterCommands.ShooterCmd;
 import frc.robot.subsystems.Conveyance.ConveyanceSub;
 import frc.robot.subsystems.Conveyance.RollersSub;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
@@ -19,9 +19,9 @@ public class ShooterAutomationCommand extends ParallelCommandGroup {
       FlyWheelSub shooter, HoodSUB hood, ConveyanceSub conveyanceWheels, RollersSub rollers) {
 
     addCommands(
-        new ShooterCommand(shooter),
-        new HoodCommand(hood),
-        new ConveyanceWheelsCommand(conveyanceWheels),
-        new RollersBackwardsCommand(rollers));
+        new ShooterCmd(shooter),
+        new HoodCmd(hood),
+        new ConveyanceWheelsCmd(conveyanceWheels),
+        new RollersBackwardsCmd(rollers));
   }
 }

@@ -4,21 +4,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Conveyance.ConveyanceConstants;
 import frc.robot.subsystems.Conveyance.RollersSub;
 
-public class RollersBackwardsCommand extends Command {
+public class RollersForwardCmd extends Command {
 
   private final RollersSub rollers;
 
-  public RollersBackwardsCommand(RollersSub rollers) {
-    this.rollers = rollers;
-    addRequirements(rollers);
-  }
+    public RollersForwardCmd(RollersSub rollers) {
+        this.rollers = rollers;
+        addRequirements(rollers);
+    }
 
   @Override
   public void initialize() {}
 
   @Override
   public void execute() {
-    rollers.setSpeed(ConveyanceConstants.kRollersBackwardsSpeed);
+    rollers.setSpeed(ConveyanceConstants.kRollersForwardSpeed);
   }
 
   @Override

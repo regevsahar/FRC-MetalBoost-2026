@@ -27,7 +27,7 @@ import frc.robot.subsystems.Swerve.SwerveModule.SwerveModule;
 import frc.robot.subsystems.Vision.PoseEstimator;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveSubsystem extends MBSubsystem {
+public class SwerveSub extends MBSubsystem {
 
   public SwerveDriveOdometry swerveOdometry;
   public SwerveModule[] mSwerveMods;
@@ -40,10 +40,10 @@ public class SwerveSubsystem extends MBSubsystem {
   private CANBus m_canBus;
 
   // private final SwerveDrivePoseEstimator m_poseEstimator;
-  public SwerveSubsystem(PoseEstimator estimator) {
+  public SwerveSub(PoseEstimator estimator) {
     super("Swerve");
     this.estimator = estimator;
-    pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, Constants.CanivoreName);
+    pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, new CANBus(Constants.CanivoreName));
     m_canBus = new CANBus(Constants.CanivoreName);
     zeroPigeon();
     mSwerveMods =

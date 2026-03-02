@@ -62,7 +62,7 @@ public class IntakeSub extends MBSubsystem {
     motor.setPosition(0);
   }
 
-  public void StopMotor() {
+  public void stop() {
     motor.setControl(new DutyCycleOut(0));
   }
 

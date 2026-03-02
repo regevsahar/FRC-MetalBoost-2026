@@ -3,10 +3,10 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 
-public class HoodCommand extends Command {
+public class HoodCmd extends Command {
   private final HoodSUB hood;
 
-  public HoodCommand(HoodSUB hood) {
+  public HoodCmd(HoodSUB hood) {
     this.hood = hood;
     addRequirements(hood);
   }

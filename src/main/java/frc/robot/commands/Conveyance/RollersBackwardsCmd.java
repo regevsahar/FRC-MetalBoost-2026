@@ -2,28 +2,28 @@ package frc.robot.commands.Conveyance;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Conveyance.ConveyanceConstants;
-import frc.robot.subsystems.Conveyance.ConveyanceSub;
+import frc.robot.subsystems.Conveyance.RollersSub;
 
-public class ConveyanceWheelsCommand extends Command {
+public class RollersBackwardsCmd extends Command {
 
-  private ConveyanceSub wheels;
+  private final RollersSub rollers;
 
-  public ConveyanceWheelsCommand(ConveyanceSub wheels) {
-    this.wheels = wheels;
-    addRequirements(wheels);
-  }
+    public RollersBackwardsCmd(RollersSub rollers) {
+        this.rollers = rollers;
+        addRequirements(rollers);
+    }
 
   @Override
   public void initialize() {}
 
   @Override
   public void execute() {
-    wheels.setSpeed(ConveyanceConstants.kConveyanceSpeed);
+    rollers.setSpeed(ConveyanceConstants.kRollersBackwardsSpeed);
   }
 
   @Override
   public void end(boolean interrupted) {
-    wheels.stop();
+    rollers.stop();
   }
 
   @Override
