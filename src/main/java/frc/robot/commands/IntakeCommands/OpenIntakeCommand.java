@@ -22,7 +22,7 @@ public class OpenIntakeCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    intake.StopMotor();
+    intake.stop();
   }
 
   @Override

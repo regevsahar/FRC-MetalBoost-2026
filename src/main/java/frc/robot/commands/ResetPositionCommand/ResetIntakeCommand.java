@@ -17,12 +17,12 @@ public class ResetIntakeCommand extends Command {
 
     @Override
     public void execute() {
-        intake.SetMotor(-0.2); // :TODO: "tune" this
+        intake.setMotor(-0.2); // :TODO: "tune" this
     }
 
     @Override
     public void end(boolean interrupted) {
-        intake.SetMotor(0);
+        intake.stop();
         intake.resetPosition();
     }
 
