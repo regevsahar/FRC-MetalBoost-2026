@@ -16,7 +16,7 @@ import frc.robot.autos.AutoChooser;
 import frc.robot.commands.Swerve.TeleopSwerveCommand;
 import frc.robot.commands.Vision.ShootWhileMovingCommand;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
-import frc.robot.subsystems.Intake.IntakeSub;
+import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIO;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIOTalonFX;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSimulation;
@@ -52,7 +52,7 @@ public class RobotContainer {
     public final AlignToPoseSubsystem AlignToPoseSub = new AlignToPoseSubsystem();
     private final FlyWheelSub shooter;
     private final HoodSUB hood;
-    private final IntakeSub s_intake = new IntakeSub();
+    private final IntakeSubsystem s_intake = new IntakeSubsystem();
     private final IntakeRollersSub s_intakeRollers = new IntakeRollersSub();
     public final SwerveSubsystem s_Swerve = new SwerveSubsystem(poseEstimator);
 

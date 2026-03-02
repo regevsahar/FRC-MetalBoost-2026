@@ -2,12 +2,12 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.IntakeConstants;
-import frc.robot.subsystems.Intake.IntakeSub;
+import frc.robot.subsystems.Intake.IntakeSubsystem;
 
 public class OpenIntake extends Command {
-  private final IntakeSub intake;
+  private final IntakeSubsystem intake;
 
-  public OpenIntake(IntakeSub intake) {
+  public OpenIntake(IntakeSubsystem intake) {
     this.intake = intake;
     addRequirements(intake);
   }
