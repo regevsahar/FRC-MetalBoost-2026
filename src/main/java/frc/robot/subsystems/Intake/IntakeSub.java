@@ -2,10 +2,12 @@ package frc.robot.subsystems.Intake;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -26,6 +28,7 @@ public class IntakeSub extends MBSubsystem {
 
   private void configureTalonFX() {
     TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
+    MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs();
 
     // feedback configuration
     talonFXConfig.Slot0.kP = IntakeConstants.kP.get();
@@ -34,10 +37,16 @@ public class IntakeSub extends MBSubsystem {
     talonFXConfig.Slot0.kS = IntakeConstants.kS.get();
     talonFXConfig.Slot0.kV = IntakeConstants.kV.get();
     talonFXConfig.Slot0.kA = IntakeConstants.kA.get();
+    motionMagicConfigs.MotionMagicAcceleration = IntakeConstants.kAcceleration.get();
+    motionMagicConfigs.MotionMagicCruiseVelocity = IntakeConstants.kCruiseVelocity.get();
+    motionMagicConfigs.MotionMagicJerk = IntakeConstants.kJerk.get();
+
+
+
     talonFXConfig.Feedback.SensorToMechanismRatio = IntakeConstants.kGearRatio;
 
+    talonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     // limit configuration
-    // Soft limits are in Rotations. Convert cm to Rotations.
     // double forwardLimitRotations = IntakeConstants.BOTTOM_LIMIT;
     // double reverseLimitRotations = IntakeConstants.TOP_LIMIT;
 
@@ -96,7 +105,11 @@ public class IntakeSub extends MBSubsystem {
         || IntakeConstants.kD.hasChanged()
         || IntakeConstants.kS.hasChanged()
         || IntakeConstants.kV.hasChanged()
-        || IntakeConstants.kA.hasChanged()) {
+        || IntakeConstants.kA.hasChanged()
+        || IntakeConstants.kAcceleration.hasChanged()
+        || IntakeConstants.kCruiseVelocity.hasChanged()
+        || IntakeConstants.kJerk.hasChanged()
+        ) {
       configureTalonFX();
     }
   }

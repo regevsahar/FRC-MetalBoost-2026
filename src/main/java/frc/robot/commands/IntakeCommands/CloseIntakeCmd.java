@@ -17,7 +17,7 @@ public class CloseIntakeCmd extends Command {
 
   @Override
   public void execute() {
-    intake.setTargetPosition(IntakeConstants.TOP_LIMIT);
+    intake.setTargetPosition(IntakeConstants.BOTTOM_LIMIT);
   }
 
   @Override
@@ -27,6 +27,6 @@ public class CloseIntakeCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    return intake.isAtTargetPosition(IntakeConstants.TOP_LIMIT);
+    return intake.isAtTargetPosition(IntakeConstants.BOTTOM_LIMIT);
   }
 }
