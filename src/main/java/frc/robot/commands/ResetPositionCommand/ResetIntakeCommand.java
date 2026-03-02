@@ -3,10 +3,10 @@ package frc.robot.commands.ResetPositionCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 
-public class ResetIntake extends Command {
+public class ResetIntakeCommand extends Command {
     private final IntakeSubsystem intake;
 
-    public ResetIntake(IntakeSubsystem intake) {
+    public ResetIntakeCommand(IntakeSubsystem intake) {
         this.intake = intake;
         addRequirements(intake);
     }

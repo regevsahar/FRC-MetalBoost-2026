@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.IntakeConstants;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 
-public class CloseIntake extends Command {
+public class OpenIntakeCommand extends Command {
   private final IntakeSubsystem intake;
 
-  public CloseIntake(IntakeSubsystem intake) {
+  public OpenIntakeCommand(IntakeSubsystem intake) {
     this.intake = intake;
     addRequirements(intake);
   }
@@ -17,7 +17,7 @@ public class CloseIntake extends Command {
 
   @Override
   public void execute() {
-    intake.setTargetPosition(IntakeConstants.TOP_LIMIT);
+    intake.setTargetPosition(IntakeConstants.BOTTOM_LIMIT);
   }
 
   @Override
@@ -27,6 +27,6 @@ public class CloseIntake extends Command {
 
   @Override
   public boolean isFinished() {
-    return intake.isAtTargetPosition(IntakeConstants.TOP_LIMIT);
+    return intake.isAtTargetPosition(IntakeConstants.BOTTOM_LIMIT);
   }
 }

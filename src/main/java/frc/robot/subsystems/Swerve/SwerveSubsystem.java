@@ -43,7 +43,7 @@ public class SwerveSubsystem extends MBSubsystem {
   public SwerveSubsystem(PoseEstimator estimator) {
     super("Swerve");
     this.estimator = estimator;
-    pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, Constants.CanivoreName);
+    pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, new CANBus(Constants.CanivoreName));
     m_canBus = new CANBus(Constants.CanivoreName);
     zeroPigeon();
     mSwerveMods =

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Swerve.SwerveModule;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -40,16 +41,16 @@ public class SwerveModule {
     this.angleOffset = moduleConstants.angleOffset;
 
     /* Angle Encoder Config */
-    angleEncoder = new CANcoder(moduleConstants.cancoderID, Constants.CanivoreName);
+    angleEncoder = new CANcoder(moduleConstants.cancoderID, new CANBus(Constants.CanivoreName));
     angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
 
     /* Angle Motor Config */
-    mAngleMotor = new TalonFX(moduleConstants.angleMotorID, Constants.CanivoreName);
+    mAngleMotor = new TalonFX(moduleConstants.angleMotorID, new CANBus(Constants.CanivoreName));
     mAngleMotor.getConfigurator().apply(Robot.ctreConfigs.swerveAngleFXConfig);
     resetToAbsolute();
 
     /* Drive Motor Config */
-    mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Constants.CanivoreName);
+    mDriveMotor = new TalonFX(moduleConstants.driveMotorID, new CANBus(Constants.CanivoreName));
     mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
     mDriveMotor.getConfigurator().setPosition(0.0);
   }

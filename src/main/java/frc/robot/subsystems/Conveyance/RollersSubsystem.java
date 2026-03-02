@@ -3,16 +3,19 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems.Conveyance;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
 
-public class RollersSub extends MBSubsystem {
+public class RollersSubsystem extends MBSubsystem {
   
  private TalonFX motor;
 
-  public RollersSub() {
+  public RollersSubsystem() {
     super("Conveyance rollers");
-    motor = new TalonFX(ConveyanceConstants.ROLLERS_PORT_ROLLERS);
+    motor = new TalonFX(ConveyanceConstants.ROLLERS_PORT_ROLLERS,new CANBus(Constants.CanivoreName));
 
   }
 
