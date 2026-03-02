@@ -4,30 +4,29 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 
 public class ResetHoodCommand extends Command {
-    private final HoodSUB hood;
+  private final HoodSUB hood;
 
-    public ResetHoodCommand(HoodSUB hood) {
-        this.hood = hood;
-        addRequirements(hood);
-    }
+  public ResetHoodCommand(HoodSUB hood) {
+    this.hood = hood;
+    addRequirements(hood);
+  }
 
-    @Override
-    public void initialize() {
-    }
+  @Override
+  public void initialize() {}
 
-    @Override
-    public void execute() {
-        hood.setSpeed(-0.1); // :TODO: "tune" this
-    }
+  @Override
+  public void execute() {
+    hood.setSpeed(-0.2); // :TODO: "tune" this
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        hood.stop();
-        hood.resetPosition();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    hood.setSpeed(0);
+    hood.resetPosition();
+  }
 
-    @Override
-    public boolean isFinished() {
-        return hood.isStalling();
-    }
+  @Override
+  public boolean isFinished() {
+    return hood.isStalling();
+  }
 }

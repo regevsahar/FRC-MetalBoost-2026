@@ -3,9 +3,17 @@ package frc.robot;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.LimelightHelpers;
+import frc.robot.commands.ResetPositionCommand.ResetHoodCommand;
+import frc.robot.commands.ResetPositionCommand.ResetIntake;
+import frc.robot.subsystems.Intake.IntakeSub;
+import frc.robot.subsystems.Shooter.Hood.HoodIO;
+import frc.robot.subsystems.Shooter.Hood.HoodIOSim;
+import frc.robot.subsystems.Shooter.Hood.HoodIOTalonFX;
+import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.Configs.CTREConfigs;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 import java.util.Optional;
@@ -20,6 +28,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
  */
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
+  private HoodSUB hood;
+  private IntakeSub intake;
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
 
   private final RobotContainer m_robotContainer;
@@ -29,6 +39,12 @@ public class Robot extends LoggedRobot {
    * initialization code.
    */
   public Robot() {
+
+    HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
+
+    hood = new HoodSUB(hoodIO);
+
+    intake = new IntakeSub();
 
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -69,8 +85,8 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     Rotation2d currentGyro = m_robotContainer.s_Swerve.getGyroYaw();
 
-    double distanceFromTag = m_robotContainer.limelight.getDistanceFromTarget();
-    double distanceFromTag2 = m_robotContainer.limelight2.getDistanceFromTarget();
+    double distanceFromTag = 0; // m_robotContainer.limelight.getDistanceFromTarget();
+    double distanceFromTag2 = 0; // m_robotContainer.limelight2.getDistanceFromTarget();
 
     Pose2d robotPose = m_robotContainer.poseEstimator.getEstimatedPosition();
     boolean isInRedZone = m_robotContainer.fieldGrid.onForbiddenArea(robotPose);
@@ -177,6 +193,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
+    new ResetHoodCommand(hood).schedule();
+    new ResetIntake(intake).schedule();
     LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 0);
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

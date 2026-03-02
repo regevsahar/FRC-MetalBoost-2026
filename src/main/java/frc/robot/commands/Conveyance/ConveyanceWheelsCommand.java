@@ -6,29 +6,28 @@ import frc.robot.subsystems.Conveyance.ConveyanceSub;
 
 public class ConveyanceWheelsCommand extends Command {
 
-    private ConveyanceSub wheels;
+  private ConveyanceSub wheels;
 
-    public ConveyanceWheelsCommand(ConveyanceSub wheels) {
-        this.wheels = wheels;
-        addRequirements(wheels);
-    }
+  public ConveyanceWheelsCommand(ConveyanceSub wheels) {
+    this.wheels = wheels;
+    addRequirements(wheels);
+  }
 
-    @Override
-    public void initialize() {
-    }
+  @Override
+  public void initialize() {}
 
-    @Override
-    public void execute() {
-        wheels.setSpeed(ConveyanceConstants.kConveyanceSpeed);
-    }
+  @Override
+  public void execute() {
+    wheels.setSpeed(ConveyanceConstants.kConveyanceSpeed);
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        wheels.stop();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    wheels.stop();
+  }
 
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

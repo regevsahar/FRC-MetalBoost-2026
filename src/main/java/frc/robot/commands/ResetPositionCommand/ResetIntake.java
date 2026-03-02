@@ -4,30 +4,29 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.IntakeSub;
 
 public class ResetIntake extends Command {
-    private final IntakeSub intake;
+  private final IntakeSub intake;
 
-    public ResetIntake(IntakeSub intake) {
-        this.intake = intake;
-        addRequirements(intake);
-    }
+  public ResetIntake(IntakeSub intake) {
+    this.intake = intake;
+    addRequirements(intake);
+  }
 
-    @Override
-    public void initialize() {
-    }
+  @Override
+  public void initialize() {}
 
-    @Override
-    public void execute() {
-        intake.SetMotor(-0.2); // :TODO: "tune" this
-    }
+  @Override
+  public void execute() {
+    intake.SetMotor(3); // :TODO: "tune" this
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        intake.SetMotor(0);
-        intake.resetPosition();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    intake.SetMotor(0);
+    intake.resetPosition();
+  }
 
-    @Override
-    public boolean isFinished() {
-        return intake.isStalling();
-    }
+  @Override
+  public boolean isFinished() {
+    return intake.isStalling();
+  }
 }

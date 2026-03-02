@@ -3,7 +3,7 @@ package frc.robot.subsystems.Intake;
 import frc.lib.util.TunableNumber;
 
 public class IntakeConstants {
-  public static final int INTAKE_MOTOR_PORT = 14;
+  public static final int INTAKE_MOTOR_PORT = 9;
   public static final int INTAKE_ROLLER_PORT = 15;
   public static final TunableNumber kP = new TunableNumber("Intake/kP", 0.0);
   public static final TunableNumber kI = new TunableNumber("Intake/kI", 0.0);
@@ -19,5 +19,5 @@ public class IntakeConstants {
   public static final double kGearRatio = 1;
   public static final double EJECT_SPEED = 0;
   public static final double INSERT_SPEED = 0;
-  public static final double kStallThreshold = 50.0; // Amps
+  public static final double kStallThreshold = 120.0; // Amps
 }

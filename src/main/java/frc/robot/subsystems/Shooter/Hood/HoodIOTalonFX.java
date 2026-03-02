@@ -21,8 +21,6 @@ public class HoodIOTalonFX implements HoodIO {
 
     resetPosition();
     configMotor();
-
-    hoodMotor.setNeutralMode(NeutralModeValue.Brake);
   }
 
   private double degreesToRotations(double deg) {
@@ -36,7 +34,7 @@ public class HoodIOTalonFX implements HoodIO {
   private void configMotor() {
 
     TalonFXConfiguration config = new TalonFXConfiguration();
-
+    hoodMotor.setNeutralMode(NeutralModeValue.Brake);
     config.Slot0.kP = ShooterConstants.kHoodP.get();
     config.Slot0.kI = ShooterConstants.kHoodI.get();
     config.Slot0.kD = ShooterConstants.kHoodD.get();
@@ -104,6 +102,6 @@ public class HoodIOTalonFX implements HoodIO {
 
   @Override
   public void stop() {
-    hoodMotor.setControl(dutyCycleControl.withOutput(0));
+    hoodMotor.set(0);
   }
 }

@@ -38,14 +38,14 @@ public class IntakeSub extends MBSubsystem {
 
     // limit configuration
     // Soft limits are in Rotations. Convert cm to Rotations.
-    double forwardLimitRotations = IntakeConstants.BOTTOM_LIMIT;
-    double reverseLimitRotations = IntakeConstants.TOP_LIMIT;
+    // double forwardLimitRotations = IntakeConstants.BOTTOM_LIMIT;
+    // double reverseLimitRotations = IntakeConstants.TOP_LIMIT;
 
-    var softLimit = talonFXConfig.SoftwareLimitSwitch;
-    softLimit.ForwardSoftLimitEnable = true;
-    softLimit.ForwardSoftLimitThreshold = forwardLimitRotations;
-    softLimit.ReverseSoftLimitEnable = true;
-    softLimit.ReverseSoftLimitThreshold = reverseLimitRotations;
+    // var softLimit = talonFXConfig.SoftwareLimitSwitch;
+    // softLimit.ForwardSoftLimitEnable = true;
+    // softLimit.ForwardSoftLimitThreshold = forwardLimitRotations;
+    // softLimit.ReverseSoftLimitEnable = true;
+    // softLimit.ReverseSoftLimitThreshold = reverseLimitRotations;
 
     // apply the configuration
     StatusCode status = motor.getConfigurator().apply(talonFXConfig);
@@ -67,7 +67,7 @@ public class IntakeSub extends MBSubsystem {
   }
 
   public void SetMotor(double value) {
-    motor.set(value);
+    motor.setVoltage(value);
   }
 
   public double getCurrentPosition() {
@@ -89,6 +89,7 @@ public class IntakeSub extends MBSubsystem {
     SmartDashboard.putNumber("/Intake/Target Position", getCurrentPosition());
     SmartDashboard.putBoolean("/Intake/At Target", isAtTargetPosition(getCurrentPosition()));
     SmartDashboard.putNumber("/Intake/position", motor.getPosition().getValueAsDouble());
+    SmartDashboard.putNumber("/Intake/Stator Current", motor.getStatorCurrent().getValueAsDouble());
 
     if (IntakeConstants.kP.hasChanged()
         || IntakeConstants.kI.hasChanged()
