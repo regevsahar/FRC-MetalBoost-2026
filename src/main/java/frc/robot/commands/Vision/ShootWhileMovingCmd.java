@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.FlightTimeTable;
 import frc.lib.util.ShotPrediction;
+import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
+import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.SwerveSub;
 import frc.robot.subsystems.Vision.AlignToPoseSub;
 import frc.robot.subsystems.Vision.PoseEstimator;
@@ -25,6 +27,8 @@ public class ShootWhileMovingCmd extends Command {
   private final AlignToPoseSub alignSubsystem;
   private final DoubleSupplier translationXSupplier;
   private final DoubleSupplier translationYSupplier;
+  private final FlyWheelSub flywheel;
+  private final HoodSUB hood;
 
   // Optional: visualize future point on the field
   private final Field2d field = new Field2d();
@@ -34,17 +38,26 @@ public class ShootWhileMovingCmd extends Command {
       PoseEstimator poseEstimator,
       AlignToPoseSub alignSubsystem,
       DoubleSupplier translationXSupplier,
-      DoubleSupplier translationYSupplier) {
+      DoubleSupplier translationYSupplier,
+      FlyWheelSub flywheel , 
+      HoodSUB hood) {
 
     this.swerve = swerve;
     this.poseEstimator = poseEstimator;
     this.alignSubsystem = alignSubsystem;
     this.translationXSupplier = translationXSupplier;
     this.translationYSupplier = translationYSupplier;
+    this.hood = hood;
+    this.flywheel = flywheel;
 
     addRequirements(swerve, alignSubsystem);
 
     SmartDashboard.putData("ShootOnMoveField", field);
+  }
+
+  @Override
+  public void initialize() {  
+    alignSubsystem.resetToCurrent(swerve.getPose()); 
   }
 
   @Override
@@ -97,18 +110,11 @@ public class ShootWhileMovingCmd extends Command {
     double xSpeed = translationXSupplier.getAsDouble();
     double ySpeed = translationYSupplier.getAsDouble();
 
-    swerve.drive(new Translation2d(xSpeed, ySpeed), rotationOutput, true, false);
+    swerve.drive(new Translation2d(xSpeed, ySpeed), rotationOutput, true, true);
 
-    // ---- Dashboard logging ----r
-    SmartDashboard.putNumber("SOM/NowDistToHub_m", distanceToHubNow);
-    SmartDashboard.putNumber("SOM/FlightTime_s", flightTime);
-
-    SmartDashboard.putNumber("SOM/FieldVx_mps", fieldRelativeSpeeds.vxMetersPerSecond);
-    SmartDashboard.putNumber("SOM/FieldVy_mps", fieldRelativeSpeeds.vyMetersPerSecond);
-
-    SmartDashboard.putNumber("SOM/FutureDistToHub_m", futureDistanceToHub);
-    SmartDashboard.putNumber("SOM/YawSetpoint_deg", yawSetpointDeg);
-    SmartDashboard.putNumber("SOM/RotationOutput", rotationOutput);
+    hood.setTargetDistance();
+    flywheel.setTargetDistance();
+    
 
     Logger.recordOutput("ShootWhileMoving/NowDistToHub_m", distanceToHubNow);
     Logger.recordOutput("ShootWhileMoving/FlightTime_s", flightTime);
@@ -130,6 +136,13 @@ public class ShootWhileMovingCmd extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    flywheel.stop();
+    hood.stop();
     swerve.drive(new Translation2d(0, 0), 0, true, false);
+  }
+
+  @Override
+  public boolean isFinished() {
+      return false;
   }
 }

@@ -4,7 +4,7 @@ import frc.lib.util.TunableNumber;
 
 public class IntakeConstants {
   public static final int INTAKE_MOTOR_PORT = 9;
-  public static final int INTAKE_ROLLER_PORT = 15;
+  public static final int INTAKE_ROLLER_PORT = 10;
   public static final TunableNumber kP = new TunableNumber("Intake/kP", 4.5);
   public static final TunableNumber kI = new TunableNumber("Intake/kI", 0.005);
   public static final TunableNumber kD = new TunableNumber("Intake/kD", 0.02);

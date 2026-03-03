@@ -73,6 +73,7 @@ public class PoseEstimator extends MBSubsystem {
     return new Rotation2d(Math.atan2(offsetY, offsetX)).plus(gyro);
   }
 
+  
   /**
    * Check if this returns true before using {@link #updateVision()}
    *

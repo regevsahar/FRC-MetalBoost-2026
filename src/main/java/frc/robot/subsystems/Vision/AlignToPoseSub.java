@@ -1,8 +1,10 @@
 package frc.robot.subsystems.Vision;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Vision.VisionConstants.AlignToPoseConstants;
 import org.littletonrobotics.junction.Logger;
@@ -23,18 +25,29 @@ public class AlignToPoseSub extends MBSubsystem {
   }
 
   public double calculateRotationOutput(Pose2d currentPose, Translation2d targetPose) {
+
     double dx = targetPose.getX() - currentPose.getX();
     double dy = targetPose.getY() - currentPose.getY();
 
     double angleToTarget = Math.atan2(dy, dx);
 
-    double omega = pidController.calculate(currentPose.getRotation().getRadians(), angleToTarget);
+    double omega = pidController.calculate(
+        currentPose.getRotation().getRadians(),
+        angleToTarget);
 
-    omega =
-        clamp(
-            omega,
-            -AlignToPoseConstants.kMaxOmegaRadPerSec,
-            AlignToPoseConstants.kMaxOmegaRadPerSec);
+    double error = MathUtil.angleModulus(angleToTarget - currentPose.getRotation().getRadians());
+
+    if (Math.abs(error) < Units.degreesToRadians(0.5)) {
+        return 0;
+    }
+    if (pidController.atSetpoint()) {
+      return 0;
+    }
+
+    omega = clamp(
+        omega,
+        -AlignToPoseConstants.kMaxOmegaRadPerSec,
+        AlignToPoseConstants.kMaxOmegaRadPerSec);
 
     return omega;
   }

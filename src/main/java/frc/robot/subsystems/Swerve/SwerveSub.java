@@ -226,7 +226,7 @@ public class SwerveSub extends MBSubsystem {
     // return swerveOdometry.getPoseMeters();
   }
 
-  public Pose2d getRawPose() {
+  public Pose2d getOdometryPose() {
     return swerveOdometry.getPoseMeters();
   }
 
@@ -314,8 +314,7 @@ public class SwerveSub extends MBSubsystem {
     field.setRobotPose(getPose());
 
     Logger.recordOutput("Estimator/states/Mystates", getModuleStates());
-    Logger.recordOutput("Estimator/Odometry", getPose());
-    Logger.recordOutput("Estimator/RawOdometry", getRawPose());
+    Logger.recordOutput("Estimator/Odometry", getOdometryPose());
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());

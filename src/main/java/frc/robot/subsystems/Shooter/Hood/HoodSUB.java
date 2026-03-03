@@ -2,21 +2,20 @@ package frc.robot.subsystems.Shooter.Hood;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.util.TunableNumber;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
+import frc.robot.subsystems.Vision.PoseEstimator;
 
 public class HoodSUB extends MBSubsystem {
 
   private final HoodIO io;
   private final HoodIO.HoodIOInputs inputs = new HoodIO.HoodIOInputs();
   private double targetArc = 0.0;
-
+  private PoseEstimator poseEstimator; 
   // Tunables
-  private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
-
-  public HoodSUB(HoodIO io) {
+  public HoodSUB(HoodIO io,PoseEstimator poseEstimator) {
     super("Hood");
+    this.poseEstimator = poseEstimator;
     this.io = io;
   }
 
@@ -42,7 +41,8 @@ public class HoodSUB extends MBSubsystem {
   }
 
   public void setTargetDistance() {
-    setTargetArc(getArcFromDistance(testDistance.get()));
+    double distance = poseEstimator.getDistanceFromHub();
+    setTargetArc(getArcFromDistance(distance));
   }
 
   public double getArcFromDistance(double distance) {

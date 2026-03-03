@@ -26,6 +26,6 @@ public class HoodCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return hood.isAtTarget();
   }
 }

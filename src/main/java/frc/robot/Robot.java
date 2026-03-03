@@ -39,10 +39,11 @@ public class Robot extends LoggedRobot {
    * initialization code.
    */
   public Robot() {
+    m_robotContainer = new RobotContainer();
 
     HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
 
-    hood = new HoodSUB(hoodIO);
+    hood = new HoodSUB(hoodIO,m_robotContainer.poseEstimator);
 
     intake = new IntakeSub();
 
@@ -70,7 +71,6 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
   }
 
   /**
@@ -85,8 +85,8 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     Rotation2d currentGyro = m_robotContainer.s_Swerve.getGyroYaw();
 
-    double distanceFromTag = 0; // m_robotContainer.limelight.getDistanceFromTarget();
-    double distanceFromTag2 = 0; // m_robotContainer.limelight2.getDistanceFromTarget();
+    double distanceFromTag = m_robotContainer.limelight.getDistanceFromTarget();
+    double distanceFromTag2 = m_robotContainer.limelight2.getDistanceFromTarget();
 
     Pose2d robotPose = m_robotContainer.poseEstimator.getEstimatedPosition();
     boolean isInRedZone = m_robotContainer.fieldGrid.onForbiddenArea(robotPose);

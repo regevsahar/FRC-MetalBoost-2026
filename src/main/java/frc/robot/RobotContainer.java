@@ -21,6 +21,8 @@ import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
 import frc.robot.commands.ShooterCommands.HoodCmd;
 import frc.robot.commands.ShooterCommands.ShooterCmd;
 import frc.robot.commands.Swerve.TeleopSwerveCmd;
+import frc.robot.commands.Vision.AlignToPoseCmd;
+import frc.robot.commands.Vision.ShootWhileMovingCmd;
 import frc.robot.subsystems.Conveyance.ConveyanceSub;
 import frc.robot.subsystems.Conveyance.RollersSub;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
@@ -75,7 +77,8 @@ public class RobotContainer {
       new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   // private final JoystickButton followPath = new JoystickButton(driver,
   // XboxController.Button.kB.value);
-
+    private final JoystickButton AimAtPose =
+      new JoystickButton(driver, XboxController.Button.kX.value);
   private final JoystickButton GoToNearestBranch =
       new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton resetPoseEstimator =
@@ -102,11 +105,11 @@ public class RobotContainer {
     FlyWheelIO shooterIO =
         RobotBase.isSimulation() ? new FlyWheelSimulation() : new FlyWheelIOTalonFX();
 
-    shooter = new FlyWheelSub(shooterIO);
+    shooter = new FlyWheelSub(shooterIO,poseEstimator);
 
     HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
 
-    hood = new HoodSUB(hoodIO);
+    hood = new HoodSUB(hoodIO,poseEstimator);
     fieldGrid = FieldGridLoader.load("FieldGrid.json");
 
     s_Swerve.setDefaultCommand(
@@ -161,9 +164,12 @@ public class RobotContainer {
     shootAutomationTrigger.whileTrue(
         new ShooterAutomationCommand(shooter, hood, conveyanceWheels, rollers));
 
-    GoToNearestBranch.onTrue(
-        PathPlannerUtil.GoToNearesPosition(
-            poseEstimator.getEstimatedPosition(), Constants.SwerveConstants.constraints));
+    AimAtPose.whileTrue(new ShootWhileMovingCmd(s_Swerve,poseEstimator, AlignToPoseSub, 
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),shooter,hood));
+    // GoToNearestBranch.onTrue(
+    //     PathPlannerUtil.GoToNearesPosition(
+    //         poseEstimator.getEstimatedPosition(), Constants.SwerveConstants.constraints));
   }
 
   public Command getAutonomousCommand() {

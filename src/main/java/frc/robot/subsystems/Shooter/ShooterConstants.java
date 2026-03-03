@@ -77,5 +77,5 @@ public class ShooterConstants {
   public static final TunableNumber kHoodS = new TunableNumber("Shooter/Hood/kS", 0.0);
   public static final TunableNumber kHoodV = new TunableNumber("Shooter/Hood/kV", 0.0);
   public static final TunableNumber kHoodA = new TunableNumber("Shooter/Hood/kA", 0.0);
-  public static final double kHoodStallThreshold = 50.0; // Amps
+  public static final double kHoodStallThreshold = 40.0; // Amps
 }
