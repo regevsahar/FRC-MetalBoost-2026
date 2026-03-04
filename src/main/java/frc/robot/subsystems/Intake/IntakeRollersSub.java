@@ -31,7 +31,7 @@ public class IntakeRollersSub extends MBSubsystem {
   }
 
   public void setSpeed(double value) {
-    motor.set(value);
+    motor.setVoltage(value);
   }
 
   public void stopIntake() {

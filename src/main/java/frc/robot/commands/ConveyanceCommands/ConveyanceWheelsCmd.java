@@ -1,4 +1,4 @@
-package frc.robot.commands.Conveyance;
+package frc.robot.commands.ConveyanceCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Conveyance.ConveyanceConstants;

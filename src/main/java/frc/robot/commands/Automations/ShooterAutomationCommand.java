@@ -1,8 +1,8 @@
-package frc.robot.commands.Automation;
+package frc.robot.commands.Automations;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.Conveyance.ConveyanceWheelsCmd;
-import frc.robot.commands.Conveyance.RollersBackwardsCmd;
+import frc.robot.commands.ConveyanceCommands.ConveyanceWheelsCmd;
+import frc.robot.commands.ConveyanceCommands.RollersBackwardsCmd;
 import frc.robot.commands.ShooterCommands.HoodCmd;
 import frc.robot.commands.ShooterCommands.ShooterCmd;
 import frc.robot.subsystems.Conveyance.ConveyanceSub;

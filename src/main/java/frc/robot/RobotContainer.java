@@ -14,7 +14,7 @@ import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.lib.util.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
-import frc.robot.commands.Automation.ShooterAutomationCommand;
+import frc.robot.commands.Automations.ShooterAutomationCommand;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
