@@ -28,6 +28,8 @@ public final class Constants {
 
   public static final String CanivoreName = "CanivoreMB";
 
+  public static final double ManualHoodStrength = 0.5;
+
   public static final class SwerveConstants {
     public static final boolean invertGyro = false; // TODO: Always ensure Gyro is CCW+ CW-
 

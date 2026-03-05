@@ -19,6 +19,7 @@ import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
 import frc.robot.commands.ShooterCommands.HoodCmd;
+import frc.robot.commands.ShooterCommands.ManualHoodCmd;
 import frc.robot.commands.ShooterCommands.ShooterCmd;
 import frc.robot.commands.Swerve.TeleopSwerveCmd;
 import frc.robot.commands.Vision.AlignToPoseCmd;
@@ -93,9 +94,9 @@ public class RobotContainer {
       new Trigger(() -> operator.getRawAxis(shootAutomation) > 0.3);
   private final JoystickButton resetIntakePosition =
       new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton openIntake =
+  private final JoystickButton openIntake =
       new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-      private final JoystickButton closeIntake =
+  private final JoystickButton closeIntake =
       new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
 
   public final GridMap fieldGrid;
@@ -120,6 +121,8 @@ public class RobotContainer {
             () -> -driver.getRawAxis(rotationAxis),
             () -> true,
             heightSpeedReduction.getSpeedSupplier()));
+
+    hood.setDefaultCommand(new ManualHoodCmd(hood, () -> operator.getRawAxis(XboxController.Axis.kLeftY.value)));
 
     // Configure the button bindingsPP
     configureButtonBindings();
@@ -167,9 +170,7 @@ public class RobotContainer {
     AimAtPose.whileTrue(new ShootWhileMovingCmd(s_Swerve,poseEstimator, AlignToPoseSub, 
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),shooter,hood));
-    // GoToNearestBranch.onTrue(
-    //     PathPlannerUtil.GoToNearesPosition(
-    //         poseEstimator.getEstimatedPosition(), Constants.SwerveConstants.constraints));
+    
   }
 
   public Command getAutonomousCommand() {
