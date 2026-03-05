@@ -12,12 +12,11 @@ import frc.robot.subsystems.Intake.IntakeSub;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class IntakeAutomation extends ParallelCommandGroup {
-  /** Creates a new GoToL1. */
-  public IntakeAutomation(IntakeSub intakeMovement , IntakeRollersSub rollers ){ //,RollersSub conveyanceRollers) {
+  public IntakeAutomation(IntakeSub intakeMovement, IntakeRollersSub rollers) { // ,RollersSub conveyanceRollers) {
 
     addCommands(
         new OpenIntakeCmd(intakeMovement),
         new InsertBallCmd(rollers));
-        // RollersBackwardsCmd(conveyanceRollers),
+    // RollersBackwardsCmd(conveyanceRollers),
   }
 }

@@ -14,7 +14,6 @@ import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShooterAutomationCommand extends ParallelCommandGroup {
-  /** Creates a new GoToL1. */
   public ShooterAutomationCommand(
       FlyWheelSub shooter, HoodSUB hood, ConveyanceSub conveyanceWheels, RollersSub rollers) {
 
