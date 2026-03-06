@@ -11,9 +11,10 @@ public class HoodSUB extends MBSubsystem {
   private final HoodIO io;
   private final HoodIO.HoodIOInputs inputs = new HoodIO.HoodIOInputs();
   private double targetArc = 0.0;
-  private PoseEstimator poseEstimator; 
+  private PoseEstimator poseEstimator;
+
   // Tunables
-  public HoodSUB(HoodIO io,PoseEstimator poseEstimator) {
+  public HoodSUB(HoodIO io, PoseEstimator poseEstimator) {
     super("Hood");
     this.poseEstimator = poseEstimator;
     this.io = io;

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.HeightSpeedReduction;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
-import frc.lib.util.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.Automations.ShooterAutomationCommand;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
@@ -22,7 +21,6 @@ import frc.robot.commands.ShooterCommands.HoodCmd;
 import frc.robot.commands.ShooterCommands.ManualHoodCmd;
 import frc.robot.commands.ShooterCommands.ShooterCmd;
 import frc.robot.commands.Swerve.TeleopSwerveCmd;
-import frc.robot.commands.Vision.AlignToPoseCmd;
 import frc.robot.commands.Vision.ShootWhileMovingCmd;
 import frc.robot.subsystems.Conveyance.ConveyanceSub;
 import frc.robot.subsystems.Conveyance.RollersSub;
@@ -74,23 +72,37 @@ public class RobotContainer {
   public final SwerveSub s_Swerve = new SwerveSub(poseEstimator);
 
   /* Driver Buttons */
-  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-  private final JoystickButton lowerSwerveSpeed = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton higherSwerveSpeed = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-  // private final JoystickButton followPath = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton AimAtPose = new JoystickButton(driver, XboxController.Button.kX.value);
-  private final JoystickButton resetPoseEstimator = new JoystickButton(driver, XboxController.Button.kA.value);
+  private final JoystickButton zeroGyro =
+      new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton lowerSwerveSpeed =
+      new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton higherSwerveSpeed =
+      new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+  // private final JoystickButton followPath = new JoystickButton(driver,
+  // XboxController.Button.kB.value);
+  private final JoystickButton AimAtPose =
+      new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton resetPoseEstimator =
+      new JoystickButton(driver, XboxController.Button.kA.value);
 
   /// * operation Buttons */
-  private final JoystickButton hoodArc = new JoystickButton(operator, XboxController.Button.kY.value);
+  private final JoystickButton hoodArc =
+      new JoystickButton(operator, XboxController.Button.kY.value);
   private final JoystickButton shoot = new JoystickButton(operator, XboxController.Button.kX.value);
-  private final Trigger shootAutomationTrigger = new Trigger(() -> operator.getRawAxis(shootAutomation) > 0.3);
-  private final JoystickButton resetIntakePosition = new JoystickButton(operator, XboxController.Button.kA.value);
-  private final JoystickButton openIntake = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton closeIntake = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton ejectBall = new JoystickButton(operator, XboxController.Button.kB.value);
-  private final JoystickButton resetPositionAutomation = new JoystickButton(operator, 5); //TODO: check button number
-  private final Trigger shootWhileMovingTrigger = new Trigger(() -> operator.getRawAxis(shootWhileMoving) > 0.3);
+  private final Trigger shootAutomationTrigger =
+      new Trigger(() -> operator.getRawAxis(shootAutomation) > 0.3);
+  private final JoystickButton resetIntakePosition =
+      new JoystickButton(operator, XboxController.Button.kA.value);
+  private final JoystickButton openIntake =
+      new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+  private final JoystickButton closeIntake =
+      new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton ejectBall =
+      new JoystickButton(operator, XboxController.Button.kB.value);
+  private final JoystickButton resetPositionAutomation =
+      new JoystickButton(operator, 5); // TODO: check button number
+  private final Trigger shootWhileMovingTrigger =
+      new Trigger(() -> operator.getRawAxis(shootWhileMoving) > 0.3);
 
   public final GridMap fieldGrid;
 
@@ -99,11 +111,11 @@ public class RobotContainer {
     FlyWheelIO shooterIO =
         RobotBase.isSimulation() ? new FlyWheelSimulation() : new FlyWheelIOTalonFX();
 
-    shooter = new FlyWheelSub(shooterIO,poseEstimator);
+    shooter = new FlyWheelSub(shooterIO, poseEstimator);
 
     HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
 
-    hood = new HoodSUB(hoodIO,poseEstimator);
+    hood = new HoodSUB(hoodIO, poseEstimator);
     fieldGrid = FieldGridLoader.load("FieldGrid.json");
 
     s_Swerve.setDefaultCommand(
@@ -115,7 +127,8 @@ public class RobotContainer {
             () -> true,
             heightSpeedReduction.getSpeedSupplier()));
 
-    hood.setDefaultCommand(new ManualHoodCmd(hood, () -> operator.getRawAxis(XboxController.Axis.kLeftY.value)));
+    hood.setDefaultCommand(
+        new ManualHoodCmd(hood, () -> operator.getRawAxis(XboxController.Axis.kLeftY.value)));
 
     // Configure the button bindingsPP
     configureButtonBindings();
@@ -159,15 +172,20 @@ public class RobotContainer {
     closeIntake.whileTrue(new CloseIntakeCmd(intake));
     shootAutomationTrigger.whileTrue(
         new ShooterAutomationCommand(shooter, hood, conveyanceWheels, rollers));
-/*
-    ejectBall.whileTrue(new COMMANDNAME());
-    shootWhileMovingTrigger.whileTrue(new COMMANDNAME());
-    resetPositionAutomation.whileTrue(new COMMANDNAME());
-*/
-    AimAtPose.whileTrue(new ShootWhileMovingCmd(s_Swerve,poseEstimator, AlignToPoseSub, 
+    /*
+        ejectBall.whileTrue(new COMMANDNAME());
+        shootWhileMovingTrigger.whileTrue(new COMMANDNAME());
+        resetPositionAutomation.whileTrue(new COMMANDNAME());
+    */
+    AimAtPose.whileTrue(
+        new ShootWhileMovingCmd(
+            s_Swerve,
+            poseEstimator,
+            AlignToPoseSub,
             () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),shooter,hood));
-    
+            () -> -driver.getRawAxis(strafeAxis),
+            shooter,
+            hood));
   }
 
   public Command getAutonomousCommand() {

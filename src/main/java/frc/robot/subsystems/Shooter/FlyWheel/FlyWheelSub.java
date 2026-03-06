@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Shooter.FlyWheel;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.util.TunableNumber;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Vision.PoseEstimator;
@@ -12,8 +11,9 @@ public class FlyWheelSub extends MBSubsystem {
   private final FlyWheelIO.FlyWheelIOInputs inputs = new FlyWheelIO.FlyWheelIOInputs();
   private double targetRPM = 0.0;
   private PoseEstimator poseEstimator;
+
   // Tunables
-  public FlyWheelSub(FlyWheelIO io,PoseEstimator poseEstimator) {
+  public FlyWheelSub(FlyWheelIO io, PoseEstimator poseEstimator) {
     super("Shooter");
     this.poseEstimator = poseEstimator;
     this.io = io;

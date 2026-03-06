@@ -9,35 +9,34 @@ import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
 import frc.robot.subsystems.Shooter.ShooterConstants;
 
 public class ShootCmd extends Command {
-    /** Creates a new Shoot. */
-    private final FlyWheelSub shooter;
+  /** Creates a new Shoot. */
+  private final FlyWheelSub shooter;
 
-    public ShootCmd(FlyWheelSub shooter) {
-        this.shooter = shooter;
-        addRequirements(shooter);
-        // Use addRequirements() here to declare subsystem dependencies.
-    }
+  public ShootCmd(FlyWheelSub shooter) {
+    this.shooter = shooter;
+    addRequirements(shooter);
+    // Use addRequirements() here to declare subsystem dependencies.
+  }
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
-    }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-        shooter.setTargetRPM(ShooterConstants.kShootRPM);
-    }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    shooter.setTargetRPM(ShooterConstants.kShootRPM);
+  }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        shooter.stop();
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    shooter.stop();
+  }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

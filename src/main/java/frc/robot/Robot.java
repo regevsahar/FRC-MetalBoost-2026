@@ -43,7 +43,7 @@ public class Robot extends LoggedRobot {
 
     HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
 
-    hood = new HoodSUB(hoodIO,m_robotContainer.poseEstimator);
+    hood = new HoodSUB(hoodIO, m_robotContainer.poseEstimator);
 
     intake = new IntakeSub();
 

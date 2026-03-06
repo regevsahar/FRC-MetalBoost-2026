@@ -31,23 +31,22 @@ public class AlignToPoseSub extends MBSubsystem {
 
     double angleToTarget = Math.atan2(dy, dx);
 
-    double omega = pidController.calculate(
-        currentPose.getRotation().getRadians(),
-        angleToTarget);
+    double omega = pidController.calculate(currentPose.getRotation().getRadians(), angleToTarget);
 
     double error = MathUtil.angleModulus(angleToTarget - currentPose.getRotation().getRadians());
 
     if (Math.abs(error) < Units.degreesToRadians(0.5)) {
-        return 0;
+      return 0;
     }
     if (pidController.atSetpoint()) {
       return 0;
     }
 
-    omega = clamp(
-        omega,
-        -AlignToPoseConstants.kMaxOmegaRadPerSec,
-        AlignToPoseConstants.kMaxOmegaRadPerSec);
+    omega =
+        clamp(
+            omega,
+            -AlignToPoseConstants.kMaxOmegaRadPerSec,
+            AlignToPoseConstants.kMaxOmegaRadPerSec);
 
     return omega;
   }

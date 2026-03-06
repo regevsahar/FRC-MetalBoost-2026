@@ -10,10 +10,8 @@ import frc.robot.subsystems.Intake.IntakeRollersSub;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class EjectBallAutomation extends ParallelCommandGroup {
-    public EjectBallAutomation(IntakeRollersSub intakeRollers, RollersSub rollers) {
+  public EjectBallAutomation(IntakeRollersSub intakeRollers, RollersSub rollers) {
 
-        addCommands(
-                new EjectBallCmd(intakeRollers),
-                new RollersBackwardsCmd(rollers));
-    }
+    addCommands(new EjectBallCmd(intakeRollers), new RollersBackwardsCmd(rollers));
+  }
 }
