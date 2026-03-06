@@ -37,6 +37,10 @@ public class ConveyanceSub extends MBSubsystem {
     lowerMotor.set(0);
   }
 
+  public boolean hasBall() {
+    return colorSensor.getProximity() > ConveyanceConstants.BALL_DETECTION_THRESHOLD;
+  }
+
   @Override
   public void subsystemPeriodic() {
     SmartDashboard.putNumber("Proximity", colorSensor.getProximity());

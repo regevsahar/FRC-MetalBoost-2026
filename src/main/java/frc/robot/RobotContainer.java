@@ -13,7 +13,7 @@ import frc.lib.util.HeightSpeedReduction;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.robot.autos.AutoChooser;
-import frc.robot.commands.Automations.ShooterAutomationCommand;
+import frc.robot.commands.Automations.ShooterAutomationCmd;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
@@ -171,7 +171,7 @@ public class RobotContainer {
     openIntake.whileTrue(new OpenIntakeCmd(intake));
     closeIntake.whileTrue(new CloseIntakeCmd(intake));
     shootAutomationTrigger.whileTrue(
-        new ShooterAutomationCommand(shooter, hood, conveyanceWheels, rollers));
+        new ShooterAutomationCmd(shooter, hood, conveyanceWheels, rollers));
     /*
         ejectBall.whileTrue(new COMMANDNAME());
         shootWhileMovingTrigger.whileTrue(new COMMANDNAME());

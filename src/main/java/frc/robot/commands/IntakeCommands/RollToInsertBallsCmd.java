@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.IntakeConstants;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
 
-public class InsertBallCmd extends Command {
+public class RollToInsertBallsCmd extends Command {
   private IntakeRollersSub intakeRollers;
 
-  public InsertBallCmd(IntakeRollersSub intakeRollers) {
+  public RollToInsertBallsCmd(IntakeRollersSub intakeRollers) {
     this.intakeRollers = intakeRollers;
     addRequirements(intakeRollers);
   }

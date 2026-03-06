@@ -112,8 +112,8 @@ public class ShootWhileMovingCmd extends Command {
 
     swerve.drive(new Translation2d(xSpeed, ySpeed), rotationOutput, true, true);
 
-    hood.setTargetDistance();
-    flywheel.setTargetDistance();
+    hood.setTargetDistance(futureDistanceToHub);
+    flywheel.setTargetDistance(futureDistanceToHub);
 
     Logger.recordOutput("ShootWhileMoving/NowDistToHub_m", distanceToHubNow);
     Logger.recordOutput("ShootWhileMoving/FlightTime_s", flightTime);

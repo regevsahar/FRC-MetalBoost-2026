@@ -16,7 +16,7 @@ public class HoodCmd extends Command {
 
   @Override
   public void execute() {
-    hood.setTargetDistance();
+    hood.setTargetDistanceFromHub();
   }
 
   @Override

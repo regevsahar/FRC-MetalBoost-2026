@@ -11,4 +11,5 @@ public class ConveyanceConstants {
   public static final double kRollersBackwardsSpeed = -5;
   public static final double kRollersForwardSpeed = 5;
   public static final I2C.Port COLOR_SENSOR_PORT = I2C.Port.kMXP;
+  public static final int BALL_DETECTION_THRESHOLD = 250;
 }
