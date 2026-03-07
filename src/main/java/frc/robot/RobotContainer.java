@@ -13,12 +13,15 @@ import frc.lib.util.HeightSpeedReduction;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.robot.autos.AutoChooser;
+import frc.robot.commands.Automations.EjectBallsAutomationCmd;
+import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 import frc.robot.commands.Automations.ShooterAutomationCmd;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
 import frc.robot.commands.ShooterCommands.HoodCmd;
 import frc.robot.commands.ShooterCommands.ManualHoodCmd;
+import frc.robot.commands.ShooterCommands.ShootConstantValueCmd;
 import frc.robot.commands.ShooterCommands.ShooterCmd;
 import frc.robot.commands.Swerve.TeleopSwerveCmd;
 import frc.robot.commands.Vision.ShootWhileMovingCmd;
@@ -86,7 +89,7 @@ public class RobotContainer {
       new JoystickButton(driver, XboxController.Button.kA.value);
 
   /// * operation Buttons */
-  private final JoystickButton hoodArc =
+  private final JoystickButton ShootConstantValue =
       new JoystickButton(operator, XboxController.Button.kY.value);
   private final JoystickButton shoot = new JoystickButton(operator, XboxController.Button.kX.value);
   private final Trigger shootAutomationTrigger =
@@ -166,12 +169,23 @@ public class RobotContainer {
                     new Pose2d(0, 0, new Rotation2d()))));
 
     shoot.whileTrue(new ShooterCmd(shooter, conveyanceWheels));
-    hoodArc.whileTrue(new HoodCmd(hood));
+    ShootConstantValue.whileTrue(new ShootConstantValueCmd(shooter));
     resetIntakePosition.onTrue(new ResetIntakeCmd(intake));
-    openIntake.whileTrue(new OpenIntakeCmd(intake));
+    openIntake.whileTrue(new OpenIntakeCmd(intake));    
     closeIntake.whileTrue(new CloseIntakeCmd(intake));
     shootAutomationTrigger.whileTrue(
         new ShooterAutomationCmd(shooter, hood, conveyanceWheels, rollers));
+    resetPositionAutomation.whileTrue(new ResetSubsystemsAutomationCmd(hood,intake));
+    ejectBall.whileTrue(new EjectBallsAutomationCmd(intakeRollers, rollers));
+    shootWhileMovingTrigger.whileTrue(
+        new ShootWhileMovingCmd(
+            s_Swerve,
+            poseEstimator,
+            AlignToPoseSub,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            shooter,
+            hood));
     /*
         ejectBall.whileTrue(new COMMANDNAME());
         shootWhileMovingTrigger.whileTrue(new COMMANDNAME());
