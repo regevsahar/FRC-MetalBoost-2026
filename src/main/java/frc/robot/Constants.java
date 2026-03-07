@@ -23,7 +23,7 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
   public static final double stickDeadband = 0.1;
 
-  public static final int LedId = 9;
+  public static final int LedId = 1;
   public static final int LedLength = 150;
 
   public static final String CanivoreName = "CanivoreMB";

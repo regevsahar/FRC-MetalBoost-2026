@@ -88,6 +88,22 @@ public class RobotContainer {
   private final JoystickButton resetPoseEstimator =
       new JoystickButton(driver, XboxController.Button.kA.value);
 
+<<<<<<< HEAD
+=======
+  AutoChooser autoChooser;
+
+  /* Subsystems */
+
+  private HeightSpeedReduction heightSpeedReduction = HeightSpeedReduction.getInstance();
+  private final FlyWheelSub shooter;
+  private final HoodSUB hood;
+  private final Intake s_intake = new Intake();
+  public final PoseEstimator poseEstimator = new PoseEstimator();
+  public final LimelightSubsystem limelight = new LimelightSubsystem("limelight");
+  public final LimelightSubsystem limelight2 = new LimelightSubsystem("limelight2");
+  public final Swerve s_Swerve = new Swerve(poseEstimator);
+
+>>>>>>> ac7d7115dbe69b67f257f19dfcb14b57f76849f4
   /// * operation Buttons */
   private final JoystickButton ShootConstantValue =
       new JoystickButton(operator, XboxController.Button.kY.value);
@@ -140,6 +156,14 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
+<<<<<<< HEAD
+=======
+    shoot.whileTrue(new Shoot(shooter));
+    intake.whileTrue(new IntakeCommand(s_intake, 0.45));
+    hoodCommand.whileTrue(new HoodCommand(hood));
+    flywheelHoodAutoCommand.whileTrue(new FlywheelHoodIntegrationCommand(shooter, hood));
+
+>>>>>>> ac7d7115dbe69b67f257f19dfcb14b57f76849f4
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     lowerSwerveSpeed.whileTrue(
