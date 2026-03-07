@@ -26,9 +26,9 @@ public enum CenteringPositions {
   private final boolean isLeft;
   private final Pose2d pose;
 
-  CenteringPositions(int index, boolean isLeft, Pose2d pose) {
+  CenteringPositions(int index, boolean isBlue, Pose2d pose) {
     this.index = index;
-    this.isLeft = isLeft;
+    this.isLeft = isBlue;
     this.pose = pose;
   }
 

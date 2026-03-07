@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve.SwerveSub;
 import frc.robot.subsystems.Vision.AlignToPoseSub;
-import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
 import java.util.function.DoubleSupplier;
 
 public class AlignToPoseCmd extends Command {
@@ -16,16 +15,20 @@ public class AlignToPoseCmd extends Command {
   private final AlignToPoseSub hubAlignSubsystem;
   private DoubleSupplier translationSup;
   private DoubleSupplier strafeSup;
+  private Translation2d targetPose;
 
   public AlignToPoseCmd(
       SwerveSub swerve,
       AlignToPoseSub hubAlignSubsystem,
       DoubleSupplier translationSup,
-      DoubleSupplier strafeSup) {
+      DoubleSupplier strafeSup,
+      Translation2d targetPose) {
+
     this.swerve = swerve;
     this.hubAlignSubsystem = hubAlignSubsystem;
     this.translationSup = translationSup;
     this.strafeSup = strafeSup;
+    this.targetPose = targetPose;
     addRequirements(swerve, hubAlignSubsystem);
   }
 
@@ -43,12 +46,8 @@ public class AlignToPoseCmd extends Command {
 
     var alliance = DriverStation.getAlliance();
 
-    Translation2d target = FieldConstants.HUB_CENTER_BLUE;
-    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      target = FieldConstants.HUB_CENTER_RED;
-    }
 
-    double rotation = hubAlignSubsystem.calculateRotationOutput(swerve.getPose(), target);
+    double rotation = hubAlignSubsystem.calculateRotationOutput(swerve.getPose(), this.targetPose);
 
     swerve.drive(new Translation2d(translationVal, strafeVal), rotation, true, true);
   }

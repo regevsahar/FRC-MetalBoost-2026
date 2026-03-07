@@ -9,9 +9,12 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.FieldPoses;
+import frc.lib.math.ToleranceMath;
 import frc.lib.util.FlightTimeTable;
 import frc.lib.util.LedController;
 import frc.lib.util.ShotPrediction;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.SwerveSub;
@@ -30,7 +33,7 @@ public class ShootWhileMovingCmd extends Command {
   private final DoubleSupplier translationYSupplier;
   private final FlyWheelSub flywheel;
   private final HoodSUB hood;
-
+  private final Translation2d target;
   // Optional: visualize future point on the field
   private final Field2d field = new Field2d();
 
@@ -41,7 +44,8 @@ public class ShootWhileMovingCmd extends Command {
       DoubleSupplier translationXSupplier,
       DoubleSupplier translationYSupplier,
       FlyWheelSub flywheel,
-      HoodSUB hood) {
+      HoodSUB hood,
+      Translation2d target) {
 
     this.swerve = swerve;
     this.poseEstimator = poseEstimator;
@@ -50,6 +54,7 @@ public class ShootWhileMovingCmd extends Command {
     this.translationYSupplier = translationYSupplier;
     this.hood = hood;
     this.flywheel = flywheel;
+    this.target = target;
 
     addRequirements(swerve, alignSubsystem);
 
@@ -67,18 +72,11 @@ public class ShootWhileMovingCmd extends Command {
     // 1) Current pose
     Pose2d currentPose = poseEstimator.getEstimatedPosition();
 
-    // 2) Hub position by alliance
-    Translation2d hubPosition = FieldConstants.HUB_CENTER_BLUE;
-    Optional<Alliance> alliance = DriverStation.getAlliance();
-    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-      hubPosition = FieldConstants.HUB_CENTER_RED;
-    }
-
-    // 3) Distance now -> flight time
-    double distanceToHubNow = currentPose.getTranslation().getDistance(hubPosition);
+    // 2) Distance now -> flight time
+    double distanceToHubNow = currentPose.getTranslation().getDistance(this.target);
     double flightTime = FlightTimeTable.get(distanceToHubNow);
 
-    // 4) Robot-relative speeds -> field-relative
+    // 3) Robot-relative speeds -> field-relative
     ChassisSpeeds robotRelativeSpeeds = swerve.getRobotRelativeSpeeds();
 
     // Safer conversion (avoids sign mistakes)
@@ -86,29 +84,28 @@ public class ShootWhileMovingCmd extends Command {
         ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeeds, currentPose.getRotation());
 
     // Deadband to reduce noise
-    if (Math.abs(fieldRelativeSpeeds.vxMetersPerSecond) < 0.1)
-      fieldRelativeSpeeds.vxMetersPerSecond = 0;
-    if (Math.abs(fieldRelativeSpeeds.vyMetersPerSecond) < 0.1)
-      fieldRelativeSpeeds.vyMetersPerSecond = 0;
 
-    // 5) Predict future position
+    fieldRelativeSpeeds.vxMetersPerSecond = ToleranceMath.applyDeadband(fieldRelativeSpeeds.vxMetersPerSecond, Constants.stickDeadband);
+    fieldRelativeSpeeds.vyMetersPerSecond = ToleranceMath.applyDeadband(fieldRelativeSpeeds.vyMetersPerSecond, Constants.stickDeadband);
+
+    // 4) Predict future position
     Translation2d futurePos =
         ShotPrediction.predictFuturePosition(currentPose, fieldRelativeSpeeds, flightTime);
 
-    // 6) Record future distance
-    double futureDistanceToHub = futurePos.getDistance(hubPosition);
+    // 5) Record future distance
+    double futureDistanceToHub = futurePos.getDistance(this.target);
 
-    // 7) Compute yaw setpoint (what angle you'd aim from futurePos to hub)
+    // 6) Compute yaw setpoint (what angle you'd aim from futurePos to hub)
     double yawSetpointRad =
-        Math.atan2(hubPosition.getY() - futurePos.getY(), hubPosition.getX() - futurePos.getX());
+        Math.atan2(this.target.getY() - futurePos.getY(), this.target.getX() - futurePos.getX());
     double yawSetpointDeg = Units.radiansToDegrees(yawSetpointRad);
 
-    // 8) Use your align subsystem for rotation output if you want closed-loop
+    // 7) Use your align subsystem for rotation output if you want closed-loop
     // aiming
     Pose2d futurePoseForCalc = new Pose2d(futurePos, currentPose.getRotation());
-    double rotationOutput = alignSubsystem.calculateRotationOutput(futurePoseForCalc, hubPosition);
+    double rotationOutput = alignSubsystem.calculateRotationOutput(futurePoseForCalc, this.target);
 
-    // 9) Driver translation
+    // 8) Driver translation
     double xSpeed = translationXSupplier.getAsDouble();
     double ySpeed = translationYSupplier.getAsDouble();
 
@@ -126,13 +123,13 @@ public class ShootWhileMovingCmd extends Command {
     Logger.recordOutput("ShootWhileMoving/RotationOutput", rotationOutput);
     Logger.recordOutput("ShootWhileMoving/CurrentPose", currentPose);
     Logger.recordOutput("ShootWhileMoving/FuturePose", futurePoseForCalc);
-    Logger.recordOutput("ShootWhileMoving/HubPosition", hubPosition);
+    Logger.recordOutput("ShootWhileMoving/TargetPosition", this.target);
 
     // Field2d visualization
     // TODO: Check what de phuc it is
     field.setRobotPose(currentPose);
-    field.getObject("FuturePos").setPose(new Pose2d(futurePos, currentPose.getRotation()));
-    field.getObject("Hub").setPose(new Pose2d(hubPosition, currentPose.getRotation()));
+    field.getObject("FuturePos").setPose(futurePoseForCalc);
+    field.getObject("Target").setPose(new Pose2d(this.target, currentPose.getRotation()));
   }
 
   @Override

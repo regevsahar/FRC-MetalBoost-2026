@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib.FieldPoses;
 import frc.lib.util.HeightSpeedReduction;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
@@ -186,7 +187,8 @@ public class RobotContainer {
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
             shooter,
-            hood));
+            hood,
+            FieldPoses.getHubPosByAliiance()));
     /*
         ejectBall.whileTrue(new COMMANDNAME());
         shootWhileMovingTrigger.whileTrue(new COMMANDNAME());
@@ -200,7 +202,8 @@ public class RobotContainer {
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
             shooter,
-            hood));
+            hood,
+            FieldPoses.getHubPosByAliiance()));
   }
 
   public Command getAutonomousCommand() {

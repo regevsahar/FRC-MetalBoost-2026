@@ -133,17 +133,7 @@ public class PathPlannerUtil {
   }
 
   public static Command GoToNearesPosition(Pose2d currentPose, PathConstraints constraints) {
-    CenteringPositions closest = null;
-    double minDistance = Double.MAX_VALUE;
-
-    for (CenteringPositions branch : CenteringPositions.values()) {
-      double distance = branch.getDistance(currentPose);
-      if (distance < minDistance) {
-        minDistance = distance;
-        closest = branch;
-      }
-    }
-    return createPathDuringRuntime(currentPose, closest.getPose(), constraints);
+    return GoToNearesPosition(currentPose, constraints, true);
   }
 
   public static void setDynamicObstacles(
