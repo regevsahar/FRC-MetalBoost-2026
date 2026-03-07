@@ -1,16 +1,25 @@
 package frc.robot;
 
+import java.util.Set;
+
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.FieldPoses;
+import frc.lib.util.DriveToPoseUtil;
 import frc.lib.util.HeightSpeedReduction;
+import frc.lib.util.PathFollowingCommandsBuilder;
+import frc.lib.util.PathPlannerUtil;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.robot.autos.AutoChooser;
@@ -83,8 +92,7 @@ public class RobotContainer {
       new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton higherSwerveSpeed =
       new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-  // private final JoystickButton followPath = new JoystickButton(driver,
-  // XboxController.Button.kB.value);
+  private final JoystickButton followPath = new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton AimAtPose =
       new JoystickButton(driver, XboxController.Button.kX.value);
   private final JoystickButton resetPoseEstimator =
@@ -105,7 +113,7 @@ public class RobotContainer {
   private final JoystickButton ejectBall =
       new JoystickButton(operator, XboxController.Button.kB.value);
   private final JoystickButton resetPositionAutomation =
-      new JoystickButton(operator, 5); // TODO: check button number
+      new JoystickButton(operator, XboxController.Button.kStart.value); // TODO: check button number
   private final Trigger shootWhileMovingTrigger =
       new Trigger(() -> operator.getRawAxis(shootWhileMoving) > 0.3);
 
@@ -134,7 +142,32 @@ public class RobotContainer {
 
     hood.setDefaultCommand(
         new ManualHoodCmd(hood, () -> operator.getRawAxis(XboxController.Axis.kLeftY.value)));
+    
+    followPath.toggleOnTrue(
+        new DeferredCommand(
+            () -> PathPlannerUtil.createPathDuringRuntime(
+                poseEstimator.getEstimatedPosition(),
+                new Pose2d(
+                    2.85,
+                    4.33,
+                    Rotation2d.fromDegrees(0)
+                ),
+                new PathConstraints(0.5, 0.5, 0.5, 0.5),
+                true
+            ),
+            Set.of(s_Swerve)
+        )
+    );
 
+    // try {
+    //     followPath.toggleOnTrue(
+    //         PathFollowingCommandsBuilder.followPath(
+    //             PathPlannerPath.fromPathFile("line")
+    //         )
+    //     );
+    // } catch (Exception e) {
+    //     // TODO: handle exception
+    // }
     // Configure the button bindingsPP
     configureButtonBindings();
     registerPathPlannerCommands();
