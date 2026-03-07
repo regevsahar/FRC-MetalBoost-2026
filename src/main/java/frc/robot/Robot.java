@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.lib.util.LedController;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.commands.ResetPositionCommand.ResetHoodCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
@@ -173,7 +174,9 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    LedController.getInstance().defaultAnimation();
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.FlightTimeTable;
+import frc.lib.util.LedController;
 import frc.lib.util.ShotPrediction;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
@@ -58,6 +59,7 @@ public class ShootWhileMovingCmd extends Command {
   @Override
   public void initialize() {
     alignSubsystem.resetToCurrent(swerve.getPose());
+    LedController.getInstance().startFlashing(edu.wpi.first.wpilibj.util.Color.kGreen);
   }
 
   @Override
@@ -138,6 +140,7 @@ public class ShootWhileMovingCmd extends Command {
     flywheel.stop();
     hood.stop();
     swerve.drive(new Translation2d(0, 0), 0, true, false);
+    LedController.getInstance().stopFlashing();
   }
 
   @Override

@@ -55,8 +55,8 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   /* Buttons */
-  private final int shootAutomation = XboxController.Axis.kRightTrigger.value;
-  private final int shootWhileMoving = XboxController.Axis.kLeftTrigger.value;
+  private final int shootAutomation = XboxController.Axis.kLeftTrigger.value;
+  private final int shootWhileMoving = XboxController.Axis.kRightTrigger.value;
 
   AutoChooser autoChooser;
 
@@ -177,7 +177,7 @@ public class RobotContainer {
     shootAutomationTrigger.whileTrue(
         new ShooterAutomationCmd(shooter, hood, conveyanceWheels, rollers));
     resetPositionAutomation.whileTrue(new ResetSubsystemsAutomationCmd(hood,intake));
-    ejectBall.whileTrue(new EjectBallsAutomationCmd(intakeRollers, rollers));
+    ejectBall.whileTrue(new EjectBallsAutomationCmd(intakeRollers, rollers , intake));
     shootWhileMovingTrigger.whileTrue(
         new ShootWhileMovingCmd(
             s_Swerve,
