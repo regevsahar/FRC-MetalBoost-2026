@@ -4,8 +4,6 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.AddressableLEDBufferView;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants;
@@ -141,10 +139,10 @@ public class LedController {
     LEDPattern base =
         LEDPattern.gradient(
             LEDPattern.GradientType.kContinuous,
-            Color.kLightSkyBlue,
-            Color.kAqua,
             Color.kDarkBlue,
-            Color.kAqua);
+            Color.kMagenta,
+            Color.kDarkBlue,
+            Color.kDarkMagenta);
 
     LEDPattern pattern = base.scrollAtRelativeSpeed(Percent.per(Second).of(speed));
     pattern.applyTo(ledBuffer);

@@ -14,6 +14,7 @@ import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.Automations.EjectBallsAutomationCmd;
+import frc.robot.commands.Automations.InsetBallsAutomationCmd;
 import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 import frc.robot.commands.Automations.ShooterAutomationCmd;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
@@ -88,22 +89,6 @@ public class RobotContainer {
   private final JoystickButton resetPoseEstimator =
       new JoystickButton(driver, XboxController.Button.kA.value);
 
-<<<<<<< HEAD
-=======
-  AutoChooser autoChooser;
-
-  /* Subsystems */
-
-  private HeightSpeedReduction heightSpeedReduction = HeightSpeedReduction.getInstance();
-  private final FlyWheelSub shooter;
-  private final HoodSUB hood;
-  private final Intake s_intake = new Intake();
-  public final PoseEstimator poseEstimator = new PoseEstimator();
-  public final LimelightSubsystem limelight = new LimelightSubsystem("limelight");
-  public final LimelightSubsystem limelight2 = new LimelightSubsystem("limelight2");
-  public final Swerve s_Swerve = new Swerve(poseEstimator);
-
->>>>>>> ac7d7115dbe69b67f257f19dfcb14b57f76849f4
   /// * operation Buttons */
   private final JoystickButton ShootConstantValue =
       new JoystickButton(operator, XboxController.Button.kY.value);
@@ -156,14 +141,6 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-<<<<<<< HEAD
-=======
-    shoot.whileTrue(new Shoot(shooter));
-    intake.whileTrue(new IntakeCommand(s_intake, 0.45));
-    hoodCommand.whileTrue(new HoodCommand(hood));
-    flywheelHoodAutoCommand.whileTrue(new FlywheelHoodIntegrationCommand(shooter, hood));
-
->>>>>>> ac7d7115dbe69b67f257f19dfcb14b57f76849f4
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     lowerSwerveSpeed.whileTrue(
@@ -195,7 +172,7 @@ public class RobotContainer {
     shoot.whileTrue(new ShooterCmd(shooter, conveyanceWheels));
     ShootConstantValue.whileTrue(new ShootConstantValueCmd(shooter));
     resetIntakePosition.onTrue(new ResetIntakeCmd(intake));
-    openIntake.whileTrue(new OpenIntakeCmd(intake));    
+    openIntake.whileTrue(new InsetBallsAutomationCmd(intake, intakeRollers));    
     closeIntake.whileTrue(new CloseIntakeCmd(intake));
     shootAutomationTrigger.whileTrue(
         new ShooterAutomationCmd(shooter, hood, conveyanceWheels, rollers));
