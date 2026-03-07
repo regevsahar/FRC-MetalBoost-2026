@@ -165,7 +165,7 @@ public class RobotContainer {
                     s_Swerve.getModulePositions(),
                     new Pose2d(0, 0, new Rotation2d()))));
 
-    shoot.whileTrue(new ShooterCmd(shooter));
+    shoot.whileTrue(new ShooterCmd(shooter, conveyanceWheels));
     hoodArc.whileTrue(new HoodCmd(hood));
     resetIntakePosition.onTrue(new ResetIntakeCmd(intake));
     openIntake.whileTrue(new OpenIntakeCmd(intake));
