@@ -28,12 +28,7 @@ public final class VisionConstants {
     public static final double minimumStdDev = 0.1;
   }
 
-  public static final class FieldConstants {
-    public static final Translation2d HUB_CENTER_RED = new Translation2d(11.915, 4.035);
-    public static final Translation2d HUB_CENTER_BLUE = new Translation2d(4.625, 4.035);
-    // coordinates
-
-  }
+  
 
   public static final class AlignToPoseConstants {
     // TODO: Tune these constants

@@ -1,6 +1,5 @@
 package frc.lib.util.FieldUtils;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -10,8 +9,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.lib.math.AngleTransform;
 import frc.lib.math.FieldMath;
-import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
-import java.util.Optional;
 
 public class FieldPoses {
 
@@ -60,6 +57,11 @@ public class FieldPoses {
       return this.pose.getTranslation().getDistance(pose.getTranslation());
     }
   }
+  
+  public static final Translation2d HUB_CENTER_RED = new Translation2d(11.915, 4.035);
+  public static final Translation2d HUB_CENTER_BLUE = new Translation2d(4.625, 4.035);
+  
+
   public static final DriverStation.Alliance RELATIVE_FIELD_CONVENTION_ALLIANCE =
       DriverStation.Alliance.Blue;
 
@@ -74,10 +76,10 @@ public class FieldPoses {
     return robotTranslation.getX() < LENGTH_METERS / 2.0;
   }
   public static Translation2d getHubPosByAliiance(){
-    Translation2d hubPosition = FieldConstants.HUB_CENTER_BLUE;
+    Translation2d hubPosition = HUB_CENTER_BLUE;
     Optional<Alliance> alliance = DriverStation.getAlliance();
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-      hubPosition = FieldConstants.HUB_CENTER_RED;
+      hubPosition = HUB_CENTER_RED;
     }
     return hubPosition;
   }

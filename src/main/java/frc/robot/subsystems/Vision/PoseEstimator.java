@@ -14,10 +14,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.lib.util.FieldUtils.FieldPoses;
 import frc.lib.util.Vision.LimelightHelpers;
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
-import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
+
+import java.lang.reflect.Field;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
@@ -33,7 +35,7 @@ public class PoseEstimator extends MBSubsystem {
   private double offsetX = 0;
   private double offsetY = 0;
   private int nOffsets = 0;
-  private Translation2d target = FieldConstants.HUB_CENTER_BLUE;
+  private Translation2d target = FieldPoses.HUB_CENTER_BLUE;
 
   public PoseEstimator() {
     super("PoseEstimator");
@@ -53,7 +55,7 @@ public class PoseEstimator extends MBSubsystem {
     var alliance = DriverStation.getAlliance();
     SmartDashboard.putData("FieldPoseEstimator", field);
     if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      target = FieldConstants.HUB_CENTER_RED;
+      target = FieldPoses.HUB_CENTER_RED;
     }
   }
 
