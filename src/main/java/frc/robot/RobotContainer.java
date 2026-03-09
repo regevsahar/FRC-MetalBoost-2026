@@ -88,6 +88,16 @@ public class RobotContainer {
   private final JoystickButton resetPoseEstimator =
       new JoystickButton(driver, XboxController.Button.kA.value);
 
+  /* SysId Characterization Buttons (run in Test mode only) */
+  private final JoystickButton sysIdQuasFwd =
+      new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton sysIdQuasRev =
+      new JoystickButton(driver, XboxController.Button.kStart.value);
+  private final JoystickButton sysIdDynFwd =
+      new JoystickButton(driver, XboxController.Button.kBack.value);
+  private final Trigger sysIdDynRev =
+      new Trigger(() -> driver.getPOV() == 0); // POV Up
+
   /// * operation Buttons */
   private final JoystickButton ShootConstantValue =
       new JoystickButton(operator, XboxController.Button.kY.value);
@@ -185,6 +195,15 @@ public class RobotContainer {
                     s_Swerve.getGyroYaw(),
                     s_Swerve.getModulePositions(),
                     new Pose2d(0, 0, new Rotation2d()))));
+
+    // -----------------------------------------------------------------------
+    // SysId — hold each button while enabled in TEST mode on the Driver Station
+    // Run all 4 tests, then open the .wpilog in the SysId Analyzer tool.
+    // -----------------------------------------------------------------------
+    sysIdQuasFwd.whileTrue(s_Swerve.sysIdQuasistaticForward());
+    sysIdQuasRev.whileTrue(s_Swerve.sysIdQuasistaticReverse());
+    sysIdDynFwd.whileTrue(s_Swerve.sysIdDynamicForward());
+    sysIdDynRev.whileTrue(s_Swerve.sysIdDynamicReverse());
 
     shoot.whileTrue(new ShooterSpeedToHubCmd(shooter, conveyanceWheels));
     ShootConstantValue.whileTrue(new ShootConstantValueCmd(shooter));
