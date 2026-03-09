@@ -3,7 +3,6 @@ package frc.robot;
 import java.util.Set;
 
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,22 +14,17 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.lib.FieldPoses;
-import frc.lib.util.DriveToPoseUtil;
-import frc.lib.util.HeightSpeedReduction;
-import frc.lib.util.PathFollowingCommandsBuilder;
-import frc.lib.util.PathPlannerUtil;
+import frc.lib.util.FieldUtils.FieldPoses;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
+import frc.lib.util.Paths.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.Automations.EjectBallsAutomationCmd;
 import frc.robot.commands.Automations.InsetBallsAutomationCmd;
 import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 import frc.robot.commands.Automations.ShooterAutomationCmd;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
-import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
-import frc.robot.commands.ShooterCommands.AlignHoodToHubCmd;
 import frc.robot.commands.ShooterCommands.ManualHoodCmd;
 import frc.robot.commands.ShooterCommands.ShootConstantValueCmd;
 import frc.robot.commands.ShooterCommands.ShooterSpeedToHubCmd;
@@ -72,7 +66,6 @@ public class RobotContainer {
 
         /* Subsystems */
 
-        private HeightSpeedReduction heightSpeedReduction = HeightSpeedReduction.getInstance();
         public final PoseEstimator poseEstimator = new PoseEstimator();
         public final LimelightSub limelight = new LimelightSub(CameraConstants.limelight3name);
         public final LimelightSub limelight2 = new LimelightSub(CameraConstants.limelight4name);
@@ -130,8 +123,7 @@ public class RobotContainer {
                                                 () -> -driver.getRawAxis(translationAxis),
                                                 () -> -driver.getRawAxis(strafeAxis),
                                                 () -> -driver.getRawAxis(rotationAxis),
-                                                () -> true,
-                                                heightSpeedReduction.getSpeedSupplier()));
+                                                () -> true));
 
                 hood.setDefaultCommand(
                                 new ManualHoodCmd(hood, () -> operator.getRawAxis(XboxController.Axis.kLeftY.value)));

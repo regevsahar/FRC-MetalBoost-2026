@@ -1,4 +1,4 @@
-package frc.lib.util;
+package frc.lib.util.ShootOnMove;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;

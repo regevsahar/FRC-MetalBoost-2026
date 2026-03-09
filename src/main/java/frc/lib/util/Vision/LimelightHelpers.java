@@ -1,6 +1,6 @@
 // LimelightHelpers v1.12 (REQUIRES LLOS 2025.0 OR LATER)
 
-package frc.lib.util;
+package frc.lib.util.Vision;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;

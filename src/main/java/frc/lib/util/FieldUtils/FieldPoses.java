@@ -1,5 +1,6 @@
-package frc.lib;
+package frc.lib.util.FieldUtils;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -7,6 +8,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.lib.math.AngleTransform;
+import frc.lib.math.FieldMath;
 import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
 public class FieldPoses {
     
@@ -56,7 +59,19 @@ public class FieldPoses {
       return this.pose.getTranslation().getDistance(pose.getTranslation());
     }
   }
+  public static final DriverStation.Alliance RELATIVE_FIELD_CONVENTION_ALLIANCE =
+      DriverStation.Alliance.Blue;
 
+  public static boolean isFieldConventionAlliance() {
+    return DriverStationUtil.getAlliance() == RELATIVE_FIELD_CONVENTION_ALLIANCE;
+  }
+
+  public static final double LENGTH_METERS = 16.54;
+  public static final double WIDTH_METERS = 8.07;
+
+  public static boolean isOnBlueSide(Translation2d robotTranslation) {
+    return robotTranslation.getX() < LENGTH_METERS / 2.0;
+  }
   public static Translation2d getHubPosByAliiance(){
     Translation2d hubPosition = FieldConstants.HUB_CENTER_BLUE;
     Optional<Alliance> alliance = DriverStation.getAlliance();
@@ -65,4 +80,40 @@ public class FieldPoses {
     }
     return hubPosition;
   }
+  public static Pose2d getAllianceRelative(
+      Pose2d pose, boolean mirrorX, boolean mirrorY, AngleTransform angleTransform) {
+    return isFieldConventionAlliance()
+        ? pose
+        : FieldMath.mirror(pose, mirrorX, mirrorY, angleTransform);
+  }
+
+  public static Translation2d getAllianceRelative(
+      Translation2d translation, boolean mirrorX, boolean mirrorY) {
+    return isFieldConventionAlliance()
+        ? translation
+        : FieldMath.mirror(translation, mirrorX, mirrorY);
+  }
+
+  public static Pose2d getPointFromCertainDistance(Pose2d point, double distantInMeters) {
+    return new Pose2d(
+        point.getX() - point.getRotation().getCos() * distantInMeters,
+        point.getY() - point.getRotation().getSin() * distantInMeters,
+        point.getRotation());
+  }
+
+  public static Pose2d getAllianceRelative(Pose2d pose2d) {
+    return new Pose2d(
+        getAllianceRelative(pose2d.getTranslation()), getAllianceRelative(pose2d.getRotation()));
+  }
+
+  public static Translation2d getAllianceRelative(Translation2d translation) {
+    return isFieldConventionAlliance() ? translation : FieldMath.mirror(translation, true, true);
+  }
+
+  public static Rotation2d getAllianceRelative(Rotation2d rotation) {
+    return isFieldConventionAlliance()
+        ? rotation
+        : FieldMath.transformAngle(rotation, AngleTransform.INVERT);
+  }
+
 }

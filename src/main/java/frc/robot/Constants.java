@@ -17,8 +17,8 @@ import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
-import frc.lib.util.COTSTalonFXSwerveConstants;
-import frc.lib.util.SwerveModuleConstants;
+import frc.lib.util.Swerve.COTSTalonFXSwerveConstants;
+import frc.lib.util.Swerve.SwerveModuleConstants;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;

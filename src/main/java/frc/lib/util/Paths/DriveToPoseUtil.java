@@ -1,4 +1,4 @@
-package frc.lib.util;
+package frc.lib.util.Paths;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
