@@ -2,7 +2,7 @@ package frc.robot.commands.Automations;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.ConveyanceCommands.RollersBackwardsCmd;
-import frc.robot.commands.IntakeCommands.EjectBallCmd;
+import frc.robot.commands.IntakeCommands.RollToEjectBallsCmd;
 import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
 
@@ -12,6 +12,6 @@ import frc.robot.subsystems.Intake.IntakeRollersSub;
 public class EjectBallAutomation extends ParallelCommandGroup {
   public EjectBallAutomation(IntakeRollersSub intakeRollers, ConveyanceRollerSub rollers) {
 
-    addCommands(new EjectBallCmd(intakeRollers), new RollersBackwardsCmd(rollers));
+    addCommands(new RollToEjectBallsCmd(intakeRollers), new RollersBackwardsCmd(rollers));
   }
 }

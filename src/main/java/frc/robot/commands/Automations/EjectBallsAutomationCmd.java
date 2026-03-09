@@ -5,15 +5,14 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.lib.util.LedController;
 import frc.robot.commands.ConveyanceCommands.RollersBackwardsCmd;
-import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.IntakeCommands.RollToEjectBallsCmd;
-import frc.robot.subsystems.Conveyance.RollersSub;
+import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
 import frc.robot.subsystems.Intake.IntakeSub;
 
 public class EjectBallsAutomationCmd extends ParallelCommandGroup {
-  public EjectBallsAutomationCmd(IntakeRollersSub intakeRollers, RollersSub rollers , IntakeSub intake) {
+  public EjectBallsAutomationCmd(IntakeRollersSub intakeRollers, ConveyanceRollerSub rollers, IntakeSub intake) {
 
     addCommands(
         new RollToEjectBallsCmd(intakeRollers),
@@ -21,7 +20,8 @@ public class EjectBallsAutomationCmd extends ParallelCommandGroup {
         new OpenIntakeCmd(intake),
         new FunctionalCommand(
             () -> LedController.getInstance().startGradient(Color.kRed, Color.kYellow),
-            () -> {},
+            () -> {
+            },
             (interrupted) -> LedController.getInstance().stopGradient(),
             () -> false));
   }

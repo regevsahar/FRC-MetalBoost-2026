@@ -4,16 +4,13 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 
 import frc.robot.commands.ConveyanceCommands.ConveyanceWheelsCmd;
 import frc.robot.commands.ConveyanceCommands.RollersBackwardsCmd;
-import frc.robot.commands.ShooterCommands.HoodCmd;
-import frc.robot.commands.ShooterCommands.ShooterCmd;
+import frc.robot.commands.ShooterCommands.AlignHoodToHubCmd;
+import frc.robot.commands.ShooterCommands.ShooterSpeedToHubCmd;
 
 import frc.robot.subsystems.Conveyance.ConveyanceSub;
 import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
-import frc.robot.subsystems.Swerve.SwerveSub;
-import frc.robot.subsystems.Vision.AlignToPoseSub;
-import java.util.function.DoubleSupplier;
 
 public class ShooterAutomationCmd extends ParallelRaceGroup {
 
@@ -21,11 +18,11 @@ public class ShooterAutomationCmd extends ParallelRaceGroup {
       FlyWheelSub shooter,
       HoodSUB hood,
       ConveyanceSub conveyanceWheels,
-      RollersSub rollers) {
+      ConveyanceRollerSub rollers) {
 
     addCommands(
-        new ShooterCmd(shooter, conveyanceWheels),
-        new HoodCmd(hood),
+        new ShooterSpeedToHubCmd(shooter, conveyanceWheels),
+        new AlignHoodToHubCmd(hood),
         new ConveyanceWheelsCmd(conveyanceWheels),
         new RollersBackwardsCmd(rollers));
   }

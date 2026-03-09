@@ -16,7 +16,7 @@ public class ShooterSpeedToHubCmd extends Command {
   private final Timer noBallTimer = new Timer();
   private boolean timerStarted = false;
 
-  public ShooterCmd(FlyWheelSub shooter, ConveyanceSub conveyance) {
+  public ShooterSpeedToHubCmd(FlyWheelSub shooter, ConveyanceSub conveyance) {
     this.shooter = shooter;
     this.conveyance = conveyance;
     addRequirements(shooter);
