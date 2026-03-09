@@ -123,11 +123,11 @@ public class PathPlannerUtil {
     CenteringPositions closest = null;
     double minDistance = Double.MAX_VALUE;
 
-    for (CenteringPositions branch : CenteringPositions.values()) {
-      double distance = branch.getDistance(currentPose);
+    for (CenteringPositions position : CenteringPositions.values()) {
+      double distance = position.getDistance(currentPose);
       if (distance < minDistance) {
         minDistance = distance;
-        closest = branch;
+        closest = position;
       }
     }
     return createPathDuringRuntime(currentPose, closest.getPose(), constraints, mirror);
