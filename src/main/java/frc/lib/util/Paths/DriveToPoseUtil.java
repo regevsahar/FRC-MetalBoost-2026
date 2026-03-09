@@ -40,6 +40,4 @@ public class DriveToPoseUtil {
 
     return AutoBuilder.followPath(path);
   }
-
-  
 }

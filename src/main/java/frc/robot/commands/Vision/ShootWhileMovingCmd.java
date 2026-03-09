@@ -75,24 +75,26 @@ public class ShootWhileMovingCmd extends Command {
     ChassisSpeeds robotRelativeSpeeds = swerve.getRobotRelativeSpeeds();
 
     // Safer conversion (avoids sign mistakes)
-    ChassisSpeeds fieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeeds,
-        currentPose.getRotation());
+    ChassisSpeeds fieldRelativeSpeeds =
+        ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeeds, currentPose.getRotation());
 
     // Deadband to reduce noise
 
-    fieldRelativeSpeeds.vxMetersPerSecond = ToleranceMath.applyDeadband(fieldRelativeSpeeds.vxMetersPerSecond,
-        Constants.stickDeadband);
-    fieldRelativeSpeeds.vyMetersPerSecond = ToleranceMath.applyDeadband(fieldRelativeSpeeds.vyMetersPerSecond,
-        Constants.stickDeadband);
+    fieldRelativeSpeeds.vxMetersPerSecond =
+        ToleranceMath.applyDeadband(fieldRelativeSpeeds.vxMetersPerSecond, Constants.stickDeadband);
+    fieldRelativeSpeeds.vyMetersPerSecond =
+        ToleranceMath.applyDeadband(fieldRelativeSpeeds.vyMetersPerSecond, Constants.stickDeadband);
 
     // 4) Predict future position
-    Translation2d futurePos = ShotPrediction.predictFuturePosition(currentPose, fieldRelativeSpeeds, flightTime);
+    Translation2d futurePos =
+        ShotPrediction.predictFuturePosition(currentPose, fieldRelativeSpeeds, flightTime);
 
     // 5) Record future distance
     double futureDistanceToHub = futurePos.getDistance(this.target);
 
     // 6) Compute yaw setpoint (what angle you'd aim from futurePos to hub)
-    double yawSetpointRad = Math.atan2(this.target.getY() - futurePos.getY(), this.target.getX() - futurePos.getX());
+    double yawSetpointRad =
+        Math.atan2(this.target.getY() - futurePos.getY(), this.target.getX() - futurePos.getX());
     double yawSetpointDeg = Units.radiansToDegrees(yawSetpointRad);
 
     // 7) Use your align subsystem for rotation output if you want closed-loop

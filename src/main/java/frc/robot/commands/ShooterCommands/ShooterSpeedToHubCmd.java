@@ -12,6 +12,7 @@ import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
 public class ShooterSpeedToHubCmd extends Command {
   /** Creates a new Shoot. */
   private final FlyWheelSub shooter;
+
   private final ConveyanceSub conveyance;
   private final Timer noBallTimer = new Timer();
   private boolean timerStarted = false;

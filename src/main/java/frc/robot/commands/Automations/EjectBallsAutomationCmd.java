@@ -12,7 +12,8 @@ import frc.robot.subsystems.Intake.IntakeRollersSub;
 import frc.robot.subsystems.Intake.IntakeSub;
 
 public class EjectBallsAutomationCmd extends ParallelCommandGroup {
-  public EjectBallsAutomationCmd(IntakeRollersSub intakeRollers, ConveyanceRollerSub rollers, IntakeSub intake) {
+  public EjectBallsAutomationCmd(
+      IntakeRollersSub intakeRollers, ConveyanceRollerSub rollers, IntakeSub intake) {
 
     addCommands(
         new RollToEjectBallsCmd(intakeRollers),
@@ -20,8 +21,7 @@ public class EjectBallsAutomationCmd extends ParallelCommandGroup {
         new OpenIntakeCmd(intake),
         new FunctionalCommand(
             () -> LedController.getInstance().startGradient(Color.kRed, Color.kYellow),
-            () -> {
-            },
+            () -> {},
             (interrupted) -> LedController.getInstance().stopGradient(),
             () -> false));
   }
