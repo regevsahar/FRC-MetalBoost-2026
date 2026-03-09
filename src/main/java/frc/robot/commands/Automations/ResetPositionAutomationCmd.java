@@ -9,8 +9,8 @@ import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ResetPositionAutomation extends ParallelCommandGroup {
-  public ResetPositionAutomation(HoodSUB hood, IntakeSub intake) {
+public class ResetPositionAutomationCmd extends ParallelCommandGroup {
+  public ResetPositionAutomationCmd(HoodSUB hood, IntakeSub intake) {
 
     addCommands(new ResetHoodCmd(hood), new ResetIntakeCmd(intake));
   }
