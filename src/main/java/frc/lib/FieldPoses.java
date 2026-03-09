@@ -1,15 +1,14 @@
 package frc.lib;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
+import java.util.Optional;
+
 public class FieldPoses {
-    
 
   // TODO: update these positions and name and add more if needed
   public enum CenteringPositions {
@@ -57,7 +56,7 @@ public class FieldPoses {
     }
   }
 
-  public static Translation2d getHubPosByAliiance(){
+  public static Translation2d getHubPosByAliiance() {
     Translation2d hubPosition = FieldConstants.HUB_CENTER_BLUE;
     Optional<Alliance> alliance = DriverStation.getAlliance();
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {

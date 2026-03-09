@@ -46,7 +46,6 @@ public class AlignToPoseCmd extends Command {
 
     var alliance = DriverStation.getAlliance();
 
-
     double rotation = hubAlignSubsystem.calculateRotationOutput(swerve.getPose(), this.targetPose);
 
     swerve.drive(new Translation2d(translationVal, strafeVal), rotation, true, true);

@@ -4,12 +4,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.lib.FieldPoses;
 import frc.lib.math.ToleranceMath;
 import frc.lib.util.FlightTimeTable;
 import frc.lib.util.LedController;
@@ -20,8 +17,6 @@ import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.SwerveSub;
 import frc.robot.subsystems.Vision.AlignToPoseSub;
 import frc.robot.subsystems.Vision.PoseEstimator;
-import frc.robot.subsystems.Vision.VisionConstants.FieldConstants;
-import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -80,24 +75,26 @@ public class ShootWhileMovingCmd extends Command {
     ChassisSpeeds robotRelativeSpeeds = swerve.getRobotRelativeSpeeds();
 
     // Safer conversion (avoids sign mistakes)
-    ChassisSpeeds fieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeeds,
-        currentPose.getRotation());
+    ChassisSpeeds fieldRelativeSpeeds =
+        ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeeds, currentPose.getRotation());
 
     // Deadband to reduce noise
 
-    fieldRelativeSpeeds.vxMetersPerSecond = ToleranceMath.applyDeadband(fieldRelativeSpeeds.vxMetersPerSecond,
-        Constants.stickDeadband);
-    fieldRelativeSpeeds.vyMetersPerSecond = ToleranceMath.applyDeadband(fieldRelativeSpeeds.vyMetersPerSecond,
-        Constants.stickDeadband);
+    fieldRelativeSpeeds.vxMetersPerSecond =
+        ToleranceMath.applyDeadband(fieldRelativeSpeeds.vxMetersPerSecond, Constants.stickDeadband);
+    fieldRelativeSpeeds.vyMetersPerSecond =
+        ToleranceMath.applyDeadband(fieldRelativeSpeeds.vyMetersPerSecond, Constants.stickDeadband);
 
     // 4) Predict future position
-    Translation2d futurePos = ShotPrediction.predictFuturePosition(currentPose, fieldRelativeSpeeds, flightTime);
+    Translation2d futurePos =
+        ShotPrediction.predictFuturePosition(currentPose, fieldRelativeSpeeds, flightTime);
 
     // 5) Record future distance
     double futureDistanceToHub = futurePos.getDistance(this.target);
 
     // 6) Compute yaw setpoint (what angle you'd aim from futurePos to hub)
-    double yawSetpointRad = Math.atan2(this.target.getY() - futurePos.getY(), this.target.getX() - futurePos.getX());
+    double yawSetpointRad =
+        Math.atan2(this.target.getY() - futurePos.getY(), this.target.getX() - futurePos.getX());
     double yawSetpointDeg = Units.radiansToDegrees(yawSetpointRad);
 
     // 7) Use your align subsystem for rotation output if you want closed-loop

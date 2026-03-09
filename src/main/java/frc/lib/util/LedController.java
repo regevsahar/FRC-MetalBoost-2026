@@ -25,9 +25,7 @@ public class LedController {
     led.setLength(ledBuffer.getLength());
     led.setData(ledBuffer);
     led.start();
-
   }
-
 
   public static LedController getInstance() {
     if (instance == null) {
@@ -75,8 +73,7 @@ public class LedController {
                 try {
                   LEDPattern base =
                       LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors);
-                  LEDPattern pattern =
-                      base.scrollAtRelativeSpeed(Percent.per(Second).of(40));
+                  LEDPattern pattern = base.scrollAtRelativeSpeed(Percent.per(Second).of(40));
                   pattern.applyTo(ledBuffer);
                   setData();
                   Thread.sleep(20);

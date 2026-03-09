@@ -3,17 +3,12 @@ package frc.robot;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.LedController;
 import frc.lib.util.LimelightHelpers;
-import frc.robot.commands.ResetPositionCommand.ResetHoodCmd;
-import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
+import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 import frc.robot.subsystems.Intake.IntakeSub;
-import frc.robot.subsystems.Shooter.Hood.HoodIO;
-import frc.robot.subsystems.Shooter.Hood.HoodIOSim;
-import frc.robot.subsystems.Shooter.Hood.HoodIOTalonFX;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.Configs.CTREConfigs;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
@@ -21,7 +16,6 @@ import java.util.Optional;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -42,12 +36,6 @@ public class Robot extends LoggedRobot {
    */
   public Robot() {
     m_robotContainer = new RobotContainer();
-
-    HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
-
-    hood = new HoodSUB(hoodIO, m_robotContainer.poseEstimator);
-
-    intake = new IntakeSub();
 
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -74,7 +62,7 @@ public class Robot extends LoggedRobot {
     // and put our
     // autonomous chooser on the dashboard.
   }
-  
+
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -86,7 +74,6 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     Rotation2d currentGyro = m_robotContainer.s_Swerve.getGyroYaw();
-
 
     Pose2d robotPose = m_robotContainer.poseEstimator.getEstimatedPosition();
     boolean isInRedZone = m_robotContainer.fieldGrid.onForbiddenArea(robotPose);
@@ -137,7 +124,7 @@ public class Robot extends LoggedRobot {
           m_robotContainer.poseEstimator.getGyroYawAtTimeStamp(
               ll2estimateMT2.get().timestampSeconds);
     }
-    try {  
+    try {
       boolean hasTarget = m_robotContainer.limelight.hasTarget();
       if (hasTarget) {
         double distanceFromTag = m_robotContainer.limelight.getDistanceFromTarget();
@@ -189,7 +176,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    
+
     LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 0);
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -212,7 +199,6 @@ public class Robot extends LoggedRobot {
       m_autonomousCommand.cancel();
     }
     CommandScheduler.getInstance().schedule(new ResetSubsystemsAutomationCmd(hood, intake));
-
   }
 
   /** This function is called periodically during operator control. */
