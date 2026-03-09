@@ -68,7 +68,6 @@ public class LedController {
     gradientRunning = true;
     new Thread(
             () -> {
-              int tick = 0;
               while (gradientRunning) {
                 try {
                   LEDPattern base =
@@ -77,14 +76,32 @@ public class LedController {
                   pattern.applyTo(ledBuffer);
                   setData();
                   Thread.sleep(20);
-                  tick++;
                 } catch (InterruptedException e) {
                   Thread.currentThread().interrupt();
                 }
               }
-              // Return to ambiance when gradient stops
-              LEDPattern.solid(ambiance).applyTo(ledBuffer);
-              setData();
+              returnToAmbiance();
+            })
+        .start();
+  }
+
+    public void startGradient(int speed, Color... colors) {
+    gradientRunning = true;
+    new Thread(
+            () -> {
+              while (gradientRunning) {
+                try {
+                  LEDPattern base =
+                      LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors);
+                  LEDPattern pattern = base.scrollAtRelativeSpeed(Percent.per(Second).of(speed));
+                  pattern.applyTo(ledBuffer);
+                  setData();
+                  Thread.sleep(20);
+                } catch (InterruptedException e) {
+                  Thread.currentThread().interrupt();
+                }
+              }
+              returnToAmbiance();
             })
         .start();
   }

@@ -1,13 +1,11 @@
 package frc.robot.commands.Automations;
 
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.lib.util.Leds.LedController;
+import frc.robot.commands.LedCommand;
 import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.IntakeCommands.RollToInsertBallsCmd;
-import frc.lib.util.Leds.LedController;
-import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
+import frc.robot.commands.LedCommand.Mode;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
 import frc.robot.subsystems.Intake.IntakeSub;
 
@@ -17,10 +15,13 @@ public class InsetBallsAutomationCmd extends ParallelCommandGroup {
     addCommands(
         new OpenIntakeCmd(intakeMovement),
         new RollToInsertBallsCmd(rollers),
+        new LedCommand(Mode.GRADIENT, Color.kYellow, Color.kLightYellow));
+        /* 
         new FunctionalCommand(
             () -> LedController.getInstance().startGradient(Color.kYellow, Color.kLightYellow),
             () -> {},
             (interrupted) -> LedController.getInstance().stopGradient(),
             () -> false));
+        */
   }
 }
