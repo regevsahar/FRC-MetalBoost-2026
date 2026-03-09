@@ -3,7 +3,7 @@ package frc.robot.commands.Automations;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.lib.util.LedController;
+import frc.lib.util.Leds.LedController;
 import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.IntakeCommands.RollToInsertBallsCmd;
 import frc.lib.util.Leds.LedController;
