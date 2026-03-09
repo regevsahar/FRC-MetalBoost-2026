@@ -4,6 +4,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -32,6 +33,7 @@ public class SwerveModule {
   /* drive motor control requests */
   private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
   private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
+  private final VoltageOut driveVoltage = new VoltageOut(0);
 
   /* angle motor control requests */
   private final PositionVoltage anglePosition = new PositionVoltage(0);
@@ -105,5 +107,31 @@ public class SwerveModule {
 
   public void setTo0() {
     mAngleMotor.setPosition(0);
+  }
+
+  // -------------------------------------------------------------------------
+  // SysId helpers
+  // -------------------------------------------------------------------------
+
+  /**
+   * Commands a raw voltage to the drive motor. Used exclusively during SysId
+   * characterization — do NOT call during normal teleop/auto.
+   */
+  public void setDriveVoltage(double volts) {
+    mDriveMotor.setControl(driveVoltage.withOutput(volts));
+  }
+
+  /** Drive wheel position in meters (for SysId position log). */
+  public double getDrivePositionMeters() {
+    return Conversions.rotationsToMeters(
+        mDriveMotor.getPosition().getValueAsDouble(),
+        Constants.SwerveConstants.wheelCircumference);
+  }
+
+  /** Drive wheel velocity in m/s (for SysId velocity log). */
+  public double getDriveVelocityMPS() {
+    return Conversions.RPSToMPS(
+        mDriveMotor.getVelocity().getValueAsDouble(),
+        Constants.SwerveConstants.wheelCircumference);
   }
 }
