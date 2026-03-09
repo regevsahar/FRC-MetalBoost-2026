@@ -41,28 +41,5 @@ public class DriveToPoseUtil {
     return AutoBuilder.followPath(path);
   }
 
-  public Command driveToPoseHolonomic(
-      Pose2d currentPose, Pose2d targetPose, double maxVel, double maxAccel) {
-    // Call supplier to get live position
-    // Constraints creation
-    PathConstraints constraints = new PathConstraints(maxVel, maxAccel, 10, 8);
-
-    Logger.recordOutput("Estimator/Pose2d/targetPose", targetPose);
-    Logger.recordOutput("Estimator/Pose2d/currentPose", currentPose);
-    // Waypoint creation
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(currentPose, targetPose);
-
-    // PathPlannerPath creation
-    PathPlannerPath path =
-        new PathPlannerPath(
-            waypoints,
-            constraints,
-            null,
-            new GoalEndState(
-                0.0, // velocity at end (0 = stop)
-                targetPose.getRotation() // End rotation
-                ));
-
-    return AutoBuilder.followPath(path);
-  }
+  
 }

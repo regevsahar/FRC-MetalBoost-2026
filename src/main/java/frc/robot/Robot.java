@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.lib.util.LedController;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.commands.ResetPositionCommand.ResetHoodCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
+import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -72,7 +74,7 @@ public class Robot extends LoggedRobot {
     // and put our
     // autonomous chooser on the dashboard.
   }
-
+  
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -85,8 +87,6 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     Rotation2d currentGyro = m_robotContainer.s_Swerve.getGyroYaw();
 
-    double distanceFromTag = m_robotContainer.limelight.getDistanceFromTarget();
-    double distanceFromTag2 = m_robotContainer.limelight2.getDistanceFromTarget();
 
     Pose2d robotPose = m_robotContainer.poseEstimator.getEstimatedPosition();
     boolean isInRedZone = m_robotContainer.fieldGrid.onForbiddenArea(robotPose);
@@ -137,29 +137,37 @@ public class Robot extends LoggedRobot {
           m_robotContainer.poseEstimator.getGyroYawAtTimeStamp(
               ll2estimateMT2.get().timestampSeconds);
     }
+    try {  
+      boolean hasTarget = m_robotContainer.limelight.hasTarget();
+      if (hasTarget) {
+        double distanceFromTag = m_robotContainer.limelight.getDistanceFromTarget();
+        if (llPoseMT2.isPresent() && gyroYawAtTimeStamp.isPresent()) {
+          m_robotContainer.poseEstimator.updateHeadingOffset(
+              gyroYawAtTimeStamp.get(), llPoseMT1.get().getRotation());
 
-    boolean hasTarget = m_robotContainer.limelight.hasTarget();
-    if (hasTarget) {
-      if (llPoseMT2.isPresent() && gyroYawAtTimeStamp.isPresent()) {
-        m_robotContainer.poseEstimator.updateHeadingOffset(
-            gyroYawAtTimeStamp.get(), llPoseMT1.get().getRotation());
-
-        m_robotContainer.poseEstimator.updateVision(
-            llestimateMT2.get(), gyroYawAtTimeStamp.get(), distanceFromTag);
+          m_robotContainer.poseEstimator.updateVision(
+              llestimateMT2.get(), gyroYawAtTimeStamp.get(), distanceFromTag);
+        }
       }
+    } catch (Exception e) {
+      System.err.println(e);
     }
 
-    boolean hasTarget2 = m_robotContainer.limelight2.hasTarget();
-    if (hasTarget2) {
-      if (ll2PoseMT2.isPresent() && gyroYawAtTimeStamp.isPresent()) {
-        m_robotContainer.poseEstimator.updateHeadingOffset(
-            gyroYawAtTimeStamp.get(), ll2PoseMT1.get().getRotation());
+    try {
+      boolean hasTarget2 = m_robotContainer.limelight2.hasTarget();
+      if (hasTarget2) {
+        double distanceFromTag2 = m_robotContainer.limelight2.getDistanceFromTarget();
+        if (ll2PoseMT2.isPresent() && gyroYawAtTimeStamp.isPresent()) {
+          m_robotContainer.poseEstimator.updateHeadingOffset(
+              gyroYawAtTimeStamp.get(), ll2PoseMT1.get().getRotation());
 
-        m_robotContainer.poseEstimator.updateVision(
-            ll2estimateMT2.get(), gyroYawAtTimeStamp.get(), distanceFromTag2);
+          m_robotContainer.poseEstimator.updateVision(
+              ll2estimateMT2.get(), gyroYawAtTimeStamp.get(), distanceFromTag2);
+        }
       }
+    } catch (Exception e) {
+      System.err.println(e);
     }
-
     // if (isInRedZone)
     // Constants.PoseEstimator.OdometryFactor = 2;
     // else
@@ -173,14 +181,16 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    LedController.getInstance().defaultAnimation();
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 0);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    
+    LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 0);
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -193,8 +203,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    new ResetHoodCmd(hood).schedule();
-    new ResetIntakeCmd(intake).schedule();
     LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 0);
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -203,6 +211,8 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    CommandScheduler.getInstance().schedule(new ResetSubsystemsAutomationCmd(hood, intake));
+
   }
 
   /** This function is called periodically during operator control. */

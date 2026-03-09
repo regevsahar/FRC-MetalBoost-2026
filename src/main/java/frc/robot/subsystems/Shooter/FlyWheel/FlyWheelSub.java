@@ -24,8 +24,11 @@ public class FlyWheelSub extends MBSubsystem {
     io.setTargetRPM(targetRPM);
   }
 
-  public void setTargetDistance() {
+  public void setTargetDistanceFromHub() {
     double distance = poseEstimator.getDistanceFromHub();
+    setTargetRPM(getRPMFromDistance(distance));
+  }
+  public void setTargetDistance(double distance) {
     setTargetRPM(getRPMFromDistance(distance));
   }
 

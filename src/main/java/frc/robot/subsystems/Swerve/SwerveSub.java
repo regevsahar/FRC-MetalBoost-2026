@@ -78,8 +78,8 @@ public class SwerveSub extends MBSubsystem {
         new PPHolonomicDriveController( // PPHolonomicController is the built in path following
             // controller for
             // holonomic drive trains
-            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(8.0, 0.0, 0.0) // Rotation PID constants/ Rotation PID constants
+            new PIDConstants(4.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants/ Rotation PID constants
             ),
         config, // The robot configuration
         () -> {
@@ -166,7 +166,7 @@ public class SwerveSub extends MBSubsystem {
     // Set the desired state for each swerve module
     for (SwerveModule mod : mSwerveMods) {
       mod.setDesiredState(
-          swerveModuleStates[mod.moduleNumber], false); // Assuming false for isOpenLoop
+          swerveModuleStates[mod.moduleNumber], true); // Assuming false for isOpenLoop
     }
   }
 

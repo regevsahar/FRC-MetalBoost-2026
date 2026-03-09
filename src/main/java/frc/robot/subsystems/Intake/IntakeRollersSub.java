@@ -8,6 +8,8 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
 
@@ -23,7 +25,7 @@ public class IntakeRollersSub extends MBSubsystem {
 
   private void configureTalonFX() {
     TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
-
+    talonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     StatusCode statusInsert = motor.getConfigurator().apply(talonFXConfig);
     if (statusInsert != StatusCode.OK) {
       System.out.println("Failed to configure TalonFX: " + statusInsert);
