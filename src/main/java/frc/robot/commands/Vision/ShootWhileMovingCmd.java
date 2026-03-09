@@ -39,7 +39,7 @@ public class ShootWhileMovingCmd extends Command {
       AlignToPoseSub alignSubsystem,
       DoubleSupplier translationXSupplier,
       DoubleSupplier translationYSupplier,
-      FlyWheelSub flywheel , 
+      FlyWheelSub flywheel,
       HoodSUB hood) {
 
     this.swerve = swerve;
@@ -56,8 +56,8 @@ public class ShootWhileMovingCmd extends Command {
   }
 
   @Override
-  public void initialize() {  
-    alignSubsystem.resetToCurrent(swerve.getPose()); 
+  public void initialize() {
+    alignSubsystem.resetToCurrent(swerve.getPose());
   }
 
   @Override
@@ -114,7 +114,6 @@ public class ShootWhileMovingCmd extends Command {
 
     hood.setTargetDistance();
     flywheel.setTargetDistance();
-    
 
     Logger.recordOutput("ShootWhileMoving/NowDistToHub_m", distanceToHubNow);
     Logger.recordOutput("ShootWhileMoving/FlightTime_s", flightTime);
@@ -143,6 +142,6 @@ public class ShootWhileMovingCmd extends Command {
 
   @Override
   public boolean isFinished() {
-      return false;
+    return false;
   }
 }

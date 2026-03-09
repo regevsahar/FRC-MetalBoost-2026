@@ -9,11 +9,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
 
-public class RollersSub extends MBSubsystem {
+public class ConveyanceRollerSub extends MBSubsystem {
 
   private TalonFX motor;
 
-  public RollersSub() {
+  public ConveyanceRollerSub() {
     super("Conveyance rollers");
     motor =
         new TalonFX(ConveyanceConstants.ROLLERS_PORT_ROLLERS, new CANBus(Constants.CanivoreName));

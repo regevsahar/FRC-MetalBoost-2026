@@ -7,11 +7,11 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
 
-public class ShooterCmd extends Command {
+public class ShooterSpeedToHubCmd extends Command {
   /** Creates a new Shoot. */
   private final FlyWheelSub shooter;
 
-  public ShooterCmd(FlyWheelSub shooter) {
+  public ShooterSpeedToHubCmd(FlyWheelSub shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
     // Use addRequirements() here to declare subsystem dependencies.

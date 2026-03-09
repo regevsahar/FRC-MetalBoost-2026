@@ -2,13 +2,13 @@ package frc.robot.commands.ConveyanceCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Conveyance.ConveyanceConstants;
-import frc.robot.subsystems.Conveyance.RollersSub;
+import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
 
 public class RollersBackwardsCmd extends Command {
 
-  private final RollersSub rollers;
+  private final ConveyanceRollerSub rollers;
 
-  public RollersBackwardsCmd(RollersSub rollers) {
+  public RollersBackwardsCmd(ConveyanceRollerSub rollers) {
     this.rollers = rollers;
     addRequirements(rollers);
   }

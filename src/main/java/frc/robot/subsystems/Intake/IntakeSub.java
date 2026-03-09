@@ -41,8 +41,6 @@ public class IntakeSub extends MBSubsystem {
     motionMagicConfigs.MotionMagicCruiseVelocity = IntakeConstants.kCruiseVelocity.get();
     motionMagicConfigs.MotionMagicJerk = IntakeConstants.kJerk.get();
 
-
-
     talonFXConfig.Feedback.SensorToMechanismRatio = IntakeConstants.kGearRatio;
 
     talonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -108,8 +106,7 @@ public class IntakeSub extends MBSubsystem {
         || IntakeConstants.kA.hasChanged()
         || IntakeConstants.kAcceleration.hasChanged()
         || IntakeConstants.kCruiseVelocity.hasChanged()
-        || IntakeConstants.kJerk.hasChanged()
-        ) {
+        || IntakeConstants.kJerk.hasChanged()) {
       configureTalonFX();
     }
   }

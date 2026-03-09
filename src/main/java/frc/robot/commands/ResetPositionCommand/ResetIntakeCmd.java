@@ -16,7 +16,7 @@ public class ResetIntakeCmd extends Command {
 
   @Override
   public void execute() {
-    intake.SetMotor( -3); // :TODO: "tune" this
+    intake.SetMotor(-3); // :TODO: "tune" this
   }
 
   @Override

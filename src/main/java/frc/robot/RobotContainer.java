@@ -12,19 +12,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.HeightSpeedReduction;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
-import frc.lib.util.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
 import frc.robot.commands.Automations.ShooterAutomationCommand;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
-import frc.robot.commands.ShooterCommands.HoodCmd;
-import frc.robot.commands.ShooterCommands.ShooterCmd;
+import frc.robot.commands.ShooterCommands.AlignHoodToHubCmd;
+import frc.robot.commands.ShooterCommands.ShooterSpeedToHubCmd;
 import frc.robot.commands.Swerve.TeleopSwerveCmd;
-import frc.robot.commands.Vision.AlignToPoseCmd;
 import frc.robot.commands.Vision.ShootWhileMovingCmd;
+import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
 import frc.robot.subsystems.Conveyance.ConveyanceSub;
-import frc.robot.subsystems.Conveyance.RollersSub;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
 import frc.robot.subsystems.Intake.IntakeSub;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelIO;
@@ -65,7 +63,7 @@ public class RobotContainer {
   private final IntakeSub intake = new IntakeSub();
   private final IntakeRollersSub intakeRollers = new IntakeRollersSub();
   private final ConveyanceSub conveyanceWheels = new ConveyanceSub();
-  private final RollersSub rollers = new RollersSub();
+  private final ConveyanceRollerSub rollers = new ConveyanceRollerSub();
   public final SwerveSub s_Swerve = new SwerveSub(poseEstimator);
 
   /* Driver Buttons */
@@ -77,7 +75,7 @@ public class RobotContainer {
       new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   // private final JoystickButton followPath = new JoystickButton(driver,
   // XboxController.Button.kB.value);
-    private final JoystickButton AimAtPose =
+  private final JoystickButton AimAtPose =
       new JoystickButton(driver, XboxController.Button.kX.value);
   private final JoystickButton GoToNearestBranch =
       new JoystickButton(driver, XboxController.Button.kB.value);
@@ -93,9 +91,9 @@ public class RobotContainer {
       new Trigger(() -> operator.getRawAxis(shootAutomation) > 0.3);
   private final JoystickButton resetIntakePosition =
       new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton openIntake =
+  private final JoystickButton openIntake =
       new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-      private final JoystickButton closeIntake =
+  private final JoystickButton closeIntake =
       new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
 
   public final GridMap fieldGrid;
@@ -105,11 +103,11 @@ public class RobotContainer {
     FlyWheelIO shooterIO =
         RobotBase.isSimulation() ? new FlyWheelSimulation() : new FlyWheelIOTalonFX();
 
-    shooter = new FlyWheelSub(shooterIO,poseEstimator);
+    shooter = new FlyWheelSub(shooterIO, poseEstimator);
 
     HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
 
-    hood = new HoodSUB(hoodIO,poseEstimator);
+    hood = new HoodSUB(hoodIO, poseEstimator);
     fieldGrid = FieldGridLoader.load("FieldGrid.json");
 
     s_Swerve.setDefaultCommand(
@@ -156,20 +154,27 @@ public class RobotContainer {
                     s_Swerve.getModulePositions(),
                     new Pose2d(0, 0, new Rotation2d()))));
 
-    shoot.whileTrue(new ShooterCmd(shooter));
-    hoodArc.whileTrue(new HoodCmd(hood));
+    shoot.whileTrue(new ShooterSpeedToHubCmd(shooter));
+    hoodArc.whileTrue(new AlignHoodToHubCmd(hood));
     resetIntakePosition.onTrue(new ResetIntakeCmd(intake));
     openIntake.whileTrue(new OpenIntakeCmd(intake));
     closeIntake.whileTrue(new CloseIntakeCmd(intake));
     shootAutomationTrigger.whileTrue(
         new ShooterAutomationCommand(shooter, hood, conveyanceWheels, rollers));
 
-    AimAtPose.whileTrue(new ShootWhileMovingCmd(s_Swerve,poseEstimator, AlignToPoseSub, 
+    AimAtPose.whileTrue(
+        new ShootWhileMovingCmd(
+            s_Swerve,
+            poseEstimator,
+            AlignToPoseSub,
             () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),shooter,hood));
+            () -> -driver.getRawAxis(strafeAxis),
+            shooter,
+            hood));
     // GoToNearestBranch.onTrue(
-    //     PathPlannerUtil.GoToNearesPosition(
-    //         poseEstimator.getEstimatedPosition(), Constants.SwerveConstants.constraints));
+    // PathPlannerUtil.GoToNearesPosition(
+    // poseEstimator.getEstimatedPosition(),
+    // Constants.SwerveConstants.constraints));
   }
 
   public Command getAutonomousCommand() {
