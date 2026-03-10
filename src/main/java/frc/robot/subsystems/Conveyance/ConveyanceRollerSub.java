@@ -18,14 +18,13 @@ public class ConveyanceRollerSub extends MBSubsystem {
 
   public ConveyanceRollerSub() {
     super("Conveyance rollers");
-    motor =
-        new TalonFX(ConveyanceConstants.ROLLERS_PORT_ROLLERS, new CANBus(Constants.CanivoreName));
+    motor = new TalonFX(ConveyanceConstants.ROLLERS_PORT_ROLLERS, new CANBus(Constants.CanivoreName));
     configureTalonFX();
   }
 
   private void configureTalonFX() {
     TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
-    talonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    talonFXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     StatusCode statusInsert = motor.getConfigurator().apply(talonFXConfig);
     if (statusInsert != StatusCode.OK) {
       System.out.println("Failed to configure TalonFX: " + statusInsert);

@@ -20,6 +20,10 @@ import frc.robot.subsystems.Vision.PoseEstimator;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
+import frc.robot.subsystems.Conveyance.ConveyanceConstants;
+import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
+import frc.robot.subsystems.Conveyance.ConveyanceSub;
+
 public class ShootWhileMovingCmd extends Command {
   private final SwerveSub swerve;
   private final PoseEstimator poseEstimator;
@@ -29,6 +33,8 @@ public class ShootWhileMovingCmd extends Command {
   private final FlyWheelSub flywheel;
   private final HoodSUB hood;
   private final Translation2d target;
+  private final ConveyanceSub conveyance;
+  private final ConveyanceRollerSub rollers;
   // Optional: visualize future point on the field
   private final Field2d field = new Field2d();
 
@@ -40,7 +46,9 @@ public class ShootWhileMovingCmd extends Command {
       DoubleSupplier translationYSupplier,
       FlyWheelSub flywheel,
       HoodSUB hood,
-      Translation2d target) {
+      Translation2d target,
+      ConveyanceSub conveyanceWheels,
+      ConveyanceRollerSub rollers) {
 
     this.swerve = swerve;
     this.poseEstimator = poseEstimator;
@@ -50,6 +58,8 @@ public class ShootWhileMovingCmd extends Command {
     this.hood = hood;
     this.flywheel = flywheel;
     this.target = target;
+    this.conveyance = conveyanceWheels;
+    this.rollers = rollers;
 
     addRequirements(swerve, alignSubsystem);
 
@@ -75,26 +85,24 @@ public class ShootWhileMovingCmd extends Command {
     ChassisSpeeds robotRelativeSpeeds = swerve.getRobotRelativeSpeeds();
 
     // Safer conversion (avoids sign mistakes)
-    ChassisSpeeds fieldRelativeSpeeds =
-        ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeeds, currentPose.getRotation());
+    ChassisSpeeds fieldRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeSpeeds,
+        currentPose.getRotation());
 
     // Deadband to reduce noise
 
-    fieldRelativeSpeeds.vxMetersPerSecond =
-        ToleranceMath.applyDeadband(fieldRelativeSpeeds.vxMetersPerSecond, Constants.stickDeadband);
-    fieldRelativeSpeeds.vyMetersPerSecond =
-        ToleranceMath.applyDeadband(fieldRelativeSpeeds.vyMetersPerSecond, Constants.stickDeadband);
+    fieldRelativeSpeeds.vxMetersPerSecond = ToleranceMath.applyDeadband(fieldRelativeSpeeds.vxMetersPerSecond,
+        Constants.stickDeadband);
+    fieldRelativeSpeeds.vyMetersPerSecond = ToleranceMath.applyDeadband(fieldRelativeSpeeds.vyMetersPerSecond,
+        Constants.stickDeadband);
 
     // 4) Predict future position
-    Translation2d futurePos =
-        ShotPrediction.predictFuturePosition(currentPose, fieldRelativeSpeeds, flightTime);
+    Translation2d futurePos = ShotPrediction.predictFuturePosition(currentPose, fieldRelativeSpeeds, flightTime);
 
     // 5) Record future distance
     double futureDistanceToHub = futurePos.getDistance(this.target);
 
     // 6) Compute yaw setpoint (what angle you'd aim from futurePos to hub)
-    double yawSetpointRad =
-        Math.atan2(this.target.getY() - futurePos.getY(), this.target.getX() - futurePos.getX());
+    double yawSetpointRad = Math.atan2(this.target.getY() - futurePos.getY(), this.target.getX() - futurePos.getX());
     double yawSetpointDeg = Units.radiansToDegrees(yawSetpointRad);
 
     // 7) Use your align subsystem for rotation output if you want closed-loop
@@ -106,10 +114,12 @@ public class ShootWhileMovingCmd extends Command {
     double xSpeed = translationXSupplier.getAsDouble();
     double ySpeed = translationYSupplier.getAsDouble();
 
-    swerve.drive(new Translation2d(xSpeed, ySpeed), rotationOutput, true, true);
+    swerve.drive(new Translation2d(-xSpeed, -ySpeed), rotationOutput, true, true);
 
     hood.setTargetDistance(futureDistanceToHub);
     flywheel.setTargetDistance(futureDistanceToHub);
+    conveyance.setSpeed(ConveyanceConstants.kConveyanceSpeed);
+    rollers.setSpeed(ConveyanceConstants.kRollersBackwardsSpeed);
 
     Logger.recordOutput("ShootWhileMoving/NowDistToHub_m", distanceToHubNow);
     Logger.recordOutput("ShootWhileMoving/FlightTime_s", flightTime);

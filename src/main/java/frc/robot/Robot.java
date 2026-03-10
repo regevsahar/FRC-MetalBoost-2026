@@ -16,21 +16,23 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
+
 /**
- * The methods in this class are called automatically corresponding to each mode, as described in
- * the TimedRobot documentation. If you change the name of this class or the package after creating
+ * The methods in this class are called automatically corresponding to each
+ * mode, as described in
+ * the TimedRobot documentation. If you change the name of this class or the
+ * package after creating
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
-  private HoodSUB hood;
-  private IntakeSub intake;
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
 
   private final RobotContainer m_robotContainer;
 
   /**
-   * This function is run when the robot is first started up and should be used for any
+   * This function is run when the robot is first started up and should be used
+   * for any
    * initialization code.
    */
   public Robot() {
@@ -63,10 +65,13 @@ public class Robot extends LoggedRobot {
   }
 
   /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
+   * This function is called every 20 ms, no matter the mode. Use this for items
+   * like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and
    * SmartDashboard integrated updating.
    */
   @Override
@@ -91,17 +96,13 @@ public class Robot extends LoggedRobot {
     m_robotContainer.limelight2.setHeading(
         m_robotContainer.poseEstimator.getCorrectedHeading(currentGyro));
 
-    Optional<LimelightHelpers.PoseEstimate> llestimateMT2 =
-        m_robotContainer.limelight.getMegaTag2Pose();
-    Optional<LimelightHelpers.PoseEstimate> llestimateMT1 =
-        m_robotContainer.limelight.getMegaTag1Pose();
+    Optional<LimelightHelpers.PoseEstimate> llestimateMT2 = m_robotContainer.limelight.getMegaTag2Pose();
+    Optional<LimelightHelpers.PoseEstimate> llestimateMT1 = m_robotContainer.limelight.getMegaTag1Pose();
     Optional<Pose2d> llPoseMT2 = Optional.empty();
     Optional<Pose2d> llPoseMT1 = Optional.empty();
 
-    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT2 =
-        m_robotContainer.limelight2.getMegaTag2Pose();
-    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT1 =
-        m_robotContainer.limelight2.getMegaTag1Pose();
+    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT2 = m_robotContainer.limelight2.getMegaTag2Pose();
+    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT1 = m_robotContainer.limelight2.getMegaTag1Pose();
 
     Optional<Pose2d> ll2PoseMT2 = Optional.empty();
     Optional<Pose2d> ll2PoseMT1 = Optional.empty();
@@ -111,17 +112,15 @@ public class Robot extends LoggedRobot {
     if (llestimateMT2.isPresent() && llestimateMT1.isPresent()) {
       llPoseMT2 = Optional.of(llestimateMT2.get().pose);
       llPoseMT1 = Optional.of(llestimateMT1.get().pose);
-      gyroYawAtTimeStamp =
-          m_robotContainer.poseEstimator.getGyroYawAtTimeStamp(
-              llestimateMT2.get().timestampSeconds);
+      gyroYawAtTimeStamp = m_robotContainer.poseEstimator.getGyroYawAtTimeStamp(
+          llestimateMT2.get().timestampSeconds);
     }
 
     if (ll2estimateMT2.isPresent() && ll2estimateMT1.isPresent()) {
       ll2PoseMT2 = Optional.of(ll2estimateMT2.get().pose);
       ll2PoseMT1 = Optional.of(ll2estimateMT1.get().pose);
-      gyroYawAtTimeStamp =
-          m_robotContainer.poseEstimator.getGyroYawAtTimeStamp(
-              ll2estimateMT2.get().timestampSeconds);
+      gyroYawAtTimeStamp = m_robotContainer.poseEstimator.getGyroYawAtTimeStamp(
+          ll2estimateMT2.get().timestampSeconds);
     }
     try {
       boolean hasTarget = m_robotContainer.limelight.hasTarget();
@@ -171,7 +170,10 @@ public class Robot extends LoggedRobot {
     LedController.getInstance().defaultAnimation();
   }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -185,7 +187,8 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void teleopInit() {
@@ -197,12 +200,15 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    CommandScheduler.getInstance().schedule(new ResetSubsystemsAutomationCmd(hood, intake));
+    // CommandScheduler.getInstance().schedule(new
+    // ResetSubsystemsAutomationCmd(m_robotContainer.hood,
+    // m_robotContainer.intake));
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @Override
   public void testInit() {
@@ -212,13 +218,16 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+  }
 }
