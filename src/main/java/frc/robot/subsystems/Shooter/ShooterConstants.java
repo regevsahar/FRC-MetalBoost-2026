@@ -40,7 +40,7 @@ public class ShooterConstants {
     public static final double kMaxRPM = 5400;
     public static final double kMinRPM = 0;
     public static final double kDefaultRPM = 2500;
-    public static final double kRPMPolerance = 300;
+    public static final double kRPMPolerance = 200;
     public static final int kNumMotors = 2; // Number of Kraken X60 motors
     public static final double kGearRatio = 1.0;
     public static final double kMomentOfInertia = 0.01; // kg * m^2
@@ -57,9 +57,9 @@ public class ShooterConstants {
     public static final TunableNumber kShooterP = new TunableNumber("Shooter/Real/kP", 0.6947);
     public static final TunableNumber kShooterI = new TunableNumber("Shooter/Real/kI", 0.55);
     public static final TunableNumber kShooterD = new TunableNumber("Shooter/Real/kD", 0.000017);
-    public static final TunableNumber kShooterS = new TunableNumber("Shooter/Real/kS", 0.0);
-    public static final TunableNumber kShooterV = new TunableNumber("Shooter/Real/kV", 12.0 / kMaxRPM);
-    public static final TunableNumber kShooterA = new TunableNumber("Shooter/Real/kA", 0.0);
+    public static final TunableNumber kShooterS = new TunableNumber("Shooter/Real/kS", 0.24954);
+    public static final TunableNumber kShooterV = new TunableNumber("Shooter/Real/kV", 0.12244);
+    public static final TunableNumber kShooterA = new TunableNumber("Shooter/Real/kA", 0.003786);
     public static final double kMaxArc = 80;
     public static final double kMinArc = 38;
     public static final double kArcTolerance = 2;
