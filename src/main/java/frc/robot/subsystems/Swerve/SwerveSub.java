@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,38 +49,38 @@ public class SwerveSub extends MBSubsystem {
   // ---------------------------------------------------------------------------
   // SysId Routine — characterizes the drive motors (kS, kV, kA, kP)
   // ---------------------------------------------------------------------------
-  private final SysIdRoutine m_sysIdRoutine =
-      new SysIdRoutine(
-          // Default config: 1 V/s ramp rate, 7 V step, 10 s timeout
-          new SysIdRoutine.Config(),
-          new SysIdRoutine.Mechanism(
-              // Drive: send the same voltage to every module's drive motor
-              // while locking steering to 0° (straight ahead)
-              (voltage) -> {
-                for (SwerveModule mod : mSwerveMods) {
-                  // Lock steer to 0 rotations (straight forward)
-                  mod.setDesiredState(
-                      new SwerveModuleState(0, Rotation2d.fromDegrees(0)), true);
-                  mod.setDriveVoltage(voltage.in(Volts));
-                }
-              },
-              // Log: average position and velocity across all four modules
-              // The SysIdRoutine framework captures the applied voltage automatically.
-              (log) -> {
-                double avgPositionMeters = 0;
-                double avgVelocityMPS = 0;
-                for (SwerveModule mod : mSwerveMods) {
-                  avgPositionMeters += mod.getDrivePositionMeters();
-                  avgVelocityMPS += mod.getDriveVelocityMPS();
-                }
-                avgPositionMeters /= 4.0;
-                avgVelocityMPS /= 4.0;
+  private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(
+          Units.Volts.per(Units.Second).of(0.5), // ramp rate
+          Units.Volts.of(3.0), // step voltage
+          null, // default timeout
+          (state) -> SignalLogger.writeString("SysIdTestState", state.toString())),
+      new SysIdRoutine.Mechanism(
+          // Drive: send the same voltage to every module's drive motor
+          // while locking steering to 0° (straight ahead)
+          (voltage) -> {
+            for (SwerveModule mod : mSwerveMods) {
+              // Lock steer to 0 rotations (straight forward)
+              mod.setAngle(Rotation2d.fromDegrees(0));
+              mod.setDriveVoltage(voltage.in(Volts));
+            }
+          },
+          // Log: average position and velocity across all four modules
+          // The SysIdRoutine framework captures the applied voltage automatically.
+          (log) -> {
+            double avgPositionMeters = 0;
+            double avgVelocityMPS = 0;
+            for (SwerveModule mod : mSwerveMods) {
+              avgPositionMeters += mod.getDrivePositionMeters();
+              avgVelocityMPS += mod.getDriveVelocityMPS();
+            }
+            avgPositionMeters /= 4.0;
+            avgVelocityMPS /= 4.0;
 
-                log.motor("swerve-drive")
-                    .linearPosition(Meters.of(avgPositionMeters))
-                    .linearVelocity(MetersPerSecond.of(avgVelocityMPS));
-              },
-              this));
+            log.motor("swerve-drive")
+                .linearPosition(Meters.of(avgPositionMeters))
+                .linearVelocity(MetersPerSecond.of(avgVelocityMPS));
+          }, this));
 
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   public SwerveSub(PoseEstimator estimator) {
@@ -193,6 +195,7 @@ public class SwerveSub extends MBSubsystem {
 
   public void resetPose(Pose2d pose) {
     swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+    estimator.resetPose(getGyroYaw(), getModulePositions(), pose);
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
@@ -293,6 +296,7 @@ public class SwerveSub extends MBSubsystem {
 
   public void setPose(Pose2d pose) {
     swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+    estimator.resetPose(getGyroYaw(), getModulePositions(), pose);
   }
 
   public Rotation2d getHeading() {
@@ -300,15 +304,15 @@ public class SwerveSub extends MBSubsystem {
   }
 
   public void setHeading(Rotation2d heading) {
-    swerveOdometry.resetPosition(
-        getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
+    Pose2d newPose = new Pose2d(getPose().getTranslation(), heading);
+    swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), newPose);
+    estimator.resetPose(getGyroYaw(), getModulePositions(), newPose);
   }
 
   public void zeroHeading() {
-    swerveOdometry.resetPosition(
-        getGyroYaw(),
-        getModulePositions(),
-        new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    Pose2d newPose = new Pose2d(getPose().getTranslation(), new Rotation2d());
+    swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), newPose);
+    estimator.resetPose(getGyroYaw(), getModulePositions(), newPose);
   }
 
   public Rotation2d getGyroYaw() {
@@ -365,7 +369,7 @@ public class SwerveSub extends MBSubsystem {
 
   @Override
   public void subsystemPeriodic() {
-
+    this.estimator.updateSwerve(getGyroYaw(), getModulePositions());
     // ב-Subsystem הלוונטי או ב-RobotContainer
     var status = m_canBus.getStatus();
     SmartDashboard.putNumber("CANivore Load", status.BusUtilization * 100);

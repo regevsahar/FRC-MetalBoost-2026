@@ -1,12 +1,15 @@
 package frc.robot.subsystems.Swerve.SwerveModule;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -24,11 +27,10 @@ public class SwerveModule {
   private TalonFX mDriveMotor;
   private CANcoder angleEncoder;
 
-  private final SimpleMotorFeedforward driveFeedForward =
-      new SimpleMotorFeedforward(
-          Constants.SwerveConstants.driveKS,
-          Constants.SwerveConstants.driveKV,
-          Constants.SwerveConstants.driveKA);
+  private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(
+      Constants.SwerveConstants.driveKS,
+      Constants.SwerveConstants.driveKV,
+      Constants.SwerveConstants.driveKA);
 
   /* drive motor control requests */
   private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
@@ -53,7 +55,10 @@ public class SwerveModule {
 
     /* Drive Motor Config */
     mDriveMotor = new TalonFX(moduleConstants.driveMotorID, new CANBus(Constants.CanivoreName));
-    mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
+    TalonFXConfiguration driveConfig = Robot.ctreConfigs.swerveDriveFXConfig;
+
+    mDriveMotor.getConfigurator().apply(driveConfig);
+
     mDriveMotor.getConfigurator().setPosition(0.0);
   }
 
@@ -68,13 +73,11 @@ public class SwerveModule {
 
   private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
     if (isOpenLoop) {
-      driveDutyCycle.Output =
-          desiredState.speedMetersPerSecond / Constants.SwerveConstants.maxSpeed;
+      driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.SwerveConstants.maxSpeed;
       mDriveMotor.setControl(driveDutyCycle);
     } else {
-      driveVelocity.Velocity =
-          Conversions.MPSToRPS(
-              desiredState.speedMetersPerSecond, Constants.SwerveConstants.wheelCircumference);
+      driveVelocity.Velocity = Conversions.MPSToRPS(
+          desiredState.speedMetersPerSecond, Constants.SwerveConstants.wheelCircumference);
       driveVelocity.FeedForward = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
       mDriveMotor.setControl(driveVelocity);
     }
@@ -112,6 +115,13 @@ public class SwerveModule {
   // -------------------------------------------------------------------------
   // SysId helpers
   // -------------------------------------------------------------------------
+
+  /**
+   * Forces a steering angle without optimization. Used exclusively during SysId.
+   */
+  public void setAngle(Rotation2d angle) {
+    mAngleMotor.setControl(anglePosition.withPosition(angle.getRotations()));
+  }
 
   /**
    * Commands a raw voltage to the drive motor. Used exclusively during SysId

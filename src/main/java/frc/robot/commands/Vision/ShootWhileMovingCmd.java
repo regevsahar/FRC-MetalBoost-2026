@@ -144,6 +144,8 @@ public class ShootWhileMovingCmd extends Command {
     flywheel.stop();
     hood.stop();
     swerve.drive(new Translation2d(0, 0), 0, true, false);
+    conveyance.stop();
+    rollers.stop();
     LedController.getInstance().stopFlashing();
   }
 

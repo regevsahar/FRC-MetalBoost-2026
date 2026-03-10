@@ -20,15 +20,15 @@ import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
 public class PoseEstimator extends MBSubsystem {
   public SwerveDrivePoseEstimator sEstimator;
-  public TimeInterpolatableBuffer<Double> turretYawBuffer =
-      TimeInterpolatableBuffer.createDoubleBuffer(1.0);
-  public TimeInterpolatableBuffer<Rotation2d> gyroYawBuffer =
-      TimeInterpolatableBuffer.createBuffer(1.5);
+  public TimeInterpolatableBuffer<Double> turretYawBuffer = TimeInterpolatableBuffer.createDoubleBuffer(1.0);
+  public TimeInterpolatableBuffer<Rotation2d> gyroYawBuffer = TimeInterpolatableBuffer.createBuffer(1.5);
   public Pose2d visionPose = new Pose2d();
   Field2d field = new Field2d();
   // buffer לזווית של הגירו
@@ -39,24 +39,20 @@ public class PoseEstimator extends MBSubsystem {
 
   public PoseEstimator() {
     super("PoseEstimator");
-    sEstimator =
-        new SwerveDrivePoseEstimator(
-            Constants.SwerveConstants.swerveKinematics,
-            new Rotation2d(),
-            new SwerveModulePosition[] {
-              new SwerveModulePosition(),
-              new SwerveModulePosition(),
-              new SwerveModulePosition(),
-              new SwerveModulePosition()
-            },
-            new Pose2d(),
-            VisionConstants.PoseEstimator.stateStdDevs,
-            VisionConstants.PoseEstimator.visionStdDevs);
-    var alliance = DriverStation.getAlliance();
+    sEstimator = new SwerveDrivePoseEstimator(
+        Constants.SwerveConstants.swerveKinematics,
+        new Rotation2d(),
+        new SwerveModulePosition[] {
+            new SwerveModulePosition(),
+            new SwerveModulePosition(),
+            new SwerveModulePosition(),
+            new SwerveModulePosition()
+        },
+        new Pose2d(),
+        VisionConstants.PoseEstimator.stateStdDevs,
+        VisionConstants.PoseEstimator.visionStdDevs);
     SmartDashboard.putData("FieldPoseEstimator", field);
-    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      target = FieldPoses.HUB_CENTER_RED;
-    }
+    target = FieldPoses.getHubPosByAliiance();
   }
 
   public void updateHeadingOffset(Rotation2d gyro, Rotation2d vision) {
@@ -71,7 +67,8 @@ public class PoseEstimator extends MBSubsystem {
   }
 
   public Rotation2d getCorrectedHeading(Rotation2d gyro) {
-    if (nOffsets == 0) return gyro;
+    if (nOffsets == 0)
+      return gyro;
     return new Rotation2d(Math.atan2(offsetY, offsetX)).plus(gyro);
   }
 
@@ -84,7 +81,10 @@ public class PoseEstimator extends MBSubsystem {
     return gyroYawBuffer.getSample(0).isPresent();
   }
 
-  /** Update estimator with Swerve States and Gyro Yaw data. Needs to be updated every loop. */
+  /**
+   * Update estimator with Swerve States and Gyro Yaw data. Needs to be updated
+   * every loop.
+   */
   // public void updateSwerve(Rotation2d gyroAngle, SwerveModulePosition[]
   // modulePositions){
   // sEstimator.update(gyroAngle, modulePositions);
@@ -96,18 +96,23 @@ public class PoseEstimator extends MBSubsystem {
     gyroYawBuffer.addSample(Timer.getFPGATimestamp(), gyroAngle);
   }
 
+  public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
+    sEstimator.resetPosition(getCorrectedHeading(gyroAngle), modulePositions, newPose);
+  }
+
   /**
-   * Update estimator with vision data. Should only be updated when target is visible.
+   * Update estimator with vision data. Should only be updated when target is
+   * visible.
    *
    * @param LLlatency seconds
    */
   // public void updateVision(Pose2d LLpose, double LLlatency){
-  //     double timeStamp = Timer.getFPGATimestamp() - LLlatency;
-  //     Rotation2d gyro = new Rotation2d(gyroYawBuffer.getSample(timeStamp).get());
-  //     sEstimator.addVisionMeasurement(
-  //         new Pose2d(LLpose.getX(), LLpose.getY(), gyro),
-  //         timeStamp
-  //     );
+  // double timeStamp = Timer.getFPGATimestamp() - LLlatency;
+  // Rotation2d gyro = new Rotation2d(gyroYawBuffer.getSample(timeStamp).get());
+  // sEstimator.addVisionMeasurement(
+  // new Pose2d(LLpose.getX(), LLpose.getY(), gyro),
+  // timeStamp
+  // );
   // }
   public Optional<Rotation2d> getGyroYawAtTimeStamp(double timestamp) {
     return gyroYawBuffer.getSample(timestamp);
@@ -116,16 +121,13 @@ public class PoseEstimator extends MBSubsystem {
   public void updateVision(
       LimelightHelpers.PoseEstimate estimate, Rotation2d currentGyro, double distanceFromTag) {
     double timestamp = estimate.timestampSeconds;
-    double translationSTDev =
-        Math.max(
-            Math.pow(distanceFromTag, 2) * VisionConstants.PoseEstimator.stdDevFactorTranslation,
-            VisionConstants.PoseEstimator.minimumStdDev);
-    double rotationSTDev =
-        Math.max(
-            Math.pow(distanceFromTag, 2) * VisionConstants.PoseEstimator.stdDevFactorRotation,
-            VisionConstants.PoseEstimator.minimumStdDev);
-    Matrix<N3, N1> visionStdDevs =
-        VecBuilder.fill(translationSTDev, translationSTDev, rotationSTDev);
+    double translationSTDev = Math.max(
+        Math.pow(distanceFromTag, 2) * VisionConstants.PoseEstimator.stdDevFactorTranslation,
+        VisionConstants.PoseEstimator.minimumStdDev);
+    double rotationSTDev = Math.max(
+        Math.pow(distanceFromTag, 2) * VisionConstants.PoseEstimator.stdDevFactorRotation,
+        VisionConstants.PoseEstimator.minimumStdDev);
+    Matrix<N3, N1> visionStdDevs = VecBuilder.fill(translationSTDev, translationSTDev, rotationSTDev);
     sEstimator.addVisionMeasurement(estimate.pose, timestamp, visionStdDevs);
   }
 
@@ -135,6 +137,12 @@ public class PoseEstimator extends MBSubsystem {
 
   public Pose2d getEstimatedPosition() {
     return sEstimator.getEstimatedPosition();
+  }
+
+  private final List<LimelightSub> limelights = new ArrayList<>();
+
+  public void addLimelight(LimelightSub limelight) {
+    limelights.add(limelight);
   }
 
   @Override
@@ -149,6 +157,29 @@ public class PoseEstimator extends MBSubsystem {
     Logger.recordOutput("Estimator/Pose2d/robotY", getEstimatedPosition().getY());
     Logger.recordOutput(
         "Estimator/Pose2d/robotHeading", getEstimatedPosition().getRotation().getRadians());
+
+    Optional<Rotation2d> currentGyroOpt = gyroYawBuffer.getSample(Timer.getFPGATimestamp());
+    if (currentGyroOpt.isPresent()) {
+      Rotation2d currentGyro = currentGyroOpt.get();
+      Rotation2d correctedHeading = getCorrectedHeading(currentGyro);
+
+      for (LimelightSub limelight : limelights) {
+        limelight.setHeading(correctedHeading);
+
+        Optional<LimelightHelpers.PoseEstimate> mt1 = limelight.getMegaTag1Pose();
+        Optional<LimelightHelpers.PoseEstimate> mt2 = limelight.getMegaTag2Pose();
+
+        if (mt1.isPresent() && mt2.isPresent()) {
+          Optional<Rotation2d> gyroYawAtTimeStamp = getGyroYawAtTimeStamp(mt2.get().timestampSeconds);
+          if (limelight.hasTarget() && gyroYawAtTimeStamp.isPresent()) {
+            double distanceFromTag = limelight.getDistanceFromTarget();
+
+            updateHeadingOffset(gyroYawAtTimeStamp.get(), mt1.get().pose.getRotation());
+            updateVision(mt2.get(), gyroYawAtTimeStamp.get(), distanceFromTag);
+          }
+        }
+      }
+    }
 
     field.setRobotPose(getEstimatedPosition());
   }

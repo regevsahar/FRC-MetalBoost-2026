@@ -86,13 +86,16 @@ public class RobotContainer {
         public final SwerveSub s_Swerve = new SwerveSub(poseEstimator);
 
         /* Driver Buttons */
-        private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-        private final JoystickButton lowerSwerveSpeed = new JoystickButton(driver,
-                        XboxController.Button.kLeftBumper.value);
-        private final JoystickButton higherSwerveSpeed = new JoystickButton(driver,
-                        XboxController.Button.kRightBumper.value);
-        private final JoystickButton followPath = new JoystickButton(driver, XboxController.Button.kB.value);
-        private final JoystickButton resetPoseEstimator = new JoystickButton(driver, XboxController.Button.kA.value);
+        // private final JoystickButton zeroGyro = new JoystickButton(driver,
+        // XboxController.Button.kY.value);
+        // private final JoystickButton lowerSwerveSpeed = new JoystickButton(driver,
+        // XboxController.Button.kLeftBumper.value);
+        // private final JoystickButton higherSwerveSpeed = new JoystickButton(driver,
+        // XboxController.Button.kRightBumper.value);
+        // private final JoystickButton followPath = new JoystickButton(driver,
+        // XboxController.Button.kB.value);
+        // private final JoystickButton resetPoseEstimator = new JoystickButton(driver,
+        // XboxController.Button.kA.value);
 
         /* SysId Characterization Buttons (run in Test mode only) */
         private final JoystickButton sysIdQuasFwd = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -123,6 +126,9 @@ public class RobotContainer {
 
                 fieldGrid = FieldGridLoader.load("FieldGrid.json");
 
+                poseEstimator.addLimelight(limelight);
+                poseEstimator.addLimelight(limelight2);
+
                 s_Swerve.setDefaultCommand(
                                 new TeleopSwerveCmd(
                                                 s_Swerve,
@@ -134,24 +140,6 @@ public class RobotContainer {
                 hood.setDefaultCommand(
                                 new ManualHoodCmd(hood, () -> operator.getRawAxis(XboxController.Axis.kLeftY.value)));
 
-                followPath.toggleOnTrue(
-                                new DeferredCommand(
-                                                () -> PathPlannerUtil.createPathDuringRuntime(
-                                                                poseEstimator.getEstimatedPosition(),
-                                                                new Pose2d(2.85, 4.33, Rotation2d.fromDegrees(0)),
-                                                                new PathConstraints(0.5, 0.5, 0.5, 0.5),
-                                                                true),
-                                                Set.of(s_Swerve)));
-
-                // try {
-                // followPath.toggleOnTrue(
-                // PathFollowingCommandsBuilder.followPath(
-                // PathPlannerPath.fromPathFile("line")
-                // )
-                // );
-                // } catch (Exception e) {
-                // // TODO: handle exception
-                // }
                 // Configure the button bindingsPP
                 configureButtonBindings();
                 registerPathPlannerCommands();
@@ -160,31 +148,31 @@ public class RobotContainer {
         private void configureButtonBindings() {
 
                 /* Driver Buttons */
-                zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-                lowerSwerveSpeed.whileTrue(
-                                new TeleopSwerveCmd(
-                                                s_Swerve,
-                                                () -> driver.getRawAxis(translationAxis),
-                                                () -> driver.getRawAxis(strafeAxis),
-                                                () -> -driver.getRawAxis(rotationAxis),
-                                                () -> true,
-                                                () -> 0.4));
+                // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+                // lowerSwerveSpeed.whileTrue(
+                // new TeleopSwerveCmd(
+                // s_Swerve,
+                // () -> driver.getRawAxis(translationAxis),
+                // () -> driver.getRawAxis(strafeAxis),
+                // () -> -driver.getRawAxis(rotationAxis),
+                // () -> true,
+                // () -> 0.4));
 
-                higherSwerveSpeed.whileTrue(
-                                new TeleopSwerveCmd(
-                                                s_Swerve,
-                                                () -> driver.getRawAxis(translationAxis),
-                                                () -> driver.getRawAxis(strafeAxis),
-                                                () -> -driver.getRawAxis(rotationAxis),
-                                                () -> true,
-                                                () -> 0.85));
+                // higherSwerveSpeed.whileTrue(
+                // new TeleopSwerveCmd(
+                // s_Swerve,
+                // () -> driver.getRawAxis(translationAxis),
+                // () -> driver.getRawAxis(strafeAxis),
+                // () -> -driver.getRawAxis(rotationAxis),
+                // () -> true,
+                // () -> 0.85));
 
-                resetPoseEstimator.onTrue(
-                                new InstantCommand(
-                                                () -> poseEstimator.sEstimator.resetPosition(
-                                                                s_Swerve.getGyroYaw(),
-                                                                s_Swerve.getModulePositions(),
-                                                                new Pose2d(0, 0, new Rotation2d()))));
+                // resetPoseEstimator.onTrue(
+                // new InstantCommand(
+                // () -> poseEstimator.sEstimator.resetPosition(
+                // s_Swerve.getGyroYaw(),
+                // s_Swerve.getModulePositions(),
+                // new Pose2d(0, 0, new Rotation2d()))));
 
                 // -----------------------------------------------------------------------
                 // SysId — hold each button while enabled in TEST mode on the Driver Station
@@ -226,6 +214,24 @@ public class RobotContainer {
                                                 conveyanceWheels,
                                                 rollers,
                                                 FieldPoses.getHubPosByAliiance())); // TODO: change to real target
+                // followPath.toggleOnTrue(
+                // new DeferredCommand(
+                // () -> PathPlannerUtil.createPathDuringRuntime(
+                // poseEstimator.getEstimatedPosition(),
+                // new Pose2d(2.85, 4.33, Rotation2d.fromDegrees(0)),
+                // new PathConstraints(0.5, 0.5, 0.5, 0.5),
+                // true),
+                // Set.of(s_Swerve)));
+
+                // try {
+                // followPath.toggleOnTrue(
+                // PathFollowingCommandsBuilder.followPath(
+                // PathPlannerPath.fromPathFile("line")
+                // )
+                // );
+                // } catch (Exception e) {
+                // // TODO: handle exception
+                // }
         }
 
         public Command getAutonomousCommand() {

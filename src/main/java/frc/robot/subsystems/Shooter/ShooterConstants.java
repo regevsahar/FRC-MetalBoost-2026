@@ -10,20 +10,16 @@ public class ShooterConstants {
     public static final InterpolatingDoubleTreeMap DISTANCE_TO_RPM_MAP = new InterpolatingDoubleTreeMap();
 
     static {
-        // Angle->RPM
-        ANGLE_TO_RPM_MAP.put(38.0, 2800.0);
-        ANGLE_TO_RPM_MAP.put(60.0, 3200.0);
-        ANGLE_TO_RPM_MAP.put(70.0, 3500.0);
-        ANGLE_TO_RPM_MAP.put(82.0, 3400.0);
-
         // Distance->Angle
-        DISTANCE_TO_RPM_MAP.put(1.5, 30.0);
-        DISTANCE_TO_RPM_MAP.put(1.5, 38.0);
-        DISTANCE_TO_RPM_MAP.put(2.0, 50.0);
-        DISTANCE_TO_RPM_MAP.put(2.5, 55.0);
-        DISTANCE_TO_RPM_MAP.put(3.0, 64.0);
-        DISTANCE_TO_RPM_MAP.put(3.5, 65.0);
-        DISTANCE_TO_RPM_MAP.put(4.0, 70.0);
+        DISTANCE_TO_ARC_MAP.put(1.5, 30.0);
+        DISTANCE_TO_ARC_MAP.put(1.5, 38.0);
+        DISTANCE_TO_ARC_MAP.put(2.0, 50.0);
+        DISTANCE_TO_ARC_MAP.put(2.5, 55.0);
+        DISTANCE_TO_ARC_MAP.put(3.0, 64.0);
+        DISTANCE_TO_ARC_MAP.put(3.5, 65.0);
+        DISTANCE_TO_ARC_MAP.put(4.0, 70.0);
+        DISTANCE_TO_ARC_MAP.put(4.5, 75.0);
+        DISTANCE_TO_ARC_MAP.put(5.0, 75.0);
 
         // Distance->RPM
 
@@ -34,6 +30,8 @@ public class ShooterConstants {
         DISTANCE_TO_RPM_MAP.put(3.0, 1545.0);
         DISTANCE_TO_RPM_MAP.put(3.5, 1605.0);
         DISTANCE_TO_RPM_MAP.put(4.0, 1650.0);
+        DISTANCE_TO_RPM_MAP.put(4.0, 1750.0);
+        DISTANCE_TO_RPM_MAP.put(4.0, 1850.0);
 
     }
 
@@ -55,13 +53,13 @@ public class ShooterConstants {
     public static final int MASTER_MOTOR_PORT = 4;
     public static final int SLAVE_MOTOR_PORT = 15;
     public static final TunableNumber kShooterP = new TunableNumber("Shooter/Real/kP", 0.6947);
-    public static final TunableNumber kShooterI = new TunableNumber("Shooter/Real/kI", 0.55);
+    public static final TunableNumber kShooterI = new TunableNumber("Shooter/Real/kI", 0.4);
     public static final TunableNumber kShooterD = new TunableNumber("Shooter/Real/kD", 0.000017);
     public static final TunableNumber kShooterS = new TunableNumber("Shooter/Real/kS", 0.24954);
     public static final TunableNumber kShooterV = new TunableNumber("Shooter/Real/kV", 0.12244);
     public static final TunableNumber kShooterA = new TunableNumber("Shooter/Real/kA", 0.003786);
     public static final double kMaxArc = 80;
-    public static final double kMinArc = 38;
+    public static final double kMinArc = 30;
     public static final double kArcTolerance = 2;
     public static final int HOOD_MOTOR_ID = 1;
     public static final int HOOD_CANCODER_ID = 51;
