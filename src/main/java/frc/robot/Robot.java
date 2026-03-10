@@ -91,17 +91,13 @@ public class Robot extends LoggedRobot {
     m_robotContainer.limelight2.setHeading(
         m_robotContainer.poseEstimator.getCorrectedHeading(currentGyro));
 
-    Optional<LimelightHelpers.PoseEstimate> llestimateMT2 =
-        m_robotContainer.limelight.getMegaTag2Pose();
-    Optional<LimelightHelpers.PoseEstimate> llestimateMT1 =
-        m_robotContainer.limelight.getMegaTag1Pose();
+    Optional<LimelightHelpers.PoseEstimate> llestimateMT2 = m_robotContainer.limelight.getMegaTag2Pose();
+    Optional<LimelightHelpers.PoseEstimate> llestimateMT1 = m_robotContainer.limelight.getMegaTag1Pose();
     Optional<Pose2d> llPoseMT2 = Optional.empty();
     Optional<Pose2d> llPoseMT1 = Optional.empty();
 
-    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT2 =
-        m_robotContainer.limelight2.getMegaTag2Pose();
-    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT1 =
-        m_robotContainer.limelight2.getMegaTag1Pose();
+    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT2 = m_robotContainer.limelight2.getMegaTag2Pose();
+    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT1 = m_robotContainer.limelight2.getMegaTag1Pose();
 
     Optional<Pose2d> ll2PoseMT2 = Optional.empty();
     Optional<Pose2d> ll2PoseMT1 = Optional.empty();
@@ -163,7 +159,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 200);
+    LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 200); //Throttle to reduce temps
   }
 
   @Override

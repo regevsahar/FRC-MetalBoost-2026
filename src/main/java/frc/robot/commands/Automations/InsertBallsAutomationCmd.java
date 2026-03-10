@@ -16,12 +16,5 @@ public class InsertBallsAutomationCmd extends ParallelCommandGroup {
         new OpenIntakeCmd(intakeMovement),
         new RollToInsertBallsCmd(rollers),
         new LedCommand(Mode.GRADIENT, Color.kYellow, Color.kLightYellow));
-        /* 
-        new FunctionalCommand(
-            () -> LedController.getInstance().startGradient(Color.kYellow, Color.kLightYellow),
-            () -> {},
-            (interrupted) -> LedController.getInstance().stopGradient(),
-            () -> false));
-        */
   }
 }

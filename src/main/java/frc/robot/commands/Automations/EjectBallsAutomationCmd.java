@@ -20,12 +20,5 @@ public class EjectBallsAutomationCmd extends ParallelCommandGroup {
         new RollersBackwardsCmd(rollers),
         new OpenIntakeCmd(intake),
         new LedCommand(Mode.GRADIENT, Color.kRed, Color.kYellow));
-        /* 
-        new FunctionalCommand(
-            () -> LedController.getInstance().startGradient(Color.kRed, Color.kYellow),
-            () -> {},
-            (interrupted) -> LedController.getInstance().stopGradient(),
-            () -> false));
-        */
   }
 }
