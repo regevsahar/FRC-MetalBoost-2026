@@ -14,6 +14,7 @@ import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.SwerveSub;
 import frc.robot.subsystems.Vision.AlignToPoseSub;
 import java.util.function.DoubleSupplier;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class ShooterAutomationCmd extends ParallelRaceGroup {
 
@@ -26,8 +27,8 @@ public class ShooterAutomationCmd extends ParallelRaceGroup {
     addCommands(
         new ShooterSpeedToHubCmd(flywheel, conveyanceWheels),
         new AlignHoodToHubCmd(hood),
-        new ConveyanceWheelsCmd(conveyanceWheels),
-        new RollersBackwardsCmd(rollers));
+        new WaitUntilCommand(() -> flywheel.isAtTarget())
+            .andThen(new ConveyanceWheelsCmd(conveyanceWheels), new RollersBackwardsCmd(rollers)));
   }
 
   public ShooterAutomationCmd(
@@ -44,9 +45,8 @@ public class ShooterAutomationCmd extends ParallelRaceGroup {
     addCommands(
         new ShooterSpeedToHubCmd(flywheel, conveyanceWheels),
         new AlignHoodToHubCmd(hood),
-        new ConveyanceWheelsCmd(conveyanceWheels),
-        new RollersBackwardsCmd(rollers),
-        new AlignToPoseCmd(
-            swerve, alignSubsystem, translationXSupplier, translationYSupplier, target));
+        new AlignToPoseCmd(swerve, alignSubsystem, translationXSupplier, translationYSupplier, target),
+        new WaitUntilCommand(() -> flywheel.isAtTarget() && hood.isAtTarget() && alignSubsystem.atSetpoint())
+            .andThen(new ConveyanceWheelsCmd(conveyanceWheels), new RollersBackwardsCmd(rollers)));
   }
 }
