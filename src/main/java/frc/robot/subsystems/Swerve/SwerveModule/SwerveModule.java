@@ -62,9 +62,16 @@ public class SwerveModule {
     mDriveMotor.getConfigurator().setPosition(0.0);
   }
 
+  private SwerveModuleState targetState = new SwerveModuleState();
+
+  public SwerveModuleState getTargetState() {
+    return targetState;
+  }
+
   public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
 
     desiredState.optimize(getState().angle);
+    this.targetState = desiredState;
 
     mAngleMotor.setControl(anglePosition.withPosition((desiredState.angle.getRotations())));
     // -(desiredState.angle.getRotations()) TODO check

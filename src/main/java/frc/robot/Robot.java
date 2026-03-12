@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -87,6 +88,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 200);
+    SignalLogger.stop();
   }
 
   @Override
@@ -138,6 +140,7 @@ public class Robot extends LoggedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    SignalLogger.start();
   }
 
   /** This function is called periodically during test mode. */

@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -86,8 +87,6 @@ public class RobotContainer {
         public final SwerveSub s_Swerve = new SwerveSub(poseEstimator);
 
         /* Driver Buttons */
-        // private final JoystickButton zeroGyro = new JoystickButton(driver,
-        // XboxController.Button.kY.value);
         // private final JoystickButton lowerSwerveSpeed = new JoystickButton(driver,
         // XboxController.Button.kLeftBumper.value);
         // private final JoystickButton higherSwerveSpeed = new JoystickButton(driver,
@@ -143,12 +142,12 @@ public class RobotContainer {
                 // Configure the button bindingsPP
                 configureButtonBindings();
                 registerPathPlannerCommands();
+                autoChooser = new AutoChooser(new PathPlannerAuto("TEST 1M"));
         }
 
         private void configureButtonBindings() {
 
                 /* Driver Buttons */
-                // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
                 // lowerSwerveSpeed.whileTrue(
                 // new TeleopSwerveCmd(
                 // s_Swerve,
