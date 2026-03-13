@@ -115,7 +115,13 @@ public class SwerveSub extends MBSubsystem {
             new PIDConstants(5.5, 0.0, 0.0),
             new PIDConstants(7.5, 0.0, 0.0)),
         config,
-        () -> false, // Do not flip the path
+        () -> {
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
         this);
 
     // m_poseEstimator =
