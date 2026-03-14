@@ -17,4 +17,8 @@ public interface HoodIO {
   default void setTargetArc(double arc) {}
 
   default void stop() {}
+
+  default void resetPosition() {}
+
+  default void setSpeed(double speed) {}
 }

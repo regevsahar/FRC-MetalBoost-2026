@@ -3,19 +3,19 @@ package frc.robot.subsystems.Shooter.FlyWheel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.MBSubsystem;
 import frc.robot.subsystems.Shooter.ShooterConstants;
-import frc.robot.util.TunableNumber;
+import frc.robot.subsystems.Vision.PoseEstimator;
 
 public class FlyWheelSub extends MBSubsystem {
 
   private final FlyWheelIO io;
   private final FlyWheelIO.FlyWheelIOInputs inputs = new FlyWheelIO.FlyWheelIOInputs();
   private double targetRPM = 0.0;
+  private PoseEstimator poseEstimator;
 
   // Tunables
-  private final TunableNumber testDistance = new TunableNumber("Shooter/Distance", 0.0);
-
-  public FlyWheelSub(FlyWheelIO io) {
+  public FlyWheelSub(FlyWheelIO io, PoseEstimator poseEstimator) {
     super("Shooter");
+    this.poseEstimator = poseEstimator;
     this.io = io;
   }
 
@@ -24,8 +24,13 @@ public class FlyWheelSub extends MBSubsystem {
     io.setTargetRPM(targetRPM);
   }
 
-  public void setTargetDistance() {
-    setTargetRPM(getRPMFromDistance(testDistance.get()));
+  public void setTargetDistanceFromHub() {
+    double distance = poseEstimator.getDistanceFromHub();
+    setTargetRPM(getRPMFromDistance(distance));
+  }
+
+  public void setTargetDistance(double distance) {
+    setTargetRPM(getRPMFromDistance(distance));
   }
 
   public double getRPMFromDistance(double distance) {

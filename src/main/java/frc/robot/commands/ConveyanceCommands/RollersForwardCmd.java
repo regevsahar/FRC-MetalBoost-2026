@@ -1,0 +1,33 @@
+package frc.robot.commands.ConveyanceCommands;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Conveyance.ConveyanceConstants;
+import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
+
+public class RollersForwardCmd extends Command {
+
+  private final ConveyanceRollerSub rollers;
+
+  public RollersForwardCmd(ConveyanceRollerSub rollers) {
+    this.rollers = rollers;
+    addRequirements(rollers);
+  }
+
+  @Override
+  public void initialize() {}
+
+  @Override
+  public void execute() {
+    rollers.setSpeed(ConveyanceConstants.kRollersForwardSpeed);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    rollers.stop();
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+}

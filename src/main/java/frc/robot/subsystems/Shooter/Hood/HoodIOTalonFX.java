@@ -1,16 +1,9 @@
 package frc.robot.subsystems.Shooter.Hood;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants;
@@ -19,50 +12,28 @@ import frc.robot.subsystems.Shooter.ShooterConstants;
 public class HoodIOTalonFX implements HoodIO {
 
   private final TalonFX hoodMotor;
-  private final CANcoder cancoder;
-  private final PositionVoltage positionControl = new PositionVoltage(0);
-  private final DutyCycleOut dutyCycleControl = new DutyCycleOut(0);
 
-  // Status Signals for optimization
-  private final StatusSignal<?> positionSignal;
-  private final StatusSignal<?> velocitySignal;
-  private final StatusSignal<?> motorVoltageSignal;
-  private final StatusSignal<?> supplyCurrentSignal;
-  private final StatusSignal<?> tempSignal;
+  private final DutyCycleOut dutyCycleControl = new DutyCycleOut(0);
+  private final PositionVoltage positionControl = new PositionVoltage(0);
 
   public HoodIOTalonFX() {
     hoodMotor = new TalonFX(ShooterConstants.HOOD_MOTOR_ID, new CANBus(Constants.CanivoreName));
-    cancoder = new CANcoder(ShooterConstants.HOOD_CANCODER_ID, new CANBus(Constants.CanivoreName));
 
-    configureCANCoder();
-
-    // Configure the motor
     configMotor();
+  }
 
-    // Initialize Signals
-    positionSignal = hoodMotor.getPosition();
-    velocitySignal = hoodMotor.getVelocity();
-    motorVoltageSignal = hoodMotor.getMotorVoltage();
-    supplyCurrentSignal = hoodMotor.getSupplyCurrent();
-    tempSignal = hoodMotor.getDeviceTemp();
+  private double degreesToRotations(double deg) {
+    return (deg - 30) / 44.8;
+  }
 
-    // Optimize bus utilization
-
-    BaseStatusSignal.setUpdateFrequencyForAll(
-        50.0, positionSignal, velocitySignal, motorVoltageSignal, supplyCurrentSignal, tempSignal);
-
-    // Disable or lower unused signals if necessary (optional, but
-    // setUpdateFrequencyForAll handles the main ones)
-    hoodMotor.optimizeBusUtilization();
-
-    // Set initial neutral mode
-    hoodMotor.setNeutralMode(NeutralModeValue.Brake);
+  private double rotationsToDegrees(double rot) {
+    return rot * 44.8 + 30;
   }
 
   private void configMotor() {
-    TalonFXConfiguration config = new TalonFXConfiguration();
 
-    // PID Configs
+    TalonFXConfiguration config = new TalonFXConfiguration();
+    hoodMotor.setNeutralMode(NeutralModeValue.Brake);
     config.Slot0.kP = ShooterConstants.kHoodP.get();
     config.Slot0.kI = ShooterConstants.kHoodI.get();
     config.Slot0.kD = ShooterConstants.kHoodD.get();
@@ -70,58 +41,31 @@ public class HoodIOTalonFX implements HoodIO {
     config.Slot0.kV = ShooterConstants.kHoodV.get();
     config.Slot0.kA = ShooterConstants.kHoodA.get();
 
-    // Current Limits: 20A continuous, 40A peak
+    // SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
 
-    CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
-    currentLimits.SupplyCurrentLimit = 40.0; // Peak
-    currentLimits.SupplyCurrentLimitEnable = true;
-    currentLimits.SupplyCurrentLowerLimit = 20.0; // Continuous
-    currentLimits.SupplyCurrentLowerTime = 0.1;
-    config.CurrentLimits = currentLimits;
+    // softLimits.ForwardSoftLimitEnable = true;
+    // softLimits.ReverseSoftLimitEnable = true;
 
-    // Soft Limits (Prevent mechanism damage)
-    SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
-    softLimits.ForwardSoftLimitEnable = true;
-    softLimits.ReverseSoftLimitEnable = true;
-    // Convert degrees to rotations
-    softLimits.ForwardSoftLimitThreshold =
-        ShooterConstants.kMaxArc * ShooterConstants.kHoodRotationsPerDegree;
-    softLimits.ReverseSoftLimitThreshold =
-        ShooterConstants.kMinArc * ShooterConstants.kHoodRotationsPerDegree;
-    config.SoftwareLimitSwitch = softLimits;
+    // softLimits.ForwardSoftLimitThreshold =
+    // degreesToRotations(ShooterConstants.kMaxArc);
 
-    // Retry configuration application
+    // softLimits.ReverseSoftLimitThreshold =
+    // degreesToRotations(ShooterConstants.kMinArc);
+
+    // config.SoftwareLimitSwitch = softLimits;
+
     for (int i = 0; i < 5; i++) {
       if (hoodMotor.getConfigurator().apply(config).isOK()) {
         return;
       }
     }
-    System.out.println("Hood TalonFX config failed after 5 attempts!");
-  }
-
-  private void configureCANCoder() {
-    CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
-    StatusCode status = cancoder.getConfigurator().apply(cancoderConfig);
-    if (status != StatusCode.OK) {
-      System.out.println("Failed to configure CANCoder: " + status);
-    }
   }
 
   @Override
   public void updateInputs(HoodIOInputs inputs) {
-    // Refresh signals
 
-    BaseStatusSignal.refreshAll(
-        positionSignal, velocitySignal, motorVoltageSignal, supplyCurrentSignal, tempSignal);
+    inputs.arc = rotationsToDegrees(hoodMotor.getPosition().getValueAsDouble());
 
-    // Populate inputs
-    inputs.arc = positionSignal.getValueAsDouble() / ShooterConstants.kHoodRotationsPerDegree;
-    inputs.velocity = velocitySignal.getValueAsDouble() / ShooterConstants.kHoodRotationsPerDegree;
-    inputs.appliedVoltage = motorVoltageSignal.getValueAsDouble();
-    inputs.supplyCurrent = supplyCurrentSignal.getValueAsDouble();
-    inputs.tempCelcius = tempSignal.getValueAsDouble();
-
-    // Check for tunable updates
     if (ShooterConstants.kHoodP.hasChanged()
         || ShooterConstants.kHoodI.hasChanged()
         || ShooterConstants.kHoodD.hasChanged()
@@ -130,27 +74,33 @@ public class HoodIOTalonFX implements HoodIO {
         || ShooterConstants.kHoodA.hasChanged()) {
       configMotor();
     }
+  }
 
-    // Convert from Rotations to Arc Degrees
-    inputs.arc =
-        cancoder.getAbsolutePosition().getValueAsDouble()
-            / ShooterConstants.kHoodRotationsPerDegree;
+  public double getCurrentArc() {
+    return rotationsToDegrees(hoodMotor.getPosition().getValueAsDouble());
   }
 
   @Override
-  public void setTargetArc(double arc) {
-    // Clamp target to soft limits for extra safety
-    double clampedArc = Math.max(ShooterConstants.kMinArc, Math.min(ShooterConstants.kMaxArc, arc));
+  public void setSpeed(double speed) {
+    hoodMotor.set(speed);
+  }
 
-    // Convert from Arc Degrees to Rotations
-    double rotations = clampedArc * ShooterConstants.kHoodRotationsPerDegree;
+  @Override
+  public void setTargetArc(double arcDegrees) {
+    hoodMotor.setControl(positionControl.withPosition(degreesToRotations(arcDegrees)));
+  }
 
-    // Check if within tolerance? PID handles it so just command it.
-    hoodMotor.setControl(positionControl.withPosition(rotations));
+  @Override
+  public void resetPosition() {
+    hoodMotor.setPosition(0);
+  }
+
+  public boolean isStalling() {
+    return hoodMotor.getStatorCurrent().getValueAsDouble() > ShooterConstants.kHoodStallThreshold;
   }
 
   @Override
   public void stop() {
-    hoodMotor.setControl(dutyCycleControl.withOutput(0));
+    hoodMotor.set(0);
   }
 }

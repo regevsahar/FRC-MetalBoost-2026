@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import frc.lib.util.Field;
+import frc.lib.util.FieldUtils.FieldPoses;
 
 public class FieldMath {
 
@@ -51,11 +51,11 @@ public class FieldMath {
   }
 
   public static double mirrorX(double x) {
-    return Field.LENGTH_METERS - x;
+    return FieldPoses.LENGTH_METERS - x;
   }
 
   public static double mirrorY(double y) {
-    return Field.WIDTH_METERS - y;
+    return FieldPoses.WIDTH_METERS - y;
   }
 
   public static Pose2d mirror(
