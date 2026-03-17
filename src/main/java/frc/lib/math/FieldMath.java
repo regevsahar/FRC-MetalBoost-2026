@@ -42,10 +42,8 @@ public class FieldMath {
       AngleTransform rollTransform,
       AngleTransform pitchTransform,
       AngleTransform yawTransform) {
-    double roll =
-        transformAngle(Rotation2d.fromRadians(rotation.getX()), rollTransform).getRadians();
-    double pitch =
-        transformAngle(Rotation2d.fromRadians(rotation.getY()), pitchTransform).getRadians();
+    double roll = transformAngle(Rotation2d.fromRadians(rotation.getX()), rollTransform).getRadians();
+    double pitch = transformAngle(Rotation2d.fromRadians(rotation.getY()), pitchTransform).getRadians();
     double yaw = transformAngle(Rotation2d.fromRadians(rotation.getZ()), yawTransform).getRadians();
     return new Rotation3d(roll, pitch, yaw);
   }
@@ -84,10 +82,9 @@ public class FieldMath {
 
   public static Pose2d getApproachPoseToObject(
       Translation2d objectTranslation, Pose2d robotPose, double distance) {
-    Rotation2d targetAngle =
-        robotPose
-            .getRotation()
-            .plus(FieldMath.getRelativeTranslation(robotPose, objectTranslation).getAngle());
+    Rotation2d targetAngle = robotPose
+        .getRotation()
+        .plus(FieldMath.getRelativeTranslation(robotPose, objectTranslation).getAngle());
     return new Pose2d(
         objectTranslation.minus(new Translation2d(distance, targetAngle)), targetAngle);
   }

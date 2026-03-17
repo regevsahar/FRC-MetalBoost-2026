@@ -22,13 +22,11 @@ import frc.robot.commands.Automations.InsertBallsAutomationCmd;
 import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 import frc.robot.commands.Automations.ShooterAutomationCmd;
 import frc.robot.commands.ConveyanceCommands.ConveyanceWheelsCmd;
-import frc.robot.commands.ConveyanceCommands.RollersBackwardsCmd;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
 import frc.robot.commands.ShooterCommands.AlignHoodToConstValue;
 import frc.robot.commands.ShooterCommands.ManualHoodCmd;
 import frc.robot.commands.ShooterCommands.ShootConstantValueCmd;
-import frc.robot.commands.ShooterCommands.ShooterSpeedToHubCmd;
 import frc.robot.commands.Swerve.TeleopSwerveCmd;
 import frc.robot.commands.Vision.ShootWhileMovingCmd;
 import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
@@ -203,7 +201,8 @@ public class RobotContainer {
                                                 () -> -driver.getRawAxis(strafeAxis),
                                                 shooter,
                                                 hood,
-                                                FieldPoses.getHubPosByAliiance(),
+                                                FieldPoses.getClosestBumper(
+                                                                poseEstimator.getEstimatedPosition().getTranslation()),
                                                 conveyanceWheels,
                                                 rollers));
                 shootToZoneTrigger.whileTrue(

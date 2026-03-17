@@ -24,9 +24,9 @@ public class FieldPoses {
 
     CLIMBER_CENTER_BLUE(4, new Pose2d(1.63, 3.7, Rotation2d.fromDegrees(180))),
 
-    BAMPER_LEFT_BLUE(5, new Pose2d(3.5, 5.5, Rotation2d.fromDegrees(0))),
+    BUMPER_LEFT_BLUE(5, new Pose2d(3.5, 5.5, Rotation2d.fromDegrees(0))),
 
-    BAMPER_RIGHT_BLUE(6, new Pose2d(3.5, 2.5, Rotation2d.fromDegrees(0)));
+    BUMPER_RIGHT_BLUE(6, new Pose2d(3.5, 2.5, Rotation2d.fromDegrees(0)));
 
     private final int index;
     private final Pose2d pose;
@@ -110,4 +110,13 @@ public class FieldPoses {
         : FieldMath.transformAngle(rotation, AngleTransform.INVERT);
   }
 
+  public static Translation2d getClosestBumper(Translation2d robotTranslation) {
+    Translation2d leftBamper = getAllianceRelative(CenteringPositions.BUMPER_LEFT_BLUE.getPose().getTranslation());
+    Translation2d rightBamper = getAllianceRelative(CenteringPositions.BUMPER_RIGHT_BLUE.getPose().getTranslation());
+
+    if (robotTranslation.getDistance(leftBamper) < robotTranslation.getDistance(rightBamper)) {
+      return leftBamper;
+    }
+    return rightBamper;
+  }
 }
