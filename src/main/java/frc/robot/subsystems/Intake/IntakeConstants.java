@@ -21,6 +21,6 @@ public class IntakeConstants {
   public static final double ROTATIONS_PER_CM = 2048;
   public static final double kGearRatio = 1;
   public static final double EJECT_SPEED = -4;
-  public static final double INSERT_SPEED = 7;
+  public static final double INSERT_SPEED = 4.5;
   public static final double kStallThreshold = 125.0; // Amps
 }

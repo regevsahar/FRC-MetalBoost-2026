@@ -46,6 +46,8 @@ import frc.robot.subsystems.Vision.AlignToPoseSub;
 import frc.robot.subsystems.Vision.LimelightSub;
 import frc.robot.subsystems.Vision.PoseEstimator;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
+
+import java.lang.reflect.Field;
 import java.util.Set;
 
 public class RobotContainer {
@@ -201,8 +203,7 @@ public class RobotContainer {
                                                 () -> -driver.getRawAxis(strafeAxis),
                                                 shooter,
                                                 hood,
-                                                FieldPoses.getClosestBumper(
-                                                                poseEstimator.getEstimatedPosition().getTranslation()),
+                                                FieldPoses.getHubPosByAliiance(),
                                                 conveyanceWheels,
                                                 rollers));
                 shootToZoneTrigger.whileTrue(
@@ -215,7 +216,11 @@ public class RobotContainer {
                                                 hood,
                                                 conveyanceWheels,
                                                 rollers,
-                                                FieldPoses.getHubPosByAliiance())); // TODO: change to real target
+                                                FieldPoses.getHubPosByAliiance()));
+                // FieldPoses.getClosestBumper(
+                // poseEstimator.getEstimatedPosition()
+                // .getTranslation()))); // TODO: change to
+                // real target
                 followPath.toggleOnTrue(
                                 new DeferredCommand(
                                                 () -> PathPlannerUtil.createPathDuringRuntime(

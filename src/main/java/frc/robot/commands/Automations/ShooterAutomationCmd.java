@@ -1,6 +1,7 @@
 package frc.robot.commands.Automations;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.ConveyanceCommands.ConveyanceWheelsCmd;
 import frc.robot.commands.ConveyanceCommands.RollersBackwardsCmd;
@@ -16,7 +17,7 @@ import frc.robot.subsystems.Vision.AlignToPoseSub;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class ShooterAutomationCmd extends ParallelRaceGroup {
+public class ShooterAutomationCmd extends ParallelCommandGroup {
 
   public ShooterAutomationCmd(
       FlyWheelSub flywheel,

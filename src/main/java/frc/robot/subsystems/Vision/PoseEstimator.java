@@ -135,6 +135,10 @@ public class PoseEstimator extends MBSubsystem {
     return getEstimatedPosition().getTranslation().getDistance(target);
   }
 
+  public double getRoundedDistanceFromHub() {
+    return Math.round(getDistanceFromHub() * 10.0) / 10.0;
+  }
+
   public Pose2d getEstimatedPosition() {
     return sEstimator.getEstimatedPosition();
   }
@@ -152,6 +156,7 @@ public class PoseEstimator extends MBSubsystem {
     SmartDashboard.putNumber("robotHeading", getEstimatedPosition().getRotation().getRadians());
 
     Logger.recordOutput("Estimator/DistanceFromHub", getDistanceFromHub());
+    Logger.recordOutput("Estimator/RoundedDistanceFromHub", getRoundedDistanceFromHub());
     Logger.recordOutput("Estimator/estimator", getEstimatedPosition());
     Logger.recordOutput("Estimator/Pose2d/robotX", getEstimatedPosition().getX());
     Logger.recordOutput("Estimator/Pose2d/robotY", getEstimatedPosition().getY());

@@ -42,7 +42,7 @@ public class HoodSUB extends MBSubsystem {
   }
 
   public void setTargetDistanceFromHub() {
-    double distance = poseEstimator.getDistanceFromHub();
+    double distance = poseEstimator.getRoundedDistanceFromHub();
     setTargetArc(getArcFromDistance(distance));
   }
 
