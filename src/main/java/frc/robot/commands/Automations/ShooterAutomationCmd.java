@@ -47,7 +47,9 @@ public class ShooterAutomationCmd extends ParallelCommandGroup {
         new ShooterSpeedToHubCmd(flywheel, conveyanceWheels),
         new AlignHoodToHubCmd(hood),
         new AlignToPoseCmd(swerve, alignSubsystem, translationXSupplier, translationYSupplier, target),
-        new WaitUntilCommand(() -> flywheel.isAtTarget() && hood.isAtTarget() && alignSubsystem.atSetpoint())
-            .andThen(new ConveyanceWheelsCmd(conveyanceWheels), new RollersBackwardsCmd(rollers)));
+        new WaitUntilCommand(() -> hood.isAtTarget() && alignSubsystem.atSetpoint() && flywheel.isAtTarget())
+            .andThen(
+                new ConveyanceWheelsCmd(conveyanceWheels)
+                    .alongWith(new RollersBackwardsCmd(rollers))));
   }
 }
