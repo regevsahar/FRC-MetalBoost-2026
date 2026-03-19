@@ -114,7 +114,7 @@ public class ShootWhileMovingCmd extends Command {
     double xSpeed = translationXSupplier.getAsDouble();
     double ySpeed = translationYSupplier.getAsDouble();
 
-    swerve.drive(new Translation2d(-xSpeed, -ySpeed), rotationOutput, true, true);
+    swerve.drive(new Translation2d(xSpeed, ySpeed), rotationOutput, true, true);
 
     hood.setTargetDistance(futureDistanceToHub);
     flywheel.setTargetDistance(futureDistanceToHub);
