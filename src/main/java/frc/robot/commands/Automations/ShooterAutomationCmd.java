@@ -2,9 +2,9 @@ package frc.robot.commands.Automations;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.ConveyanceCommands.ConveyanceWheelsCmd;
 import frc.robot.commands.ConveyanceCommands.RollersBackwardsCmd;
+import frc.robot.commands.IntakeCommands.CloseIntakeWithBallsCmd;
 import frc.robot.commands.ShooterCommands.AlignHoodToHubCmd;
 import frc.robot.commands.ShooterCommands.ShooterSpeedToHubCmd;
 import frc.robot.commands.Vision.AlignToPoseCmd;
@@ -15,41 +15,45 @@ import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.SwerveSub;
 import frc.robot.subsystems.Vision.AlignToPoseSub;
 import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.Intake.IntakeSub;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class ShooterAutomationCmd extends ParallelCommandGroup {
 
-  public ShooterAutomationCmd(
-      FlyWheelSub flywheel,
-      HoodSUB hood,
-      ConveyanceSub conveyanceWheels,
-      ConveyanceRollerSub rollers) {
+    public ShooterAutomationCmd(
+            FlyWheelSub flywheel,
+            HoodSUB hood,
+            ConveyanceSub conveyanceWheels,
+            ConveyanceRollerSub rollers) {
 
-    addCommands(
-        new ShooterSpeedToHubCmd(flywheel, conveyanceWheels),
-        new AlignHoodToHubCmd(hood),
-        new WaitUntilCommand(() -> flywheel.isAtTarget())
-            .andThen(new ConveyanceWheelsCmd(conveyanceWheels), new RollersBackwardsCmd(rollers)));
-  }
+        addCommands(
+                new ShooterSpeedToHubCmd(flywheel, conveyanceWheels),
+                new AlignHoodToHubCmd(hood),
+                new WaitUntilCommand(() -> flywheel.isAtTarget() && hood.isAtTarget())
+                        .andThen(
+                                new ConveyanceWheelsCmd(conveyanceWheels)
+                                        .alongWith(new RollersBackwardsCmd(rollers))));
+    }
 
-  public ShooterAutomationCmd(
-      SwerveSub swerve,
-      AlignToPoseSub alignSubsystem,
-      DoubleSupplier translationXSupplier,
-      DoubleSupplier translationYSupplier,
-      FlyWheelSub flywheel,
-      HoodSUB hood,
-      ConveyanceSub conveyanceWheels,
-      ConveyanceRollerSub rollers,
-      Translation2d target) {
+    public ShooterAutomationCmd(
+            SwerveSub swerve,
+            AlignToPoseSub alignSubsystem,
+            DoubleSupplier translationXSupplier,
+            DoubleSupplier translationYSupplier,
+            FlyWheelSub flywheel,
+            HoodSUB hood,
+            ConveyanceSub conveyanceWheels,
+            ConveyanceRollerSub rollers,
+            Translation2d target, IntakeSub intake) {
 
-    addCommands(
-        new ShooterSpeedToHubCmd(flywheel, conveyanceWheels),
-        new AlignHoodToHubCmd(hood),
-        new AlignToPoseCmd(swerve, alignSubsystem, translationXSupplier, translationYSupplier, target),
-        new WaitUntilCommand(() -> hood.isAtTarget() && alignSubsystem.atSetpoint() && flywheel.isAtTarget())
-            .andThen(
-                new ConveyanceWheelsCmd(conveyanceWheels)
-                    .alongWith(new RollersBackwardsCmd(rollers))));
-  }
+        addCommands(
+                new ShooterSpeedToHubCmd(flywheel, conveyanceWheels),
+                new AlignHoodToHubCmd(hood),
+                new AlignToPoseCmd(swerve, alignSubsystem, translationXSupplier, translationYSupplier, target),
+                new WaitUntilCommand(() -> hood.isAtTarget() && alignSubsystem.atSetpoint() && flywheel.isAtTarget())
+                        .andThen(
+                                new ConveyanceWheelsCmd(conveyanceWheels)
+                                        .alongWith(new RollersBackwardsCmd(rollers)))
+                        .alongWith(new CloseIntakeWithBallsCmd(intake)));
+    }
 }

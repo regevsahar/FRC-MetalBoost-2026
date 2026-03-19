@@ -118,8 +118,13 @@ public class ShootWhileMovingCmd extends Command {
 
     hood.setTargetDistance(futureDistanceToHub);
     flywheel.setTargetDistance(futureDistanceToHub);
-    conveyance.setSpeed(ConveyanceConstants.kConveyanceSpeed);
-    rollers.setSpeed(ConveyanceConstants.kRollersBackwardsSpeed);
+    if (hood.isAtTarget() && flywheel.isAtTarget() && alignSubsystem.atSetpoint()) {
+      conveyance.setSpeed(ConveyanceConstants.kConveyanceSpeed);
+      rollers.setSpeed(ConveyanceConstants.kRollersBackwardsSpeed);
+    } else {
+      conveyance.stop();
+      rollers.stop();
+    }
 
     Logger.recordOutput("ShootWhileMoving/NowDistToHub_m", distanceToHubNow);
     Logger.recordOutput("ShootWhileMoving/FlightTime_s", flightTime);

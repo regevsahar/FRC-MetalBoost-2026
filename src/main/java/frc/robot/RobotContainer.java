@@ -216,7 +216,8 @@ public class RobotContainer {
                                                 hood,
                                                 conveyanceWheels,
                                                 rollers,
-                                                FieldPoses.getHubPosByAliiance()));
+                                                FieldPoses.getHubPosByAliiance(),
+                                                intake));
                 // FieldPoses.getClosestBumper(
                 // poseEstimator.getEstimatedPosition()
                 // .getTranslation()))); // TODO: change to
