@@ -19,7 +19,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.enums.CenteringPositions;
 import frc.lib.math.ToleranceMath;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;

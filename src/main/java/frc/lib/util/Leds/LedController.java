@@ -85,7 +85,7 @@ public class LedController {
         .start();
   }
 
-    public void startGradient(int speed, Color... colors) {
+  public void startGradient(int speed, Color... colors) {
     gradientRunning = true;
     new Thread(
             () -> {
