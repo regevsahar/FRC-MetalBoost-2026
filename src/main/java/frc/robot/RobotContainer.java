@@ -11,19 +11,19 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.lib.util.GameDataUtil;
 import frc.lib.util.FieldUtils.FieldPoses;
+import frc.lib.util.GameDataUtil;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.lib.util.Paths.PathPlannerUtil;
 import frc.robot.autos.AutoChooser;
-import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.Automations.EjectBallsAutomationCmd;
 import frc.robot.commands.Automations.InsertBallsAutomationCmd;
 import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 import frc.robot.commands.Automations.ShooterAutomationCmd;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.ShooterCommands.ManualHoodCmd;
 import frc.robot.commands.ShooterCommands.ShootConstantValueCmd;
 import frc.robot.commands.ShooterCommands.ShooterSpeedToHubCmd;
@@ -49,22 +49,22 @@ import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 import java.util.Set;
 
 public class RobotContainer {
-    /* Controllers */
-    private final Joystick driver = new Joystick(0);
-    private final Joystick operator = new Joystick(1);
+  /* Controllers */
+  private final Joystick driver = new Joystick(0);
+  private final Joystick operator = new Joystick(1);
 
-    /* Drive Controls */
-    private final int translationAxis = XboxController.Axis.kLeftY.value;
-    private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    private final int rotationAxis = XboxController.Axis.kRightX.value;
+  /* Drive Controls */
+  private final int translationAxis = XboxController.Axis.kLeftY.value;
+  private final int strafeAxis = XboxController.Axis.kLeftX.value;
+  private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    /* Buttons */
-    private final int shootAutomation = XboxController.Axis.kLeftTrigger.value;
-    private final int shootWhileMoving = XboxController.Axis.kRightTrigger.value;
+  /* Buttons */
+  private final int shootAutomation = XboxController.Axis.kLeftTrigger.value;
+  private final int shootWhileMoving = XboxController.Axis.kRightTrigger.value;
 
-    AutoChooser autoChooser;
+  AutoChooser autoChooser;
 
-    /* Subsystems */
+  /* Subsystems */
 
   public final PoseEstimator poseEstimator = new PoseEstimator();
   public final LimelightSub limelight = new LimelightSub(CameraConstants.limelight3name);
@@ -118,125 +118,125 @@ public class RobotContainer {
   private final Trigger shootToZoneTrigger =
       new Trigger(() -> operator.getRawAxis(shootAutomation) > 0.3);
 
-    public final GridMap fieldGrid;
+  public final GridMap fieldGrid;
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        FlyWheelIO shooterIO = RobotBase.isSimulation() ? new FlyWheelSimulation() : new FlyWheelIOTalonFX();
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    FlyWheelIO shooterIO =
+        RobotBase.isSimulation() ? new FlyWheelSimulation() : new FlyWheelIOTalonFX();
 
-        shooter = new FlyWheelSub(shooterIO, poseEstimator);
+    shooter = new FlyWheelSub(shooterIO, poseEstimator);
 
-        HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
+    HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
 
-        hood = new HoodSUB(hoodIO, poseEstimator);
-        fieldGrid = FieldGridLoader.load("FieldGrid.json");
+    hood = new HoodSUB(hoodIO, poseEstimator);
+    fieldGrid = FieldGridLoader.load("FieldGrid.json");
 
-        s_Swerve.setDefaultCommand(
-                new TeleopSwerveCmd(
-                        s_Swerve,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        () -> true));
+    s_Swerve.setDefaultCommand(
+        new TeleopSwerveCmd(
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            () -> -driver.getRawAxis(rotationAxis),
+            () -> true));
 
-        hood.setDefaultCommand(
-                new ManualHoodCmd(hood, () -> operator.getRawAxis(XboxController.Axis.kLeftY.value)));
+    hood.setDefaultCommand(
+        new ManualHoodCmd(hood, () -> operator.getRawAxis(XboxController.Axis.kLeftY.value)));
 
-        followPath.toggleOnTrue(
-                new DeferredCommand(
-                        () -> PathPlannerUtil.createPathDuringRuntime(
-                                poseEstimator.getEstimatedPosition(),
-                                new Pose2d(2.85, 4.33, Rotation2d.fromDegrees(0)),
-                                new PathConstraints(0.5, 0.5, 0.5, 0.5),
-                                true),
-                        Set.of(s_Swerve)));
+    followPath.toggleOnTrue(
+        new DeferredCommand(
+            () ->
+                PathPlannerUtil.createPathDuringRuntime(
+                    poseEstimator.getEstimatedPosition(),
+                    new Pose2d(2.85, 4.33, Rotation2d.fromDegrees(0)),
+                    new PathConstraints(0.5, 0.5, 0.5, 0.5),
+                    true),
+            Set.of(s_Swerve)));
 
-        // Configure the button bindingsPP
-        configureButtonBindings();
-        registerPathPlannerCommands();
-    }
+    // Configure the button bindingsPP
+    configureButtonBindings();
+    registerPathPlannerCommands();
+  }
 
-    private void configureButtonBindings() {
+  private void configureButtonBindings() {
 
-        new Trigger(() -> GameDataUtil.isHubAboutToActivate())
-                .onTrue(new RumbleCommand(driver, operator).withTimeout(0.75));
+    new Trigger(() -> GameDataUtil.isHubAboutToActivate())
+        .onTrue(new RumbleCommand(driver, operator).withTimeout(0.75));
 
-        // Rumble for 1 second on every shift change during the match.
-        new Trigger(() -> GameDataUtil.didShiftJustChange())
-                .onTrue(new RumbleCommand(driver, operator).withTimeout(1.0));
+    // Rumble for 1 second on every shift change during the match.
+    new Trigger(() -> GameDataUtil.didShiftJustChange())
+        .onTrue(new RumbleCommand(driver, operator).withTimeout(1.0));
 
-        /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        lowerSwerveSpeed.whileTrue(
-                new TeleopSwerveCmd(
-                        s_Swerve,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        () -> true,
-                        () -> 0.4));
+    /* Driver Buttons */
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+    lowerSwerveSpeed.whileTrue(
+        new TeleopSwerveCmd(
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            () -> -driver.getRawAxis(rotationAxis),
+            () -> true,
+            () -> 0.4));
 
-        higherSwerveSpeed.whileTrue(
-                new TeleopSwerveCmd(
-                        s_Swerve,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        () -> true,
-                        () -> 0.85));
+    higherSwerveSpeed.whileTrue(
+        new TeleopSwerveCmd(
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            () -> -driver.getRawAxis(rotationAxis),
+            () -> true,
+            () -> 0.85));
 
-        resetPoseEstimator.onTrue(
-                new InstantCommand(
-                        () -> poseEstimator.sEstimator.resetPosition(
-                                s_Swerve.getGyroYaw(),
-                                s_Swerve.getModulePositions(),
-                                new Pose2d(0, 0, new Rotation2d()))));
+    resetPoseEstimator.onTrue(
+        new InstantCommand(
+            () ->
+                poseEstimator.sEstimator.resetPosition(
+                    s_Swerve.getGyroYaw(),
+                    s_Swerve.getModulePositions(),
+                    new Pose2d(0, 0, new Rotation2d()))));
 
-        // -----------------------------------------------------------------------
-        // SysId — hold each button while enabled in TEST mode on the Driver Station
-        // Run all 4 tests, then open the .wpilog in the SysId Analyzer tool.
-        // -----------------------------------------------------------------------
-        sysIdQuasFwd.whileTrue(s_Swerve.sysIdQuasistaticForward());
-        sysIdQuasRev.whileTrue(s_Swerve.sysIdQuasistaticReverse());
-        sysIdDynFwd.whileTrue(s_Swerve.sysIdDynamicForward());
-        sysIdDynRev.whileTrue(s_Swerve.sysIdDynamicReverse());
+    // -----------------------------------------------------------------------
+    // SysId — hold each button while enabled in TEST mode on the Driver Station
+    // Run all 4 tests, then open the .wpilog in the SysId Analyzer tool.
+    // -----------------------------------------------------------------------
+    sysIdQuasFwd.whileTrue(s_Swerve.sysIdQuasistaticForward());
+    sysIdQuasRev.whileTrue(s_Swerve.sysIdQuasistaticReverse());
+    sysIdDynFwd.whileTrue(s_Swerve.sysIdDynamicForward());
+    sysIdDynRev.whileTrue(s_Swerve.sysIdDynamicReverse());
 
-        shoot.whileTrue(new ShooterSpeedToHubCmd(shooter, conveyanceWheels));
-        ShootConstantValue.whileTrue(new ShootConstantValueCmd(shooter));
-        resetIntakePosition.onTrue(new ResetIntakeCmd(intake));
-        openIntake.whileTrue(new InsertBallsAutomationCmd(intake, intakeRollers));
-        closeIntake.whileTrue(new CloseIntakeCmd(intake));
-        resetPositionAutomation.whileTrue(new ResetSubsystemsAutomationCmd(hood, intake));
-        ejectBall.whileTrue(new EjectBallsAutomationCmd(intakeRollers, rollers, intake));
-        shootWhileMovingTrigger.whileTrue(
-                new ShootWhileMovingCmd(
-                        s_Swerve,
-                        poseEstimator,
-                        AlignToPoseSub,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        shooter,
-                        hood,
-                        FieldPoses.getHubPosByAliiance()));
-        shootToZoneTrigger.whileTrue(
-                new ShooterAutomationCmd(
-                        s_Swerve,
-                        AlignToPoseSub,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        shooter,
-                        hood,
-                        conveyanceWheels,
-                        rollers,
-                        FieldPoses.getHubPosByAliiance())); // TODO: change to real target
-    }
+    shoot.whileTrue(new ShooterSpeedToHubCmd(shooter, conveyanceWheels));
+    ShootConstantValue.whileTrue(new ShootConstantValueCmd(shooter));
+    resetIntakePosition.onTrue(new ResetIntakeCmd(intake));
+    openIntake.whileTrue(new InsertBallsAutomationCmd(intake, intakeRollers));
+    closeIntake.whileTrue(new CloseIntakeCmd(intake));
+    resetPositionAutomation.whileTrue(new ResetSubsystemsAutomationCmd(hood, intake));
+    ejectBall.whileTrue(new EjectBallsAutomationCmd(intakeRollers, rollers, intake));
+    shootWhileMovingTrigger.whileTrue(
+        new ShootWhileMovingCmd(
+            s_Swerve,
+            poseEstimator,
+            AlignToPoseSub,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            shooter,
+            hood,
+            FieldPoses.getHubPosByAliiance()));
+    shootToZoneTrigger.whileTrue(
+        new ShooterAutomationCmd(
+            s_Swerve,
+            AlignToPoseSub,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            shooter,
+            hood,
+            conveyanceWheels,
+            rollers,
+            FieldPoses.getHubPosByAliiance())); // TODO: change to real target
+  }
 
-    public Command getAutonomousCommand() {
-        return autoChooser.getSelectedAuto();
-    }
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelectedAuto();
+  }
 
-    void registerPathPlannerCommands() {
-    }
+  void registerPathPlannerCommands() {}
 }
