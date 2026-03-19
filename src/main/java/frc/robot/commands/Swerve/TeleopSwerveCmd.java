@@ -40,7 +40,7 @@ public class TeleopSwerveCmd extends Command {
       BooleanSupplier robotCentricSup,
       DoubleSupplier speedReductionSup) {
     this.s_Swerve = s_Swerve;
-    
+
     this.translationSup = translationSup;
     this.strafeSup = strafeSup;
     this.rotationSup = rotationSup;

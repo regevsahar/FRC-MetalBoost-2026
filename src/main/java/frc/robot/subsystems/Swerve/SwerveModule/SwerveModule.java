@@ -114,8 +114,8 @@ public class SwerveModule {
   // -------------------------------------------------------------------------
 
   /**
-   * Commands a raw voltage to the drive motor. Used exclusively during SysId
-   * characterization — do NOT call during normal teleop/auto.
+   * Commands a raw voltage to the drive motor. Used exclusively during SysId characterization — do
+   * NOT call during normal teleop/auto.
    */
   public void setDriveVoltage(double volts) {
     mDriveMotor.setControl(driveVoltage.withOutput(volts));
@@ -124,14 +124,12 @@ public class SwerveModule {
   /** Drive wheel position in meters (for SysId position log). */
   public double getDrivePositionMeters() {
     return Conversions.rotationsToMeters(
-        mDriveMotor.getPosition().getValueAsDouble(),
-        Constants.SwerveConstants.wheelCircumference);
+        mDriveMotor.getPosition().getValueAsDouble(), Constants.SwerveConstants.wheelCircumference);
   }
 
   /** Drive wheel velocity in m/s (for SysId velocity log). */
   public double getDriveVelocityMPS() {
     return Conversions.RPSToMPS(
-        mDriveMotor.getVelocity().getValueAsDouble(),
-        Constants.SwerveConstants.wheelCircumference);
+        mDriveMotor.getVelocity().getValueAsDouble(), Constants.SwerveConstants.wheelCircumference);
   }
 }

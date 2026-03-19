@@ -2,9 +2,9 @@ package frc.robot.commands.Automations;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.LedCommand;
 import frc.robot.commands.IntakeCommands.OpenIntakeCmd;
 import frc.robot.commands.IntakeCommands.RollToInsertBallsCmd;
+import frc.robot.commands.LedCommand;
 import frc.robot.commands.LedCommand.Mode;
 import frc.robot.subsystems.Intake.IntakeRollersSub;
 import frc.robot.subsystems.Intake.IntakeSub;

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.Leds.LedController;
 import frc.lib.util.Vision.LimelightHelpers;
+import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 import frc.robot.subsystems.Intake.IntakeSub;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.Configs.CTREConfigs;
@@ -15,7 +16,7 @@ import java.util.Optional;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
+
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
  * the TimedRobot documentation. If you change the name of this class or the package after creating
@@ -91,13 +92,17 @@ public class Robot extends LoggedRobot {
     m_robotContainer.limelight2.setHeading(
         m_robotContainer.poseEstimator.getCorrectedHeading(currentGyro));
 
-    Optional<LimelightHelpers.PoseEstimate> llestimateMT2 = m_robotContainer.limelight.getMegaTag2Pose();
-    Optional<LimelightHelpers.PoseEstimate> llestimateMT1 = m_robotContainer.limelight.getMegaTag1Pose();
+    Optional<LimelightHelpers.PoseEstimate> llestimateMT2 =
+        m_robotContainer.limelight.getMegaTag2Pose();
+    Optional<LimelightHelpers.PoseEstimate> llestimateMT1 =
+        m_robotContainer.limelight.getMegaTag1Pose();
     Optional<Pose2d> llPoseMT2 = Optional.empty();
     Optional<Pose2d> llPoseMT1 = Optional.empty();
 
-    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT2 = m_robotContainer.limelight2.getMegaTag2Pose();
-    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT1 = m_robotContainer.limelight2.getMegaTag1Pose();
+    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT2 =
+        m_robotContainer.limelight2.getMegaTag2Pose();
+    Optional<LimelightHelpers.PoseEstimate> ll2estimateMT1 =
+        m_robotContainer.limelight2.getMegaTag1Pose();
 
     Optional<Pose2d> ll2PoseMT2 = Optional.empty();
     Optional<Pose2d> ll2PoseMT1 = Optional.empty();
@@ -159,7 +164,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 200); //Throttle to reduce temps
+    LimelightHelpers.SetThrottle(CameraConstants.limelight4name, 200); // Throttle to reduce temps
   }
 
   @Override

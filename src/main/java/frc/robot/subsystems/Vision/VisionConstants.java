@@ -2,7 +2,6 @@ package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
@@ -27,8 +26,6 @@ public final class VisionConstants {
     public static final double stdDevFactorRotation = 0.5;
     public static final double minimumStdDev = 0.1;
   }
-
-  
 
   public static final class AlignToPoseConstants {
     // TODO: Tune these constants
