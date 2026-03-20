@@ -8,7 +8,6 @@ import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
@@ -21,8 +20,12 @@ public class DriveToPoseUtil {
       throw new IllegalArgumentException("At least one target pose is required");
     }
 
-    PathConstraints constraints = new PathConstraints(maxVel, maxAccel
-    ,Constants.SwerveConstants.maxAngularVelocity, Constants.SwerveConstants.maxAngularAcceleration);
+    PathConstraints constraints =
+        new PathConstraints(
+            maxVel,
+            maxAccel,
+            Constants.SwerveConstants.maxAngularVelocity,
+            Constants.SwerveConstants.maxAngularAcceleration);
 
     Logger.recordOutput("Estimator/Pose2d/currentPose", currentPose);
     Logger.recordOutput("Estimator/Pose2d/targetPoses", targetPoses);

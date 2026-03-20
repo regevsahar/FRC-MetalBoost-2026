@@ -10,9 +10,14 @@ import frc.lib.util.Leds.LedController;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class LedCommand extends Command {
-  public enum Mode {FLASH,GRADIENT}
+  public enum Mode {
+    FLASH,
+    GRADIENT
+  }
+
   Mode mode;
   Color[] colors;
+
   public LedCommand(Mode mode, Color... colors) {
     this.mode = mode;
     this.colors = colors;
@@ -21,9 +26,9 @@ public class LedCommand extends Command {
 
   @Override
   public void initialize() {
-    if(mode == Mode.FLASH){
+    if (mode == Mode.FLASH) {
       LedController.getInstance().startFlashing(colors[0]);
-    } else if(mode == Mode.GRADIENT){
+    } else if (mode == Mode.GRADIENT) {
       LedController.getInstance().startGradient(colors);
     }
   }
@@ -33,9 +38,9 @@ public class LedCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    if(mode == Mode.FLASH){
+    if (mode == Mode.FLASH) {
       LedController.getInstance().stopFlashing();
-    }else if(mode == Mode.GRADIENT){
+    } else if (mode == Mode.GRADIENT) {
       LedController.getInstance().stopGradient();
     }
   }

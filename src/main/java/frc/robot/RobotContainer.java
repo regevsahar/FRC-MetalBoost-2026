@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.FieldUtils.FieldPoses;
+import frc.lib.util.GameDataUtil;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.lib.util.Paths.PathPlannerUtil;
@@ -25,6 +26,7 @@ import frc.robot.commands.ConveyanceCommands.ConveyanceWheelsCmd;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
 import frc.robot.commands.ShooterCommands.AlignHoodToConstValue;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.ShooterCommands.ManualHoodCmd;
 import frc.robot.commands.ShooterCommands.ShootConstantValueCmd;
 import frc.robot.commands.Swerve.TeleopSwerveCmd;
@@ -106,19 +108,24 @@ public class RobotContainer {
         // private final Trigger sysIdDynRev = new Trigger(() -> driver.getPOV() == 0);
         // // POV Up
 
-        /// * operation Buttons */
-        private final JoystickButton ShootArcValue = new JoystickButton(operator, XboxController.Button.kY.value);
-        private final JoystickButton ShootConstantValue = new JoystickButton(operator, XboxController.Button.kX.value);
-        private final Trigger shootToZoneTrigger = new Trigger(() -> operator.getRawAxis(shootAutomation) > 0.3);
-        private final JoystickButton resetIntakePosition = new JoystickButton(operator, XboxController.Button.kA.value);
-        private final JoystickButton openIntake = new JoystickButton(operator,
-                        XboxController.Button.kRightBumper.value);
-        private final JoystickButton closeIntake = new JoystickButton(operator,
-                        XboxController.Button.kLeftBumper.value);
-        private final JoystickButton ejectBall = new JoystickButton(operator, XboxController.Button.kB.value);
-        private final JoystickButton resetPositionAutomation = new JoystickButton(operator,
-                        XboxController.Button.kStart.value); // TODO: check button number
-        private final Trigger shootWhileMovingTrigger = new Trigger(() -> operator.getRawAxis(shootWhileMoving) > 0.3);
+  /// * operation Buttons */
+  private final JoystickButton ShootConstantValue =
+      new JoystickButton(operator, XboxController.Button.kY.value);
+  private final JoystickButton shoot = new JoystickButton(operator, XboxController.Button.kX.value);
+  private final JoystickButton resetIntakePosition =
+      new JoystickButton(operator, XboxController.Button.kA.value);
+  private final JoystickButton openIntake =
+      new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+  private final JoystickButton closeIntake =
+      new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton ejectBall =
+      new JoystickButton(operator, XboxController.Button.kB.value);
+  private final JoystickButton resetPositionAutomation =
+      new JoystickButton(operator, XboxController.Button.kStart.value);
+  private final Trigger shootWhileMovingTrigger =
+      new Trigger(() -> operator.getRawAxis(shootWhileMoving) > 0.3);
+  private final Trigger shootToZoneTrigger =
+      new Trigger(() -> operator.getRawAxis(shootAutomation) > 0.3);
 
         public final GridMap fieldGrid;
 
@@ -149,7 +156,14 @@ public class RobotContainer {
                 autoChooser = new AutoChooser(new PathPlannerAuto("TEST 1M"));
         }
 
-        private void configureButtonBindings() {
+  private void configureButtonBindings() {
+
+    new Trigger(() -> GameDataUtil.isHubAboutToActivate())
+        .onTrue(new RumbleCommand(driver, operator).withTimeout(0.75));
+
+    // Rumble for 1 second on every shift change during the match.
+    new Trigger(() -> GameDataUtil.didShiftJustChange())
+        .onTrue(new RumbleCommand(driver, operator).withTimeout(1.0));
 
                 /* Driver Buttons */
                 lowerSwerveSpeed.whileTrue(

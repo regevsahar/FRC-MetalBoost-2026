@@ -1,7 +1,5 @@
 package frc.lib.util.FieldUtils;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -9,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.lib.math.AngleTransform;
 import frc.lib.math.FieldMath;
+import java.util.Optional;
 
 public class FieldPoses {
 
@@ -49,6 +48,7 @@ public class FieldPoses {
     }
   }
 
+
   public static final Translation2d HUB_CENTER_RED = new Translation2d(11.915, 4.035);
   public static final Translation2d HUB_CENTER_BLUE = new Translation2d(4.625, 4.035);
 
@@ -64,6 +64,8 @@ public class FieldPoses {
   public static boolean isOnBlueSide(Translation2d robotTranslation) {
     return robotTranslation.getX() < LENGTH_METERS / 2.0;
   }
+
+  public static Translation2d getHubPosByAliiance() {
 
   public static Translation2d getHubPosByAliiance() {
     Translation2d hubPosition = HUB_CENTER_BLUE;
