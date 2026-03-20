@@ -9,6 +9,15 @@ public class GameDataUtil {
 
   /** Returns true when the hub is active based on match time and shift schedule. */
   public static boolean isHubActive() {
+    return isHubActive(0);
+  }
+
+  /**
+   * Returns true when the hub will be active after the specified threshold (in seconds).
+   *
+   * @param futureThreshold Seconds to look into the future.
+   */
+  public static boolean isHubActive(int futureThreshold) {
     Optional<Alliance> alliance = DriverStation.getAlliance();
 
     // If we have no alliance, we cannot be enabled, therefore no hub.
@@ -27,7 +36,7 @@ public class GameDataUtil {
     }
 
     // We're teleop enabled, compute.
-    double matchTime = DriverStation.getMatchTime();
+    double matchTime = DriverStation.getMatchTime() - futureThreshold;
     String gameData = DriverStation.getGameSpecificMessage();
 
     // If we have no game data, we cannot compute, assume hub is active, as its
@@ -69,52 +78,7 @@ public class GameDataUtil {
    * give drivers an early warning rumble before the hub switches on.
    */
   public static boolean isHubAboutToActivate() {
-    // If hub is already active, no need to warn.
-    if (isHubActive()) {
-      return false;
-    }
-
-    // Only relevant during teleop with known game data.
-    if (!DriverStation.isTeleopEnabled()) {
-      return false;
-    }
-
-    Optional<Alliance> alliance = DriverStation.getAlliance();
-    if (alliance.isEmpty()) {
-      return false;
-    }
-
-    String gameData = DriverStation.getGameSpecificMessage();
-    if (gameData == null || gameData.isEmpty()) {
-      return false;
-    }
-
-    boolean redInactiveFirst = false;
-    switch (gameData.charAt(0)) {
-      case 'R':
-        redInactiveFirst = true;
-        break;
-      case 'B':
-        redInactiveFirst = false;
-        break;
-      default:
-        return false;
-    }
-
-    boolean shift1Active = false;
-    switch (alliance.get()) {
-      case Red:
-        shift1Active = !redInactiveFirst;
-        break;
-      case Blue:
-        shift1Active = redInactiveFirst;
-        break;
-    }
-
-    // Check if the hub will be active 3 seconds from now (i.e. 3 fewer seconds
-    // remaining).
-    double futureMatchTime = DriverStation.getMatchTime() - 3.0;
-    return isHubActiveAtTime(futureMatchTime, shift1Active);
+    return (isHubActive() == false) && (isHubActive() != isHubActive(3));
   }
 
   // ---- Shift-change detection ----

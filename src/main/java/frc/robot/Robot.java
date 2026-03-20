@@ -7,9 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.Leds.LedController;
 import frc.lib.util.Vision.LimelightHelpers;
-import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
-import frc.robot.subsystems.Intake.IntakeSub;
-import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.Configs.CTREConfigs;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 import java.util.Optional;
@@ -24,8 +21,6 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
  */
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
-  private HoodSUB hood;
-  private IntakeSub intake;
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
 
   private final RobotContainer m_robotContainer;
@@ -198,7 +193,6 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    CommandScheduler.getInstance().schedule(new ResetSubsystemsAutomationCmd(hood, intake));
   }
 
   /** This function is called periodically during operator control. */

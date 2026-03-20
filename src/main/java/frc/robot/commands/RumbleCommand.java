@@ -16,8 +16,6 @@ public class RumbleCommand extends Command {
 
   @Override
   public void initialize() {
-    driver.setRumble(RumbleType.kBothRumble, 1.0);
-    operator.setRumble(RumbleType.kBothRumble, 1.0);
   }
 
   @Override
