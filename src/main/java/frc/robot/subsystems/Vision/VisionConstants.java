@@ -14,8 +14,8 @@ public final class VisionConstants {
   public static final class PoseEstimator {
     public static double OdometryFactor = 2;
     public static final Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.003, 0.003, 0.003);
-    public static final Matrix<N3, N1> visionStdDevs = VecBuilder.fill(0.05 / OdometryFactor, 0.05 / OdometryFactor,
-        0.05 / OdometryFactor);
+    public static final Matrix<N3, N1> visionStdDevs =
+        VecBuilder.fill(0.05 / OdometryFactor, 0.05 / OdometryFactor, 0.05 / OdometryFactor);
     public static final double stdDevFactor = 0.0035;
     public static final double stdDevFactorTranslation = 0.5;
     public static final double stdDevFactorRotation = 0.5;

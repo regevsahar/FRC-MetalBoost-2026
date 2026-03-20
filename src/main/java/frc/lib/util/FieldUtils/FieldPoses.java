@@ -48,11 +48,11 @@ public class FieldPoses {
     }
   }
 
-
   public static final Translation2d HUB_CENTER_RED = new Translation2d(11.915, 4.035);
   public static final Translation2d HUB_CENTER_BLUE = new Translation2d(4.625, 4.035);
 
-  public static final DriverStation.Alliance RELATIVE_FIELD_CONVENTION_ALLIANCE = DriverStation.Alliance.Blue;
+  public static final DriverStation.Alliance RELATIVE_FIELD_CONVENTION_ALLIANCE =
+      DriverStation.Alliance.Blue;
 
   public static boolean isFieldConventionAlliance() {
     return DriverStationUtil.getAlliance() == RELATIVE_FIELD_CONVENTION_ALLIANCE;
@@ -64,8 +64,6 @@ public class FieldPoses {
   public static boolean isOnBlueSide(Translation2d robotTranslation) {
     return robotTranslation.getX() < LENGTH_METERS / 2.0;
   }
-
-  public static Translation2d getHubPosByAliiance() {
 
   public static Translation2d getHubPosByAliiance() {
     Translation2d hubPosition = HUB_CENTER_BLUE;
@@ -113,8 +111,10 @@ public class FieldPoses {
   }
 
   public static Translation2d getClosestBumper(Translation2d robotTranslation) {
-    Translation2d leftBamper = getAllianceRelative(CenteringPositions.BUMPER_LEFT_BLUE.getPose().getTranslation());
-    Translation2d rightBamper = getAllianceRelative(CenteringPositions.BUMPER_RIGHT_BLUE.getPose().getTranslation());
+    Translation2d leftBamper =
+        getAllianceRelative(CenteringPositions.BUMPER_LEFT_BLUE.getPose().getTranslation());
+    Translation2d rightBamper =
+        getAllianceRelative(CenteringPositions.BUMPER_RIGHT_BLUE.getPose().getTranslation());
 
     if (robotTranslation.getDistance(leftBamper) < robotTranslation.getDistance(rightBamper)) {
       return leftBamper;

@@ -18,7 +18,8 @@ public class ConveyanceRollerSub extends MBSubsystem {
 
   public ConveyanceRollerSub() {
     super("Conveyance rollers");
-    motor = new TalonFX(ConveyanceConstants.ROLLERS_PORT_ROLLERS, new CANBus(Constants.CanivoreName));
+    motor =
+        new TalonFX(ConveyanceConstants.ROLLERS_PORT_ROLLERS, new CANBus(Constants.CanivoreName));
     configureTalonFX();
   }
 

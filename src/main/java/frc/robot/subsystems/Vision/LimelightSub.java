@@ -23,8 +23,7 @@ public class LimelightSub extends MBSubsystem {
 
     estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
 
-    if (estimate == null || estimate.pose == null)
-      return Optional.empty();
+    if (estimate == null || estimate.pose == null) return Optional.empty();
     return Optional.of(estimate);
   }
 
@@ -33,8 +32,7 @@ public class LimelightSub extends MBSubsystem {
 
     estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
 
-    if (estimate == null || estimate.pose == null)
-      return Optional.empty();
+    if (estimate == null || estimate.pose == null) return Optional.empty();
     return Optional.of(estimate);
   }
 
@@ -57,8 +55,7 @@ public class LimelightSub extends MBSubsystem {
       estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
     }
 
-    if (estimate == null)
-      return 0.0;
+    if (estimate == null) return 0.0;
 
     double now = Timer.getFPGATimestamp();
     return now - estimate.timestampSeconds;

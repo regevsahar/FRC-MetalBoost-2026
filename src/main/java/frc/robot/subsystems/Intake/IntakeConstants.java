@@ -11,7 +11,8 @@ public class IntakeConstants {
   public static final TunableNumber kS = new TunableNumber("Intake/kS", 0.85051);
   public static final TunableNumber kV = new TunableNumber("Intake/kV", 0.19712);
   public static final TunableNumber kA = new TunableNumber("Intake/kA", 0.16532);
-  public static final TunableNumber kCruiseVelocity = new TunableNumber("Intake/kCruiseVelocity", 300.0);
+  public static final TunableNumber kCruiseVelocity =
+      new TunableNumber("Intake/kCruiseVelocity", 300.0);
   public static final TunableNumber kAcceleration = new TunableNumber("Intake/kAcceleration", 50.0);
   public static final TunableNumber kJerk = new TunableNumber("Intake/kJerk", 0.0);
   public static final double kAngleOffset = 0;

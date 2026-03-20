@@ -12,8 +12,7 @@ public class AlignHoodToHubCmd extends Command {
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
@@ -27,6 +26,6 @@ public class AlignHoodToHubCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;// hood.isAtTarget();
+    return false; // hood.isAtTarget();
   }
 }

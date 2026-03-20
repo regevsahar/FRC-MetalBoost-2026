@@ -104,8 +104,9 @@ public class PathPlannerUtil {
   public static Command createPathDuringRuntime(
       Pose2d currentPose, Pose2d targetPose, PathConstraints constraints) {
     List<Waypoint> bezierPoints = PathPlannerPath.waypointsFromPoses(currentPose, targetPose);
-    PathPlannerPath path = new PathPlannerPath(
-        bezierPoints, constraints, null, new GoalEndState(0, targetPose.getRotation()));
+    PathPlannerPath path =
+        new PathPlannerPath(
+            bezierPoints, constraints, null, new GoalEndState(0, targetPose.getRotation()));
     path.preventFlipping = true;
     return PathFollowingCommandsBuilder.followPath(path);
   }
@@ -113,8 +114,9 @@ public class PathPlannerUtil {
   public static Command createPathDuringRuntime(
       Pose2d currentPose, Pose2d targetPose, PathConstraints constraints, boolean mirror) {
     List<Waypoint> bezierPoints = PathPlannerPath.waypointsFromPoses(currentPose, targetPose);
-    PathPlannerPath path = new PathPlannerPath(
-        bezierPoints, constraints, null, new GoalEndState(0, targetPose.getRotation()));
+    PathPlannerPath path =
+        new PathPlannerPath(
+            bezierPoints, constraints, null, new GoalEndState(0, targetPose.getRotation()));
     path.preventFlipping = !mirror; // mirror=True, Don't prevent flipping.
     return PathFollowingCommandsBuilder.followPath(path);
   }
@@ -134,7 +136,8 @@ public class PathPlannerUtil {
     return createPathDuringRuntime(currentPose, closest.getPose(), constraints, mirror);
   }
 
-  public static Command GoToNearesStartingPathPosition(Pose2d currentPose, PathConstraints constraints) {
+  public static Command GoToNearesStartingPathPosition(
+      Pose2d currentPose, PathConstraints constraints) {
     return GoToNearesStartingPathPosition(currentPose, constraints, true);
   }
 

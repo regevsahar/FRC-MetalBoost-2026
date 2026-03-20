@@ -1,33 +1,32 @@
 package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter.ShooterConstants;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
+import frc.robot.subsystems.Shooter.ShooterConstants;
 
 public class AlignHoodToConstValue extends Command {
-    private final HoodSUB hood;
+  private final HoodSUB hood;
 
-    public AlignHoodToConstValue(HoodSUB hood) {
-        this.hood = hood;
-        addRequirements(hood);
-    }
+  public AlignHoodToConstValue(HoodSUB hood) {
+    this.hood = hood;
+    addRequirements(hood);
+  }
 
-    @Override
-    public void initialize() {
-    }
+  @Override
+  public void initialize() {}
 
-    @Override
-    public void execute() {
-        hood.setTargetArc(ShooterConstants.kShootArc.get());
-    }
+  @Override
+  public void execute() {
+    hood.setTargetArc(ShooterConstants.kShootArc.get());
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        hood.stop();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    hood.stop();
+  }
 
-    @Override
-    public boolean isFinished() {
-        return false;// hood.isAtTarget();
-    }
+  @Override
+  public boolean isFinished() {
+    return false; // hood.isAtTarget();
+  }
 }

@@ -49,38 +49,40 @@ public class SwerveSub extends MBSubsystem {
   // ---------------------------------------------------------------------------
   // SysId Routine — characterizes the drive motors (kS, kV, kA, kP)
   // ---------------------------------------------------------------------------
-  private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
-      new SysIdRoutine.Config(
-          Units.Volts.per(Units.Second).of(0.5), // ramp rate
-          Units.Volts.of(2.0), // step voltage
-          null, // default timeout
-          (state) -> SignalLogger.writeString("SysIdTestState", state.toString())),
-      new SysIdRoutine.Mechanism(
-          // Drive: send the same voltage to every module's drive motor
-          // while locking steering to 0° (straight ahead)
-          (voltage) -> {
-            for (SwerveModule mod : mSwerveMods) {
-              // Lock steer to 0 rotations (straight forward)
-              mod.setAngle(Rotation2d.fromDegrees(0));
-              mod.setDriveVoltage(voltage.in(Volts));
-            }
-          },
-          // Log: average position and velocity across all four modules
-          // The SysIdRoutine framework captures the applied voltage automatically.
-          (log) -> {
-            double avgPositionMeters = 0;
-            double avgVelocityMPS = 0;
-            for (SwerveModule mod : mSwerveMods) {
-              avgPositionMeters += mod.getDrivePositionMeters();
-              avgVelocityMPS += mod.getDriveVelocityMPS();
-            }
-            avgPositionMeters /= 4.0;
-            avgVelocityMPS /= 4.0;
+  private final SysIdRoutine m_sysIdRoutine =
+      new SysIdRoutine(
+          new SysIdRoutine.Config(
+              Units.Volts.per(Units.Second).of(0.5), // ramp rate
+              Units.Volts.of(2.0), // step voltage
+              null, // default timeout
+              (state) -> SignalLogger.writeString("SysIdTestState", state.toString())),
+          new SysIdRoutine.Mechanism(
+              // Drive: send the same voltage to every module's drive motor
+              // while locking steering to 0° (straight ahead)
+              (voltage) -> {
+                for (SwerveModule mod : mSwerveMods) {
+                  // Lock steer to 0 rotations (straight forward)
+                  mod.setAngle(Rotation2d.fromDegrees(0));
+                  mod.setDriveVoltage(voltage.in(Volts));
+                }
+              },
+              // Log: average position and velocity across all four modules
+              // The SysIdRoutine framework captures the applied voltage automatically.
+              (log) -> {
+                double avgPositionMeters = 0;
+                double avgVelocityMPS = 0;
+                for (SwerveModule mod : mSwerveMods) {
+                  avgPositionMeters += mod.getDrivePositionMeters();
+                  avgVelocityMPS += mod.getDriveVelocityMPS();
+                }
+                avgPositionMeters /= 4.0;
+                avgVelocityMPS /= 4.0;
 
-            log.motor("swerve-drive")
-                .linearPosition(Meters.of(avgPositionMeters))
-                .linearVelocity(MetersPerSecond.of(avgVelocityMPS));
-          }, this));
+                log.motor("swerve-drive")
+                    .linearPosition(Meters.of(avgPositionMeters))
+                    .linearVelocity(MetersPerSecond.of(avgVelocityMPS));
+              },
+              this));
 
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   public SwerveSub(PoseEstimator estimator) {
@@ -114,8 +116,7 @@ public class SwerveSub extends MBSubsystem {
         this::getRobotRelativeSpeeds,
         (speeds, feedforwards) -> driveRobotRelative(speeds),
         new PPHolonomicDriveController(
-            new PIDConstants(5.5, 0.0, 0.0),
-            new PIDConstants(7.5, 0.0, 0.0)),
+            new PIDConstants(5.5, 0.0, 0.0), new PIDConstants(7.5, 0.0, 0.0)),
         config,
         () -> {
           var alliance = DriverStation.getAlliance();
@@ -382,7 +383,8 @@ public class SwerveSub extends MBSubsystem {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
       SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Target Velocity", mod.getTargetState().speedMetersPerSecond);
+          "Mod " + mod.moduleNumber + " Target Velocity",
+          mod.getTargetState().speedMetersPerSecond);
 
       Logger.recordOutput(
           "Estimator/Mods/Mod " + mod.moduleNumber + " Cancoder", mod.getCANcoder().getDegrees());
