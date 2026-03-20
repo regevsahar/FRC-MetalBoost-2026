@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.FieldUtils.FieldPoses;
+import frc.lib.util.GameDataUtil;
 import frc.lib.util.MapFiltering.FieldGridLoader;
 import frc.lib.util.MapFiltering.GridMap;
 import frc.lib.util.Paths.PathPlannerUtil;
@@ -22,6 +23,7 @@ import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 import frc.robot.commands.Automations.ShooterAutomationCmd;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.ShooterCommands.ManualHoodCmd;
 import frc.robot.commands.ShooterCommands.ShootConstantValueCmd;
 import frc.robot.commands.ShooterCommands.ShooterSpeedToHubCmd;
@@ -157,6 +159,13 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+
+    new Trigger(() -> GameDataUtil.isHubAboutToActivate())
+        .onTrue(new RumbleCommand(driver, operator).withTimeout(0.75));
+
+    // Rumble for 1 second on every shift change during the match.
+    new Trigger(() -> GameDataUtil.didShiftJustChange())
+        .onTrue(new RumbleCommand(driver, operator).withTimeout(1.0));
 
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
