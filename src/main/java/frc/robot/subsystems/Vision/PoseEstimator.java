@@ -30,11 +30,10 @@ public class PoseEstimator extends MBSubsystem {
       TimeInterpolatableBuffer.createBuffer(1.5);
   public Pose2d visionPose = new Pose2d();
   Field2d field = new Field2d();
-  // buffer לזווית של הגירו
   private double offsetX = 0;
   private double offsetY = 0;
   private int nOffsets = 0;
-  private Translation2d target = FieldPoses.HUB_CENTER_BLUE;
+  private Translation2d hubTarget = FieldPoses.HUB_CENTER_BLUE;
 
   public PoseEstimator() {
     super("PoseEstimator");
@@ -52,7 +51,7 @@ public class PoseEstimator extends MBSubsystem {
             VisionConstants.PoseEstimator.stateStdDevs,
             VisionConstants.PoseEstimator.visionStdDevs);
     SmartDashboard.putData("FieldPoseEstimator", field);
-    target = FieldPoses.getHubPosByAliiance();
+    hubTarget = FieldPoses.getHubPosByAliiance();
   }
 
   public void updateHeadingOffset(Rotation2d gyro, Rotation2d vision) {
@@ -92,8 +91,7 @@ public class PoseEstimator extends MBSubsystem {
     gyroYawBuffer.addSample(Timer.getFPGATimestamp(), gyroAngle);
   }
 
-  public void resetPose(
-      Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
+  public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
     sEstimator.resetPosition(getCorrectedHeading(gyroAngle), modulePositions, newPose);
   }
 
@@ -131,7 +129,7 @@ public class PoseEstimator extends MBSubsystem {
   }
 
   public double getDistanceFromHub() {
-    return getEstimatedPosition().getTranslation().getDistance(target);
+    return getEstimatedPosition().getTranslation().getDistance(hubTarget);
   }
 
   public double getRoundedDistanceFromHub() {
