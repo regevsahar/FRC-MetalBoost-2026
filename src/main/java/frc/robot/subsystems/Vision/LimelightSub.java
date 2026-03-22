@@ -49,11 +49,6 @@ public class LimelightSub extends MBSubsystem {
     Optional<Alliance> alliance = edu.wpi.first.wpilibj.DriverStation.getAlliance();
     LimelightHelpers.PoseEstimate estimate;
 
-    if (alliance.get() == Alliance.Red) {
-      estimate = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
-    } else {
-      estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
-    }
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
       estimate = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(limelightName);
     } else {

@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,12 +22,13 @@ import frc.robot.commands.Automations.EjectBallsAutomationCmd;
 import frc.robot.commands.Automations.InsertBallsAutomationCmd;
 import frc.robot.commands.Automations.ResetSubsystemsAutomationCmd;
 import frc.robot.commands.Automations.ShooterAutomationCmd;
+import frc.robot.commands.ConveyanceCommands.ConveyanceWheelsCmd;
 import frc.robot.commands.IntakeCommands.CloseIntakeCmd;
 import frc.robot.commands.ResetPositionCommand.ResetIntakeCmd;
 import frc.robot.commands.RumbleCommand;
+import frc.robot.commands.ShooterCommands.AlignHoodToConstValue;
 import frc.robot.commands.ShooterCommands.ManualHoodCmd;
 import frc.robot.commands.ShooterCommands.ShootConstantValueCmd;
-import frc.robot.commands.ShooterCommands.ShooterSpeedToHubCmd;
 import frc.robot.commands.Swerve.TeleopSwerveCmd;
 import frc.robot.commands.Vision.ShootWhileMovingCmd;
 import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
@@ -70,17 +72,21 @@ public class RobotContainer {
   public final LimelightSub limelight = new LimelightSub(CameraConstants.limelight3name);
   public final LimelightSub limelight2 = new LimelightSub(CameraConstants.limelight4name);
   public final AlignToPoseSub AlignToPoseSub = new AlignToPoseSub();
-  private final FlyWheelSub shooter;
-  private final HoodSUB hood;
-  private final IntakeSub intake = new IntakeSub();
+  private final FlyWheelIO shooterIO =
+      RobotBase.isSimulation() ? new FlyWheelSimulation() : new FlyWheelIOTalonFX();
+
+  private final FlyWheelSub shooter = new FlyWheelSub(shooterIO, poseEstimator);
+
+  private final HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
+
+  public final HoodSUB hood = new HoodSUB(hoodIO, poseEstimator);
+  public final IntakeSub intake = new IntakeSub();
   private final IntakeRollersSub intakeRollers = new IntakeRollersSub();
   private final ConveyanceSub conveyanceWheels = new ConveyanceSub();
   private final ConveyanceRollerSub rollers = new ConveyanceRollerSub();
   public final SwerveSub s_Swerve = new SwerveSub(poseEstimator);
 
   /* Driver Buttons */
-  private final JoystickButton zeroGyro =
-      new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton lowerSwerveSpeed =
       new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton higherSwerveSpeed =
@@ -91,15 +97,18 @@ public class RobotContainer {
       new JoystickButton(driver, XboxController.Button.kA.value);
 
   /* SysId Characterization Buttons (run in Test mode only) */
-  private final JoystickButton sysIdQuasFwd =
-      new JoystickButton(driver, XboxController.Button.kX.value);
-  private final JoystickButton sysIdQuasRev =
-      new JoystickButton(driver, XboxController.Button.kStart.value);
-  private final JoystickButton sysIdDynFwd =
-      new JoystickButton(driver, XboxController.Button.kBack.value);
-  private final Trigger sysIdDynRev = new Trigger(() -> driver.getPOV() == 0); // POV Up
+  // private final JoystickButton sysIdQuasFwd = new JoystickButton(driver,
+  // XboxController.Button.kX.value);
+  // private final JoystickButton sysIdQuasRev = new JoystickButton(driver,
+  // XboxController.Button.kStart.value);
+  // private final JoystickButton sysIdDynFwd = new JoystickButton(driver,
+  // XboxController.Button.kBack.value);
+  // private final Trigger sysIdDynRev = new Trigger(() -> driver.getPOV() == 0);
+  // // POV Up
 
   /// * operation Buttons */
+  private final JoystickButton ShootArcValue =
+      new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton ShootConstantValue =
       new JoystickButton(operator, XboxController.Button.kY.value);
   private final JoystickButton shoot = new JoystickButton(operator, XboxController.Button.kX.value);
@@ -122,40 +131,27 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    FlyWheelIO shooterIO =
-        RobotBase.isSimulation() ? new FlyWheelSimulation() : new FlyWheelIOTalonFX();
 
-    shooter = new FlyWheelSub(shooterIO, poseEstimator);
-
-    HoodIO hoodIO = RobotBase.isSimulation() ? new HoodIOSim() : new HoodIOTalonFX();
-
-    hood = new HoodSUB(hoodIO, poseEstimator);
     fieldGrid = FieldGridLoader.load("FieldGrid.json");
+
+    poseEstimator.addLimelight(limelight);
+    poseEstimator.addLimelight(limelight2);
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerveCmd(
             s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
+            () -> driver.getRawAxis(translationAxis),
+            () -> driver.getRawAxis(strafeAxis),
             () -> -driver.getRawAxis(rotationAxis),
             () -> true));
 
     hood.setDefaultCommand(
         new ManualHoodCmd(hood, () -> operator.getRawAxis(XboxController.Axis.kLeftY.value)));
 
-    followPath.toggleOnTrue(
-        new DeferredCommand(
-            () ->
-                PathPlannerUtil.createPathDuringRuntime(
-                    poseEstimator.getEstimatedPosition(),
-                    new Pose2d(2.85, 4.33, Rotation2d.fromDegrees(0)),
-                    new PathConstraints(0.5, 0.5, 0.5, 0.5),
-                    true),
-            Set.of(s_Swerve)));
-
     // Configure the button bindingsPP
     configureButtonBindings();
     registerPathPlannerCommands();
+    autoChooser = new AutoChooser(new PathPlannerAuto("TEST 1M"));
   }
 
   private void configureButtonBindings() {
@@ -168,12 +164,11 @@ public class RobotContainer {
         .onTrue(new RumbleCommand(driver, operator).withTimeout(1.0));
 
     /* Driver Buttons */
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     lowerSwerveSpeed.whileTrue(
         new TeleopSwerveCmd(
             s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
+            () -> driver.getRawAxis(translationAxis),
+            () -> driver.getRawAxis(strafeAxis),
             () -> -driver.getRawAxis(rotationAxis),
             () -> true,
             () -> 0.4));
@@ -181,8 +176,8 @@ public class RobotContainer {
     higherSwerveSpeed.whileTrue(
         new TeleopSwerveCmd(
             s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
+            () -> driver.getRawAxis(translationAxis),
+            () -> driver.getRawAxis(strafeAxis),
             () -> -driver.getRawAxis(rotationAxis),
             () -> true,
             () -> 0.85));
@@ -199,13 +194,14 @@ public class RobotContainer {
     // SysId — hold each button while enabled in TEST mode on the Driver Station
     // Run all 4 tests, then open the .wpilog in the SysId Analyzer tool.
     // -----------------------------------------------------------------------
-    sysIdQuasFwd.whileTrue(s_Swerve.sysIdQuasistaticForward());
-    sysIdQuasRev.whileTrue(s_Swerve.sysIdQuasistaticReverse());
-    sysIdDynFwd.whileTrue(s_Swerve.sysIdDynamicForward());
-    sysIdDynRev.whileTrue(s_Swerve.sysIdDynamicReverse());
+    // sysIdQuasFwd.whileTrue(s_Swerve.sysIdQuasistaticForward());
+    // sysIdQuasRev.whileTrue(s_Swerve.sysIdQuasistaticReverse());
+    // sysIdDynFwd.whileTrue(s_Swerve.sysIdDynamicForward());
+    // sysIdDynRev.whileTrue(s_Swerve.sysIdDynamicReverse());
 
-    shoot.whileTrue(new ShooterSpeedToHubCmd(shooter, conveyanceWheels));
-    ShootConstantValue.whileTrue(new ShootConstantValueCmd(shooter));
+    ShootArcValue.whileTrue(new AlignHoodToConstValue(hood));
+    ShootConstantValue.whileTrue(
+        new ShootConstantValueCmd(shooter).alongWith(new ConveyanceWheelsCmd(conveyanceWheels)));
     resetIntakePosition.onTrue(new ResetIntakeCmd(intake));
     openIntake.whileTrue(new InsertBallsAutomationCmd(intake, intakeRollers));
     closeIntake.whileTrue(new CloseIntakeCmd(intake));
@@ -220,7 +216,9 @@ public class RobotContainer {
             () -> -driver.getRawAxis(strafeAxis),
             shooter,
             hood,
-            FieldPoses.getHubPosByAliiance()));
+            FieldPoses.getHubPosByAliiance(),
+            conveyanceWheels,
+            rollers));
     shootToZoneTrigger.whileTrue(
         new ShooterAutomationCmd(
             s_Swerve,
@@ -231,7 +229,31 @@ public class RobotContainer {
             hood,
             conveyanceWheels,
             rollers,
-            FieldPoses.getHubPosByAliiance())); // TODO: change to real target
+            FieldPoses.getHubPosByAliiance(),
+            intake));
+    // FieldPoses.getClosestBumper(
+    // poseEstimator.getEstimatedPosition()
+    // .getTranslation()))); // TODO: change to
+    // real target
+    followPath.toggleOnTrue(
+        new DeferredCommand(
+            () ->
+                PathPlannerUtil.createPathDuringRuntime(
+                    poseEstimator.getEstimatedPosition(),
+                    new Pose2d(14, 2.48, Rotation2d.fromDegrees(-180)),
+                    new PathConstraints(4, 2, 2, 2),
+                    false),
+            Set.of(s_Swerve)));
+
+    // try {
+    // followPath.toggleOnTrue(
+    // PathFollowingCommandsBuilder.followPath(
+    // PathPlannerPath.fromPathFile("line")
+    // )
+    // );
+    // } catch (Exception e) {
+    // // TODO: handle exception
+    // }
   }
 
   public Command getAutonomousCommand() {

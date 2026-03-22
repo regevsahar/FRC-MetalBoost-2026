@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,37 +49,39 @@ public class SwerveSub extends MBSubsystem {
   // ---------------------------------------------------------------------------
   // SysId Routine — characterizes the drive motors (kS, kV, kA, kP)
   // ---------------------------------------------------------------------------
-  private final SysIdRoutine m_sysIdRoutine =
-      new SysIdRoutine(
-          // Default config: 1 V/s ramp rate, 7 V step, 10 s timeout
-          new SysIdRoutine.Config(),
-          new SysIdRoutine.Mechanism(
-              // Drive: send the same voltage to every module's drive motor
-              // while locking steering to 0° (straight ahead)
-              (voltage) -> {
-                for (SwerveModule mod : mSwerveMods) {
-                  // Lock steer to 0 rotations (straight forward)
-                  mod.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)), true);
-                  mod.setDriveVoltage(voltage.in(Volts));
-                }
-              },
-              // Log: average position and velocity across all four modules
-              // The SysIdRoutine framework captures the applied voltage automatically.
-              (log) -> {
-                double avgPositionMeters = 0;
-                double avgVelocityMPS = 0;
-                for (SwerveModule mod : mSwerveMods) {
-                  avgPositionMeters += mod.getDrivePositionMeters();
-                  avgVelocityMPS += mod.getDriveVelocityMPS();
-                }
-                avgPositionMeters /= 4.0;
-                avgVelocityMPS /= 4.0;
+  private final SysIdRoutine m_sysIdRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(
+          Units.Volts.per(Units.Second).of(0.5), // ramp rate
+          Units.Volts.of(2.0), // step voltage
+          null, // default timeout
+          (state) -> SignalLogger.writeString("SysIdTestState", state.toString())),
+      new SysIdRoutine.Mechanism(
+          // Drive: send the same voltage to every module's drive motor
+          // while locking steering to 0° (straight ahead)
+          (voltage) -> {
+            for (SwerveModule mod : mSwerveMods) {
+              // Lock steer to 0 rotations (straight forward)
+              mod.setAngle(Rotation2d.fromDegrees(0));
+              mod.setDriveVoltage(voltage.in(Volts));
+            }
+          },
+          // Log: average position and velocity across all four modules
+          // The SysIdRoutine framework captures the applied voltage automatically.
+          (log) -> {
+            double avgPositionMeters = 0;
+            double avgVelocityMPS = 0;
+            for (SwerveModule mod : mSwerveMods) {
+              avgPositionMeters += mod.getDrivePositionMeters();
+              avgVelocityMPS += mod.getDriveVelocityMPS();
+            }
+            avgPositionMeters /= 4.0;
+            avgVelocityMPS /= 4.0;
 
-                log.motor("swerve-drive")
-                    .linearPosition(Meters.of(avgPositionMeters))
-                    .linearVelocity(MetersPerSecond.of(avgVelocityMPS));
-              },
-              this));
+            log.motor("swerve-drive")
+                .linearPosition(Meters.of(avgPositionMeters))
+                .linearVelocity(MetersPerSecond.of(avgVelocityMPS));
+          },
+          this));
 
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   public SwerveSub(PoseEstimator estimator) {
@@ -86,17 +90,15 @@ public class SwerveSub extends MBSubsystem {
     pigeon = new Pigeon2(Constants.SwerveConstants.PigeonID, new CANBus(Constants.CanivoreName));
     m_canBus = new CANBus(Constants.CanivoreName);
     zeroPigeon();
-    mSwerveMods =
-        new SwerveModule[] {
-          new SwerveModule(0, Constants.SwerveConstants.Mod0.constants),
-          new SwerveModule(1, Constants.SwerveConstants.Mod1.constants),
-          new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
-          new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
-        };
+    mSwerveMods = new SwerveModule[] {
+        new SwerveModule(0, Constants.SwerveConstants.Mod0.constants),
+        new SwerveModule(1, Constants.SwerveConstants.Mod1.constants),
+        new SwerveModule(2, Constants.SwerveConstants.Mod2.constants),
+        new SwerveModule(3, Constants.SwerveConstants.Mod3.constants)
+    };
 
-    swerveOdometry =
-        new SwerveDriveOdometry(
-            Constants.SwerveConstants.swerveKinematics, getGyroYaw(), getModulePositions());
+    swerveOdometry = new SwerveDriveOdometry(
+        Constants.SwerveConstants.swerveKinematics, getGyroYaw(), getModulePositions());
 
     try {
       config = RobotConfig.fromGUISettings();
@@ -106,40 +108,21 @@ public class SwerveSub extends MBSubsystem {
     }
 
     AutoBuilder.configure(
-        // ? why not ()->estimator.getEstimatedPosition()
-        this::getPose, // Robot pose supplier
-        this::resetPose, // Method to reset odometry (will be called if your auto has a starting
-        // pose)
-        this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        (speeds, feedforwards) ->
-            driveRobotRelative(speeds), // Method that will drive the robot given ROBOT
-        // RELATIVE ChassisSpeeds. Also optionally outputs
-        // individual module feedforwards
-        new PPHolonomicDriveController( // PPHolonomicController is the built in path following
-            // controller for
-            // holonomic drive trains
-            new PIDConstants(4.0, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants/ Rotation PID constants
-            ),
-        config, // The robot configuration
+        this::getPose,
+        this::resetPose,
+        this::getRobotRelativeSpeeds,
+        (speeds, feedforwards) -> driveRobotRelative(speeds),
+        new PPHolonomicDriveController(
+            new PIDConstants(5.5, 0.0, 0.0), new PIDConstants(7.5, 0.0, 0.0)),
+        config,
         () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
           var alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
             return alliance.get() == DriverStation.Alliance.Red;
           }
           return false;
         },
-        this // Reference to this subsystem to set requirements
-        );
+        this);
 
     // m_poseEstimator =
     // new SwerveDrivePoseEstimator(
@@ -195,6 +178,7 @@ public class SwerveSub extends MBSubsystem {
 
   public void resetPose(Pose2d pose) {
     swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+    estimator.resetPose(getGyroYaw(), getModulePositions(), pose);
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
@@ -223,8 +207,7 @@ public class SwerveSub extends MBSubsystem {
 
   public void driveRobotRelative(ChassisSpeeds speeds) {
     // Convert the robot-relative speeds into swerve module states
-    SwerveModuleState[] swerveModuleStates =
-        Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(speeds);
+    SwerveModuleState[] swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
@@ -243,12 +226,11 @@ public class SwerveSub extends MBSubsystem {
 
   public void drive(
       Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-    SwerveModuleState[] swerveModuleStates =
-        Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
-            fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                    translation.getX(), translation.getY(), rotation, getHeading())
-                : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
+    SwerveModuleState[] swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
+        fieldRelative
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                translation.getX(), translation.getY(), rotation, getHeading())
+            : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
@@ -278,6 +260,14 @@ public class SwerveSub extends MBSubsystem {
     return states;
   }
 
+  public SwerveModuleState[] getTargetModuleStates() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    for (SwerveModule mod : mSwerveMods) {
+      states[mod.moduleNumber] = mod.getTargetState();
+    }
+    return states;
+  }
+
   public SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
     for (SwerveModule mod : mSwerveMods) {
@@ -297,6 +287,7 @@ public class SwerveSub extends MBSubsystem {
 
   public void setPose(Pose2d pose) {
     swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+    estimator.resetPose(getGyroYaw(), getModulePositions(), pose);
   }
 
   public Rotation2d getHeading() {
@@ -304,15 +295,13 @@ public class SwerveSub extends MBSubsystem {
   }
 
   public void setHeading(Rotation2d heading) {
-    swerveOdometry.resetPosition(
-        getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
+    Pose2d newPose = new Pose2d(getPose().getTranslation(), heading);
+    swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), newPose);
   }
 
   public void zeroHeading() {
-    swerveOdometry.resetPosition(
-        getGyroYaw(),
-        getModulePositions(),
-        new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    Pose2d newPose = new Pose2d(getPose().getTranslation(), new Rotation2d());
+    swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), newPose);
   }
 
   public Rotation2d getGyroYaw() {
@@ -369,16 +358,15 @@ public class SwerveSub extends MBSubsystem {
 
   @Override
   public void subsystemPeriodic() {
-
-    // ב-Subsystem הלוונטי או ב-RobotContainer
+    this.estimator.updateSwerve(getGyroYaw(), getModulePositions());
     var status = m_canBus.getStatus();
     SmartDashboard.putNumber("CANivore Load", status.BusUtilization * 100);
 
-    // updateOdometry();
     swerveOdometry.update(getGyroYaw(), getModulePositions());
     field.setRobotPose(getPose());
 
     Logger.recordOutput("Estimator/states/Mystates", getModuleStates());
+    Logger.recordOutput("Estimator/states/MyTargetStates", getTargetModuleStates());
     Logger.recordOutput("Estimator/Odometry", getOdometryPose());
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
@@ -387,6 +375,9 @@ public class SwerveSub extends MBSubsystem {
           "Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+      SmartDashboard.putNumber(
+          "Mod " + mod.moduleNumber + " Target Velocity",
+          mod.getTargetState().speedMetersPerSecond);
 
       Logger.recordOutput(
           "Estimator/Mods/Mod " + mod.moduleNumber + " Cancoder", mod.getCANcoder().getDegrees());
@@ -396,6 +387,9 @@ public class SwerveSub extends MBSubsystem {
       Logger.recordOutput(
           "Estimator/Mods/Mod " + mod.moduleNumber + " Velocity",
           mod.getState().speedMetersPerSecond);
+      Logger.recordOutput(
+          "Estimator/Mods/Mod " + mod.moduleNumber + " Target Velocity",
+          mod.getTargetState().speedMetersPerSecond);
     }
 
     SmartDashboard.putNumber("Pigeon2 Yaw", pigeon.getYaw().getValueAsDouble());

@@ -25,7 +25,7 @@ public class ConveyanceRollerSub extends MBSubsystem {
 
   private void configureTalonFX() {
     TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
-    talonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    talonFXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     StatusCode statusInsert = motor.getConfigurator().apply(talonFXConfig);
     if (statusInsert != StatusCode.OK) {
       System.out.println("Failed to configure TalonFX: " + statusInsert);

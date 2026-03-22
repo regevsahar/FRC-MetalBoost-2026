@@ -19,9 +19,10 @@ public class IntakeConstants {
   public static final double kTolerance = 0.05;
   public static final double TOP_LIMIT = 4.5; // rotations
   public static final double BOTTOM_LIMIT = 0; // rotations
+  public static final double ROLLERS_LIMIT = 0.3;
   public static final double ROTATIONS_PER_CM = 2048;
   public static final double kGearRatio = 1;
-  public static final double EJECT_SPEED = -8;
-  public static final double INSERT_SPEED = 7;
-  public static final double kStallThreshold = 120.0; // Amps
+  public static final double EJECT_SPEED = -4;
+  public static final double INSERT_SPEED = 4.5;
+  public static final double kStallThreshold = 125.0; // Amps
 }

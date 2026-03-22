@@ -23,6 +23,7 @@ public class IntakeSub extends MBSubsystem {
 
     configureTalonFX();
     motor.setNeutralMode(NeutralModeValue.Brake);
+    resetPosition();
   }
 
   private void configureTalonFX() {

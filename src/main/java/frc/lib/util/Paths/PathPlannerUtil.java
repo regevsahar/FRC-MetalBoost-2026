@@ -48,13 +48,17 @@ public class PathPlannerUtil {
   }
 
   /*
-  public static void setupPathPlannerLogging() {
-  	PathPlannerLogging.setLogActivePathCallback(
-  		activePath -> Logger.recordOutput(AutonomousConstants.LOG_PATH_PREFIX + "/ActivePath", activePath.toArray(Pose2d[]::new))
-  	);
-  	PathPlannerLogging
-  		.setLogTargetPoseCallback(targetPose -> Logger.recordOutput(AutonomousConstants.LOG_PATH_PREFIX + "/TargetPose", targetPose));
-  }*/
+   * public static void setupPathPlannerLogging() {
+   * PathPlannerLogging.setLogActivePathCallback(
+   * activePath -> Logger.recordOutput(AutonomousConstants.LOG_PATH_PREFIX +
+   * "/ActivePath", activePath.toArray(Pose2d[]::new))
+   * );
+   * PathPlannerLogging
+   * .setLogTargetPoseCallback(targetPose ->
+   * Logger.recordOutput(AutonomousConstants.LOG_PATH_PREFIX + "/TargetPose",
+   * targetPose));
+   * }
+   */
 
   public static void startPathfinder() {
     setPathfinder(new LocalADStar());
@@ -70,18 +74,18 @@ public class PathPlannerUtil {
   }
 
   /*
-  	public static Optional<RobotConfig> getGuiRobotConfig() {
-  		try {
-  			RobotConfig robotConfig = RobotConfig.fromGUISettings();
-  			return Optional.of(robotConfig);
-  		} catch (IOException ioException) {
-  			reportAlert(Alert.AlertType.kError, "GuiSettingsFileNotFoundAt");
-  		} catch (ParseException parseException) {
-  			reportAlert(Alert.AlertType.kError, "GuiSettingsParseFailedAt");
-  		}
-  		return Optional.empty();
-  	}
-  */
+   * public static Optional<RobotConfig> getGuiRobotConfig() {
+   * try {
+   * RobotConfig robotConfig = RobotConfig.fromGUISettings();
+   * return Optional.of(robotConfig);
+   * } catch (IOException ioException) {
+   * reportAlert(Alert.AlertType.kError, "GuiSettingsFileNotFoundAt");
+   * } catch (ParseException parseException) {
+   * reportAlert(Alert.AlertType.kError, "GuiSettingsParseFailedAt");
+   * }
+   * return Optional.empty();
+   * }
+   */
   public static void registerCommand(String commandName, Command command) {
     NamedCommands.registerCommand(commandName, command);
   }
@@ -117,7 +121,7 @@ public class PathPlannerUtil {
     return PathFollowingCommandsBuilder.followPath(path);
   }
 
-  public static Command GoToNearesPosition(
+  public static Command GoToNearesStartingPathPosition(
       Pose2d currentPose, PathConstraints constraints, boolean mirror) {
     CenteringPositions closest = null;
     double minDistance = Double.MAX_VALUE;
@@ -132,8 +136,9 @@ public class PathPlannerUtil {
     return createPathDuringRuntime(currentPose, closest.getPose(), constraints, mirror);
   }
 
-  public static Command GoToNearesPosition(Pose2d currentPose, PathConstraints constraints) {
-    return GoToNearesPosition(currentPose, constraints, true);
+  public static Command GoToNearesStartingPathPosition(
+      Pose2d currentPose, PathConstraints constraints) {
+    return GoToNearesStartingPathPosition(currentPose, constraints, true);
   }
 
   public static void setDynamicObstacles(
@@ -159,9 +164,10 @@ public class PathPlannerUtil {
         targetPose.getTranslation(), currentPose.getTranslation(), 0.5); // TODO change to constant
   }
   /*
-  private static void reportAlert(Alert.AlertType alertType, String message) {
-  	new Alert(alertType, AutonomousConstants.LOG_PATH_PREFIX + "/" + message).report();
-  }
-  */
+   * private static void reportAlert(Alert.AlertType alertType, String message) {
+   * new Alert(alertType, AutonomousConstants.LOG_PATH_PREFIX + "/" +
+   * message).report();
+   * }
+   */
 
 }

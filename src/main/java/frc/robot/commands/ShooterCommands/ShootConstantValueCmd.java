@@ -25,7 +25,7 @@ public class ShootConstantValueCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setTargetRPM(ShooterConstants.kShootRPM);
+    shooter.setTargetRPM(ShooterConstants.kShootRPM.get());
   }
 
   // Called once the command ends or is interrupted.

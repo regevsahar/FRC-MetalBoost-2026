@@ -18,7 +18,7 @@ public class HoodIOTalonFX implements HoodIO {
 
   public HoodIOTalonFX() {
     hoodMotor = new TalonFX(ShooterConstants.HOOD_MOTOR_ID, new CANBus(Constants.CanivoreName));
-
+    resetPosition();
     configMotor();
   }
 

@@ -13,39 +13,30 @@ public class FieldPoses {
 
   // TODO: update these positions and name and add more if needed
   public enum CenteringPositions {
-    A_LEFT(0, true, new Pose2d(3.71123, 4.19654, Rotation2d.fromDegrees(0))),
-    A_RIGHT(1, false, new Pose2d(3.71008, 3.86792, Rotation2d.fromDegrees(0))),
+    TRANCH_LEFT(0, new Pose2d(3.5, 7.436, Rotation2d.fromDegrees(0))),
 
-    B_LEFT(2, true, new Pose2d(3.95799, 3.44052, Rotation2d.fromDegrees(60))),
-    B_RIGHT(3, false, new Pose2d(4.24201, 3.27522, Rotation2d.fromDegrees(60))),
-    C_LEFT(4, true, new Pose2d(5.02126, 3.43953, Rotation2d.fromDegrees(120))),
-    C_RIGHT(5, false, new Pose2d(4.73610, 3.27621, Rotation2d.fromDegrees(120))),
+    TRANCH_RIGHT(1, new Pose2d(3.5, 0.66, Rotation2d.fromDegrees(0))),
 
-    D_LEFT(6, true, new Pose2d(5.26859, 4.19654, Rotation2d.fromDegrees(180))),
-    D_RIGHT(7, false, new Pose2d(5.26745, 3.86792, Rotation2d.fromDegrees(180))),
+    CLIMBER_LEFT_BLUE(2, new Pose2d(1.63, 3.2, Rotation2d.fromDegrees(180))),
 
-    E_LEFT(8, true, new Pose2d(4.73667, 4.78924, Rotation2d.fromDegrees(-120))),
-    E_RIGHT(9, false, new Pose2d(5.02069, 4.62394, Rotation2d.fromDegrees(-120))),
+    CLIMBER_RIGHT_BLUE(3, new Pose2d(1.63, 4.27, Rotation2d.fromDegrees(180))),
 
-    F_LEFT(10, true, new Pose2d(4.24258, 4.78825, Rotation2d.fromDegrees(-60))),
-    F_RIGHT(11, false, new Pose2d(3.93194, 4.62493, Rotation2d.fromDegrees(-60)));
+    CLIMBER_CENTER_BLUE(4, new Pose2d(1.63, 3.7, Rotation2d.fromDegrees(180))),
+
+    BUMPER_LEFT_BLUE(5, new Pose2d(3.5, 5.5, Rotation2d.fromDegrees(0))),
+
+    BUMPER_RIGHT_BLUE(6, new Pose2d(3.5, 2.5, Rotation2d.fromDegrees(0)));
 
     private final int index;
-    private final boolean isLeft;
     private final Pose2d pose;
 
-    CenteringPositions(int index, boolean isBlue, Pose2d pose) {
+    CenteringPositions(int index, Pose2d pose) {
       this.index = index;
-      this.isLeft = isBlue;
       this.pose = pose;
     }
 
     public int getIndex() {
       return index;
-    }
-
-    public boolean isLeft() {
-      return isLeft;
     }
 
     public Pose2d getPose() {
@@ -117,5 +108,17 @@ public class FieldPoses {
     return isFieldConventionAlliance()
         ? rotation
         : FieldMath.transformAngle(rotation, AngleTransform.INVERT);
+  }
+
+  public static Translation2d getClosestBumper(Translation2d robotTranslation) {
+    Translation2d leftBamper =
+        getAllianceRelative(CenteringPositions.BUMPER_LEFT_BLUE.getPose().getTranslation());
+    Translation2d rightBamper =
+        getAllianceRelative(CenteringPositions.BUMPER_RIGHT_BLUE.getPose().getTranslation());
+
+    if (robotTranslation.getDistance(leftBamper) < robotTranslation.getDistance(rightBamper)) {
+      return leftBamper;
+    }
+    return rightBamper;
   }
 }

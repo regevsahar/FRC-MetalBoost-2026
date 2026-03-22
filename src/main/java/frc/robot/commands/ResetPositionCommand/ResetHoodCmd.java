@@ -16,7 +16,7 @@ public class ResetHoodCmd extends Command {
 
   @Override
   public void execute() {
-    hood.setSpeed(-0.2); // :TODO: "tune" this
+    hood.setSpeed(-0.15); // :TODO: "tune" this
   }
 
   @Override

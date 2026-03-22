@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Swerve.SwerveModule;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -53,13 +54,23 @@ public class SwerveModule {
 
     /* Drive Motor Config */
     mDriveMotor = new TalonFX(moduleConstants.driveMotorID, new CANBus(Constants.CanivoreName));
-    mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
+    TalonFXConfiguration driveConfig = Robot.ctreConfigs.swerveDriveFXConfig;
+
+    mDriveMotor.getConfigurator().apply(driveConfig);
+
     mDriveMotor.getConfigurator().setPosition(0.0);
+  }
+
+  private SwerveModuleState targetState = new SwerveModuleState();
+
+  public SwerveModuleState getTargetState() {
+    return targetState;
   }
 
   public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
 
     desiredState.optimize(getState().angle);
+    this.targetState = desiredState;
 
     mAngleMotor.setControl(anglePosition.withPosition((desiredState.angle.getRotations())));
     // -(desiredState.angle.getRotations()) TODO check
@@ -112,6 +123,11 @@ public class SwerveModule {
   // -------------------------------------------------------------------------
   // SysId helpers
   // -------------------------------------------------------------------------
+
+  /** Forces a steering angle without optimization. Used exclusively during SysId. */
+  public void setAngle(Rotation2d angle) {
+    mAngleMotor.setControl(anglePosition.withPosition(angle.getRotations()));
+  }
 
   /**
    * Commands a raw voltage to the drive motor. Used exclusively during SysId characterization — do

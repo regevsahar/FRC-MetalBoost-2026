@@ -2,11 +2,12 @@ package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
+import frc.robot.subsystems.Shooter.ShooterConstants;
 
-public class AlignHoodToHubCmd extends Command {
+public class AlignHoodToConstValue extends Command {
   private final HoodSUB hood;
 
-  public AlignHoodToHubCmd(HoodSUB hood) {
+  public AlignHoodToConstValue(HoodSUB hood) {
     this.hood = hood;
     addRequirements(hood);
   }
@@ -16,7 +17,7 @@ public class AlignHoodToHubCmd extends Command {
 
   @Override
   public void execute() {
-    hood.setTargetDistanceFromHub();
+    hood.setTargetArc(ShooterConstants.kShootArc.get());
   }
 
   @Override

@@ -12,6 +12,9 @@ import frc.lib.util.FlightTimeTable;
 import frc.lib.util.Leds.LedController;
 import frc.lib.util.ShootOnMove.ShotPrediction;
 import frc.robot.Constants;
+import frc.robot.subsystems.Conveyance.ConveyanceConstants;
+import frc.robot.subsystems.Conveyance.ConveyanceRollerSub;
+import frc.robot.subsystems.Conveyance.ConveyanceSub;
 import frc.robot.subsystems.Shooter.FlyWheel.FlyWheelSub;
 import frc.robot.subsystems.Shooter.Hood.HoodSUB;
 import frc.robot.subsystems.Swerve.SwerveSub;
@@ -29,6 +32,8 @@ public class ShootWhileMovingCmd extends Command {
   private final FlyWheelSub flywheel;
   private final HoodSUB hood;
   private final Translation2d target;
+  private final ConveyanceSub conveyance;
+  private final ConveyanceRollerSub rollers;
   // Optional: visualize future point on the field
   private final Field2d field = new Field2d();
 
@@ -40,7 +45,9 @@ public class ShootWhileMovingCmd extends Command {
       DoubleSupplier translationYSupplier,
       FlyWheelSub flywheel,
       HoodSUB hood,
-      Translation2d target) {
+      Translation2d target,
+      ConveyanceSub conveyanceWheels,
+      ConveyanceRollerSub rollers) {
 
     this.swerve = swerve;
     this.poseEstimator = poseEstimator;
@@ -50,6 +57,8 @@ public class ShootWhileMovingCmd extends Command {
     this.hood = hood;
     this.flywheel = flywheel;
     this.target = target;
+    this.conveyance = conveyanceWheels;
+    this.rollers = rollers;
 
     addRequirements(swerve, alignSubsystem);
 
@@ -110,6 +119,13 @@ public class ShootWhileMovingCmd extends Command {
 
     hood.setTargetDistance(futureDistanceToHub);
     flywheel.setTargetDistance(futureDistanceToHub);
+    if (hood.isAtTarget() && flywheel.isAtTarget() && alignSubsystem.atSetpoint()) {
+      conveyance.setSpeed(ConveyanceConstants.kConveyanceSpeed);
+      rollers.setSpeed(ConveyanceConstants.kRollersBackwardsSpeed);
+    } else {
+      conveyance.stop();
+      rollers.stop();
+    }
 
     Logger.recordOutput("ShootWhileMoving/NowDistToHub_m", distanceToHubNow);
     Logger.recordOutput("ShootWhileMoving/FlightTime_s", flightTime);
@@ -134,6 +150,8 @@ public class ShootWhileMovingCmd extends Command {
     flywheel.stop();
     hood.stop();
     swerve.drive(new Translation2d(0, 0), 0, true, false);
+    conveyance.stop();
+    rollers.stop();
     LedController.getInstance().stopFlashing();
   }
 
