@@ -8,24 +8,24 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
+import com.revrobotics.ColorSensorV3;
 
 public class ConveyanceSub extends MBSubsystem {
 
   private TalonFX lowerMotor, upperMotor;
 
-  // private ColorSensorV3 colorSensor;
+  private ColorSensorV3 colorSensor;
 
   public ConveyanceSub() {
     super("Conveyance wheels");
-    lowerMotor =
-        new TalonFX(ConveyanceConstants.LOWER_MOTOR_PORT, new CANBus(Constants.CanivoreName));
-    upperMotor =
-        new TalonFX(ConveyanceConstants.UPPER_MOTOR_PORT, new CANBus(Constants.CanivoreName));
+    lowerMotor = new TalonFX(ConveyanceConstants.LOWER_MOTOR_PORT, new CANBus(Constants.CanivoreName));
+    upperMotor = new TalonFX(ConveyanceConstants.UPPER_MOTOR_PORT, new CANBus(Constants.CanivoreName));
     upperMotor.setControl(
         new Follower(ConveyanceConstants.LOWER_MOTOR_PORT, MotorAlignmentValue.Opposed));
-    // colorSensor = new ColorSensorV3(ConveyanceConstants.COLOR_SENSOR_PORT);
+    colorSensor = new ColorSensorV3(ConveyanceConstants.COLOR_SENSOR_PORT);
   }
 
   public void setSpeed(double value) {
@@ -36,17 +36,12 @@ public class ConveyanceSub extends MBSubsystem {
     lowerMotor.set(0);
   }
 
-  // public boolean hasBall() {
-  // return colorSensor.getProximity() >
-  // ConveyanceConstants.BALL_DETECTION_THRESHOLD;
-  // }
-
   public boolean hasBall() {
-    return true;
+    return colorSensor.getProximity() > ConveyanceConstants.BALL_DETECTION_THRESHOLD;
   }
 
   @Override
   public void subsystemPeriodic() {
-    // SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
+    SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
   }
 }
