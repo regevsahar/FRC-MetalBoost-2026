@@ -44,15 +44,6 @@ public class IntakeSub extends MBSubsystem {
     talonFXConfig.Feedback.SensorToMechanismRatio = IntakeConstants.kGearRatio;
 
     talonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    // limit configuration
-    // double forwardLimitRotations = IntakeConstants.BOTTOM_LIMIT;
-    // double reverseLimitRotations = IntakeConstants.TOP_LIMIT;
-
-    // var softLimit = talonFXConfig.SoftwareLimitSwitch;
-    // softLimit.ForwardSoftLimitEnable = true;
-    // softLimit.ForwardSoftLimitThreshold = forwardLimitRotations;
-    // softLimit.ReverseSoftLimitEnable = true;
-    // softLimit.ReverseSoftLimitThreshold = reverseLimitRotations;
 
     // apply the configuration
     StatusCode status = motor.getConfigurator().apply(talonFXConfig);
