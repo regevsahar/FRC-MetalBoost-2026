@@ -41,19 +41,6 @@ public class HoodIOTalonFX implements HoodIO {
     config.Slot0.kV = ShooterConstants.kHoodV.get();
     config.Slot0.kA = ShooterConstants.kHoodA.get();
 
-    // SoftwareLimitSwitchConfigs softLimits = new SoftwareLimitSwitchConfigs();
-
-    // softLimits.ForwardSoftLimitEnable = true;
-    // softLimits.ReverseSoftLimitEnable = true;
-
-    // softLimits.ForwardSoftLimitThreshold =
-    // degreesToRotations(ShooterConstants.kMaxArc);
-
-    // softLimits.ReverseSoftLimitThreshold =
-    // degreesToRotations(ShooterConstants.kMinArc);
-
-    // config.SoftwareLimitSwitch = softLimits;
-
     for (int i = 0; i < 5; i++) {
       if (hoodMotor.getConfigurator().apply(config).isOK()) {
         return;
