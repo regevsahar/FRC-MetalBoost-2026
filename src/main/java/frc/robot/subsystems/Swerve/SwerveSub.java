@@ -244,10 +244,6 @@ public class SwerveSub extends MBSubsystem {
     }
   }
 
-  public void resetPigeon() {
-    pigeon.setYaw(0);
-  }
-
   /* Used by SwerveControllerCommand in Auto */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.SwerveConstants.maxSpeed);
