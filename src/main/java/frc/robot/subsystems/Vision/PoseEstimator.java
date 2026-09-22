@@ -28,7 +28,6 @@ public class PoseEstimator extends MBSubsystem {
       TimeInterpolatableBuffer.createDoubleBuffer(1.0);
   public TimeInterpolatableBuffer<Rotation2d> gyroYawBuffer =
       TimeInterpolatableBuffer.createBuffer(1.5);
-  public Pose2d visionPose = new Pose2d();
   Field2d field = new Field2d();
   private double offsetX = 0;
   private double offsetY = 0;
@@ -69,22 +68,6 @@ public class PoseEstimator extends MBSubsystem {
     if (nOffsets == 0) return gyro;
     return new Rotation2d(Math.atan2(offsetY, offsetX)).plus(gyro);
   }
-
-  /**
-   * Check if this returns true before using {@link #updateVision()}
-   *
-   * @return If time buffers are !null
-   */
-  public boolean readyToUpdateVision() {
-    return gyroYawBuffer.getSample(0).isPresent();
-  }
-
-  /** Update estimator with Swerve States and Gyro Yaw data. Needs to be updated every loop. */
-  // public void updateSwerve(Rotation2d gyroAngle, SwerveModulePosition[]
-  // modulePositions){
-  // sEstimator.update(gyroAngle, modulePositions);
-  // gyroYawBuffer.addSample(Timer.getFPGATimestamp(), gyroAngle.getRadians());
-  // }
 
   public void updateSwerve(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions) {
     sEstimator.update(getCorrectedHeading(gyroAngle), modulePositions);

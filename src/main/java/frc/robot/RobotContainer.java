@@ -111,7 +111,6 @@ public class RobotContainer {
       new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton ShootConstantValue =
       new JoystickButton(operator, XboxController.Button.kY.value);
-  private final JoystickButton shoot = new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton resetIntakePosition =
       new JoystickButton(operator, XboxController.Button.kA.value);
   private final JoystickButton openIntake =
