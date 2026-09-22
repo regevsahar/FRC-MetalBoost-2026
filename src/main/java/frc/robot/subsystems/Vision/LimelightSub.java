@@ -36,10 +36,6 @@ public class LimelightSub extends MBSubsystem {
     return Optional.of(estimate);
   }
 
-  public void SetHeading(Rotation2d heading) {
-    LimelightHelpers.SetRobotOrientation(limelightName, heading.getDegrees(), 0, 0, 0, 0, 0);
-  }
-
   public void setHeading(Rotation2d heading) {
     LimelightHelpers.SetRobotOrientation(limelightName, heading.getDegrees(), 0, 0, 0, 0, 0);
   }
