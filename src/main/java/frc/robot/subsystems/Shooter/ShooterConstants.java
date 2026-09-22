@@ -14,7 +14,6 @@ public class ShooterConstants {
 
   static {
     // Distance->Angle
-    DISTANCE_TO_ARC_MAP.put(1.5, 30.0);
     DISTANCE_TO_ARC_MAP.put(1.5, 38.0);
     DISTANCE_TO_ARC_MAP.put(2.0, 50.0);
     DISTANCE_TO_ARC_MAP.put(2.5, 55.0);
@@ -26,14 +25,11 @@ public class ShooterConstants {
 
     // Distance->RPM
 
-    DISTANCE_TO_RPM_MAP.put(1.5, 1380.0);
     DISTANCE_TO_RPM_MAP.put(1.5, 1400.0);
     DISTANCE_TO_RPM_MAP.put(2.0, 1450.0);
     DISTANCE_TO_RPM_MAP.put(2.5, 1450.0);
     DISTANCE_TO_RPM_MAP.put(3.0, 1545.0);
     DISTANCE_TO_RPM_MAP.put(3.5, 1605.0);
-    DISTANCE_TO_RPM_MAP.put(4.0, 1650.0);
-    DISTANCE_TO_RPM_MAP.put(4.0, 1750.0);
     DISTANCE_TO_RPM_MAP.put(4.0, 1850.0);
   }
 
