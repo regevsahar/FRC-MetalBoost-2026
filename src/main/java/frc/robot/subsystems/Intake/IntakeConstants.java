@@ -21,8 +21,14 @@ public class IntakeConstants {
   public static final double BOTTOM_LIMIT = 0; // rotations
   public static final double ROLLERS_LIMIT = 0.3;
   public static final double ROTATIONS_PER_CM = 2048;
-  public static final double kGearRatio = 1;
+  public static final double kGearRatio = 25;
   public static final double EJECT_SPEED = -4;
   public static final double INSERT_SPEED = 4.5;
-  public static final double kStallThreshold = 125.0; // Amps
+  public static final double kStallThreshold = 40.0; // Amps
+
+  // for simulation
+  public static final double kCarriageMassKg = 1.0;
+  public static final double kDrumRadiusMeters = 0.02;
+  public static final double kMinHeightMeters = 0.0;
+  public static final double kMaxHeightMeters = TOP_LIMIT * 2 * Math.PI * kDrumRadiusMeters;
 }

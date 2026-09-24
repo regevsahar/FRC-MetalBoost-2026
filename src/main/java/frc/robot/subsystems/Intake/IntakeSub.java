@@ -9,6 +9,11 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.ChassisReference; // simulation
+import com.ctre.phoenix6.sim.TalonFXSimState; // simulation
+import edu.wpi.first.math.system.plant.DCMotor; // simulation
+import edu.wpi.first.wpilibj.RobotController; // simulation
+import edu.wpi.first.wpilibj.simulation.ElevatorSim; // simulation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.MBSubsystem;
@@ -16,13 +21,32 @@ import frc.robot.subsystems.MBSubsystem;
 public class IntakeSub extends MBSubsystem {
 
   private TalonFX motor;
+  private double target = 0;
+
+  private final ElevatorSim elevator;
+  private final TalonFXSimState simState;
 
   public IntakeSub() {
     super("Intake");
+
+    elevator =
+        new ElevatorSim(
+            DCMotor.getKrakenX60(1),
+            IntakeConstants.kGearRatio,
+            IntakeConstants.kCarriageMassKg,
+            IntakeConstants.kDrumRadiusMeters,
+            IntakeConstants.kMinHeightMeters,
+            IntakeConstants.kMaxHeightMeters,
+            false, // simulateGravity
+            IntakeConstants.kMinHeightMeters); // starting height
+
     motor = new TalonFX(IntakeConstants.INTAKE_MOTOR_PORT, new CANBus(Constants.CanivoreName));
+    simState = motor.getSimState();
+    simState.setMotorType(TalonFXSimState.MotorType.KrakenX60);
 
     configureTalonFX();
     motor.setNeutralMode(NeutralModeValue.Brake);
+    simState.Orientation = ChassisReference.Clockwise_Positive;
     resetPosition();
   }
 
@@ -53,6 +77,7 @@ public class IntakeSub extends MBSubsystem {
   }
 
   public void setTargetPosition(double target) {
+    this.target = target;
     motor.setControl(new PositionVoltage(target));
   }
 
@@ -73,7 +98,7 @@ public class IntakeSub extends MBSubsystem {
   }
 
   public boolean isStalling() {
-    return motor.getStatorCurrent().getValueAsDouble() > IntakeConstants.kStallThreshold;
+    return Math.abs(motor.getStatorCurrent().getValueAsDouble()) > IntakeConstants.kStallThreshold;
   }
 
   public boolean isAtTargetPosition(double targetPosition) {
@@ -84,7 +109,7 @@ public class IntakeSub extends MBSubsystem {
   @Override
   public void subsystemPeriodic() {
     SmartDashboard.putNumber("/Intake/Current Position", getCurrentPosition());
-    SmartDashboard.putNumber("/Intake/Target Position", getCurrentPosition());
+    SmartDashboard.putNumber("/Intake/Target Position", target);
     SmartDashboard.putBoolean("/Intake/At Target", isAtTargetPosition(getCurrentPosition()));
     SmartDashboard.putNumber("/Intake/position", motor.getPosition().getValueAsDouble());
     SmartDashboard.putNumber("/Intake/Stator Current", motor.getStatorCurrent().getValueAsDouble());
@@ -100,5 +125,48 @@ public class IntakeSub extends MBSubsystem {
         || IntakeConstants.kJerk.hasChanged()) {
       configureTalonFX();
     }
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    simState.setSupplyVoltage(RobotController.getBatteryVoltage());
+
+    double ctrlVolts = simState.getMotorVoltage(); // what the controller asks for
+    elevator.setInputVoltage(simState.getMotorVoltage());
+    elevator.update(0.020);
+
+    double mechRot =
+        elevator.getPositionMeters() / (2 * Math.PI * IntakeConstants.kDrumRadiusMeters);
+    simState.setRawRotorPosition(mechRot * IntakeConstants.kGearRatio);
+    simState.setRotorVelocity(
+        elevator.getVelocityMetersPerSecond()
+            / (2 * Math.PI * IntakeConstants.kDrumRadiusMeters)
+            * IntakeConstants.kGearRatio);
+
+    System.out.println(
+        "target="
+            + target
+            + " ctrlVolts="
+            + ctrlVolts
+            + " meters="
+            + elevator.getPositionMeters()
+            + " mechRot="
+            + mechRot
+            + " reported="
+            + motor.getPosition().getValueAsDouble()
+            + " mode="
+            + motor.getControlMode(true)
+            + " slot="
+            + motor.getClosedLoopSlot(true).getValue()
+            + " clErr="
+            + motor.getClosedLoopError(true).getValueAsDouble()
+            + " clOut="
+            + motor.getClosedLoopOutput(true).getValueAsDouble()
+            + " pOut="
+            + motor.getClosedLoopProportionalOutput(true).getValueAsDouble()
+            + " ff="
+            + motor.getClosedLoopFeedForward(true).getValueAsDouble()
+            + " cmd="
+            + getCurrentCommand());
   }
 }
